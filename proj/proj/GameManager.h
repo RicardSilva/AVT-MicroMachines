@@ -8,6 +8,9 @@
 #include <algorithm>
 #include <array>
 #include "Car.h"
+#include "Track.h"
+#include "OrthoCamera.h"
+#include "PerspectiveCamera.h"
 #include "time.h"
 
 // Use Very Simple Libs
@@ -57,6 +60,9 @@ class GameManager {
 	float camX, camY, camZ;
 
 	Car* car;
+	Track* track;
+	Camera* cameras[3];
+	Camera* activeCamera;
 
 public:
 	GameManager();
@@ -83,6 +89,9 @@ public:
 
 	void display();
 	void displayHUD();
+
+	void drawCar();
+	void drawTrack();
 
 	void update(double timeStep);
 	void reshape(GLsizei w, GLsizei h);

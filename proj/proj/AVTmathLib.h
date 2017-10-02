@@ -105,6 +105,7 @@
 		void lookAt(float xPos, float yPos, float zPos,
 					float xLook, float yLook, float zLook,
 					float xUp, float yUp, float zUp);
+		void lookAt(vec3& pos, vec3& look, vec3& up);
 
 
 		/** Similar to gluPerspective

@@ -295,6 +295,53 @@ void lookAt(float xPos, float yPos, float zPos,
 	multMatrix(VIEW, m2);
 }
 
+void lookAt(vec3& pos, vec3& look, vec3& u)
+{
+	float dir[3], right[3], up[3];
+
+	up[0] = u.x;	up[1] = u.y;	up[2] = u.z;
+
+	dir[0] = (look.x - pos.x);
+	dir[1] = (look.y - pos.y);
+	dir[2] = (look.z - pos.z);
+	normalize(dir);
+
+	crossProduct(dir, up, right);
+	normalize(right);
+
+	crossProduct(right, dir, up);
+	normalize(up);
+
+	float m1[16], m2[16];
+
+	m1[0] = right[0];
+	m1[4] = right[1];
+	m1[8] = right[2];
+	m1[12] = 0.0f;
+
+	m1[1] = up[0];
+	m1[5] = up[1];
+	m1[9] = up[2];
+	m1[13] = 0.0f;
+
+	m1[2] = -dir[0];
+	m1[6] = -dir[1];
+	m1[10] = -dir[2];
+	m1[14] = 0.0f;
+
+	m1[3] = 0.0f;
+	m1[7] = 0.0f;
+	m1[11] = 0.0f;
+	m1[15] = 1.0f;
+
+	setIdentityMatrix(m2, 4);
+	m2[12] = -pos.x;
+	m2[13] = -pos.y;
+	m2[14] = -pos.z;
+
+	multMatrix(VIEW, m1);
+	multMatrix(VIEW, m2);
+}
 // gluPerspective implementation
 void perspective(float fov, float ratio, float nearp, float farp)
 {

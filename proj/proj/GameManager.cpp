@@ -64,9 +64,30 @@ bool GameManager::initShaders() {
 
 void GameManager::initCameras() {
 	// set the camera position based on its spherical coordinates
-	camX = 0;
-	camZ = -5;
-	camY = 0;
+
+	Camera* topCamera = new OrthoCamera(-5,5,-5,5,0.1,10);
+	topCamera->setEye(vec3(5,5,-5));
+	topCamera->setTarget(vec3(0,0,0));
+	topCamera->setUp(vec3(0,1,0));
+
+	cameras[0] = topCamera;
+
+	Camera* topPerspCamera = new PerspectiveCamera(50, (float)WIDTH / HEIGHT, 0.1f, 10.0f);
+	topPerspCamera->setEye(vec3(5, 5, -5));
+	topPerspCamera->setTarget(vec3(0, 0, 0));
+	topPerspCamera->setUp(vec3(0, 1, 0));
+
+	cameras[1] = topPerspCamera;
+
+	Camera* carCamera = new PerspectiveCamera(50, (float)WIDTH / HEIGHT, 0.1f, 10.0f);
+	carCamera->setEye(vec3(5, 5, -5));
+	carCamera->setTarget(vec3(0, 0, 0));
+	carCamera->setUp(vec3(0, 1, 0));
+
+	cameras[2] = carCamera;
+
+	activeCamera = cameras[0];
+
 }
 
 void GameManager::initLights() {
@@ -74,7 +95,7 @@ void GameManager::initLights() {
 }
 
 void GameManager::initTrack() {
-
+	track = new Track();
 }
 
 
@@ -89,7 +110,17 @@ void GameManager::keydown(int key) {
 	case 27:
 		glutLeaveMainLoop();
 		break;
+	case '1':
+		activeCamera = cameras[0];
+		break;
+	case '2':
+		activeCamera = cameras[1];
+		break;
+	case '3':
+		activeCamera = cameras[2];
+		break;
 	}
+
 }
 
 void GameManager::specialKeydown(int key) {
@@ -132,10 +163,12 @@ void GameManager::display() {
 	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	// load identity matrices
-	loadIdentity(VIEW);
+	
 	loadIdentity(MODEL);
 	// set the camera using a function similar to gluLookAt
-	lookAt(camX, camY, camZ, 0, 0, 0, 0, 1, 0);
+	
+	activeCamera->computeView();
+	activeCamera->computeProjection(WIDTH, HEIGHT);
 	// use our shader
 	glUseProgram(shader.getProgramIndex());
 
@@ -150,16 +183,17 @@ void GameManager::display() {
 
 
 	// send matrices to OGL
-	computeDerivedMatrix(PROJ_VIEW_MODEL);
+	/*computeDerivedMatrix(PROJ_VIEW_MODEL);
 	glUniformMatrix4fv(vm_uniformId, 1, GL_FALSE, mCompMatrix[VIEW_MODEL]);
 	glUniformMatrix4fv(pvm_uniformId, 1, GL_FALSE, mCompMatrix[PROJ_VIEW_MODEL]);
 	computeNormalMatrix3x3();
-	glUniformMatrix3fv(normal_uniformId, 1, GL_FALSE, mNormal3x3);
+	glUniformMatrix3fv(normal_uniformId, 1, GL_FALSE, mNormal3x3);*/
 
 	// Render objects
-
-	car->draw();
-
+	drawCar();
+	drawTrack();
+	
+	
 
 
 	glutSwapBuffers();
@@ -170,6 +204,40 @@ void GameManager::displayHUD() {
 	
 
 
+}
+
+void GameManager::drawCar() {
+	pushMatrix(MODEL);
+	loadIdentity(MODEL);
+	translate(MODEL, car->getPosition());
+
+	// send matrices to OGL
+	computeDerivedMatrix(PROJ_VIEW_MODEL);
+	glUniformMatrix4fv(vm_uniformId, 1, GL_FALSE, mCompMatrix[VIEW_MODEL]);
+	glUniformMatrix4fv(pvm_uniformId, 1, GL_FALSE, mCompMatrix[PROJ_VIEW_MODEL]);
+	computeNormalMatrix3x3();
+	glUniformMatrix3fv(normal_uniformId, 1, GL_FALSE, mNormal3x3);
+
+	car->draw();
+	popMatrix(MODEL);
+
+}
+
+void GameManager::drawTrack() {
+	pushMatrix(MODEL);
+	loadIdentity(MODEL);
+	scale(MODEL, 50,0.5f,50);
+	translate(MODEL, 0, 0, 0);
+
+	// send matrices to OGL
+	computeDerivedMatrix(PROJ_VIEW_MODEL);
+	glUniformMatrix4fv(vm_uniformId, 1, GL_FALSE, mCompMatrix[VIEW_MODEL]);
+	glUniformMatrix4fv(pvm_uniformId, 1, GL_FALSE, mCompMatrix[PROJ_VIEW_MODEL]);
+	computeNormalMatrix3x3();
+	glUniformMatrix3fv(normal_uniformId, 1, GL_FALSE, mNormal3x3);
+
+	track->draw();
+	popMatrix(MODEL);
 }
 
 void GameManager::update(double timeStep) {

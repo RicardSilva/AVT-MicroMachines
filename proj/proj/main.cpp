@@ -43,7 +43,7 @@ void refresh(int value)
 
 void reshape(int w, int h) {
 
-	gm->reshapeAVT(w, h);
+	gm->reshape(w, h);
 }
 
 void display(void) {
