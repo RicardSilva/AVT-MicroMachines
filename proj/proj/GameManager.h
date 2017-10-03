@@ -20,8 +20,8 @@
 
 
 
-#define WIDTH 800
-#define HEIGHT 600
+#define WIDTH 640
+#define HEIGHT 480
 #define CAR_LIVES 5
 #define PI 3.141592657
 #define MES_WIDTH 700.0f
@@ -92,7 +92,7 @@ public:
 
 	void drawCar();
 	void drawTrack();
-
+	void sendMatricesToShader();
 	void update(double timeStep);
 	void reshape(GLsizei w, GLsizei h);
 	void reshapeAVT(GLsizei w, GLsizei h);

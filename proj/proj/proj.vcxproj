@@ -25,6 +25,7 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="ObjLoader.h" />
     <ClInclude Include="OrthoCamera.h" />
     <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="resource.h" />

@@ -65,7 +65,7 @@ bool GameManager::initShaders() {
 void GameManager::initCameras() {
 	// set the camera position based on its spherical coordinates
 
-	Camera* topCamera = new OrthoCamera(-5,5,-5,5,0.1,10);
+	Camera* topCamera = new OrthoCamera(-5,5,-5,5,0.1f,10);
 	topCamera->setEye(vec3(5,5,-5));
 	topCamera->setTarget(vec3(0,0,0));
 	topCamera->setUp(vec3(0,1,0));
@@ -158,7 +158,7 @@ void GameManager::specialKeyup(int key) {
 }
 
 void GameManager::display() {
-	GLint loc;
+	//GLint loc;
 
 	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -179,15 +179,6 @@ void GameManager::display() {
 	//float res[4];
 	//multMatrixPoint(VIEW, lightPos, res);   //lightPos definido em World Coord so is converted to eye space
 	//glUniform4fv(lPos_uniformId, 1, res);
-
-
-
-	// send matrices to OGL
-	/*computeDerivedMatrix(PROJ_VIEW_MODEL);
-	glUniformMatrix4fv(vm_uniformId, 1, GL_FALSE, mCompMatrix[VIEW_MODEL]);
-	glUniformMatrix4fv(pvm_uniformId, 1, GL_FALSE, mCompMatrix[PROJ_VIEW_MODEL]);
-	computeNormalMatrix3x3();
-	glUniformMatrix3fv(normal_uniformId, 1, GL_FALSE, mNormal3x3);*/
 
 	// Render objects
 	drawCar();
@@ -211,12 +202,7 @@ void GameManager::drawCar() {
 	loadIdentity(MODEL);
 	translate(MODEL, car->getPosition());
 
-	// send matrices to OGL
-	computeDerivedMatrix(PROJ_VIEW_MODEL);
-	glUniformMatrix4fv(vm_uniformId, 1, GL_FALSE, mCompMatrix[VIEW_MODEL]);
-	glUniformMatrix4fv(pvm_uniformId, 1, GL_FALSE, mCompMatrix[PROJ_VIEW_MODEL]);
-	computeNormalMatrix3x3();
-	glUniformMatrix3fv(normal_uniformId, 1, GL_FALSE, mNormal3x3);
+	sendMatricesToShader();
 
 	car->draw();
 	popMatrix(MODEL);
@@ -229,15 +215,19 @@ void GameManager::drawTrack() {
 	scale(MODEL, 50,0.5f,50);
 	translate(MODEL, 0, 0, 0);
 
+	sendMatricesToShader();
+
+	track->draw();
+	popMatrix(MODEL);
+}
+
+void GameManager::sendMatricesToShader() {
 	// send matrices to OGL
 	computeDerivedMatrix(PROJ_VIEW_MODEL);
 	glUniformMatrix4fv(vm_uniformId, 1, GL_FALSE, mCompMatrix[VIEW_MODEL]);
 	glUniformMatrix4fv(pvm_uniformId, 1, GL_FALSE, mCompMatrix[PROJ_VIEW_MODEL]);
 	computeNormalMatrix3x3();
 	glUniformMatrix3fv(normal_uniformId, 1, GL_FALSE, mNormal3x3);
-
-	track->draw();
-	popMatrix(MODEL);
 }
 
 void GameManager::update(double timeStep) {
@@ -257,7 +247,7 @@ void GameManager::reshape(GLsizei w, GLsizei h) {
 
 	// adapt viewport
 	if (ratio < aspect)
-		glViewport((w - h*ratio) / 2, 0, h*ratio, h);
+		glViewport((w - h*ratio) / 2.0f, 0, h*ratio, h);
 	else
 		glViewport(0, (h - w / ratio) / 2, w, w / ratio);
 }
