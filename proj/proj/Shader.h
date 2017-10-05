@@ -4,7 +4,9 @@
 #include "vec3.h"
 #include "vec4.h"
 #include <string>
+#include "ObjLoader.h"
 #include <GL/glew.h>
+
 
 using namespace std;
 class Shader
@@ -12,48 +14,57 @@ class Shader
 
 
 public:
-	Shader(const std::string& vertexShader, const std::string& fragmentShader);
-	virtual ~Shader(void);
-	void LoadFromString(GLenum whichShader, const std::string& source);
-	void LoadFromFile(GLenum whichShader, const std::string& filename);
-	GLuint CreateProgram();
-	void LinkProgram();
+	Shader(const std::string& vertexShader, const std::string& fragmentShader) {
+		totalShaders = 0;
+		shaders[VERTEX_SHADER] = 0;
+		shaders[FRAGMENT_SHADER] = 0;
 
-	GLuint GetProgram() const {
+		loadFromFile(GL_VERTEX_SHADER, vertexShader);
+		loadFromFile(GL_FRAGMENT_SHADER, fragmentShader);
+		createProgram();
+		linkProgram();
+	}
+	virtual ~Shader(void) {
+		deleteProgram();
+	}
+	void loadFromString(GLenum whichShader, const std::string& source);
+	void loadFromFile(GLenum whichShader, const std::string& filename);
+	GLuint createProgram();
+	void linkProgram();
+
+	GLuint getProgram() const {
 		return program;
 	}
 
-	void Use();
-	void UnUse();
+	void use();
+	void unUse();
 
-	virtual void BindAttributes(void) = 0;
-	virtual void GetUniformLocations(void) = 0;
+	virtual void bindAttributes(void) = 0;
+	virtual void getUniformLocations(void) = 0;
 
+	virtual void loadProjViewModelMatrix(float* matrix) {}
+	virtual void loadViewModelMatrix(float* matrix) {}
+	virtual void loadNormalMatrix(float* matrix) {}
+	virtual void loadLightPosition(vec3& vec) {}
+	virtual void loadMaterial(objl::Material material) {}
+	virtual void loadMatrices() {}
 
-	virtual void LoadModelMatrix(float* m) {};
-	virtual void LoadColor(vec3 &v) {};
-	//virtual void LoadTexture(Texture *t) {};
-	virtual void LoadClipingPlane(vec4 &v) {};
-	virtual void BindTextureUnits() {};
-	virtual void LoadMovementFactor(float f) {};
-	virtual void LoadCubeTexture() {};
-
-	void LoadInt(GLint location, GLint i);
-	void LoadFloat(GLint location, GLfloat f);
-	void LoadVec3(GLint location, vec3 &v);
-	void LoadVec4(GLint location, vec4 &v);
-	void LoadMat3(GLint location, float* m);
-	void LoadMat4(GLint location, float* m);
+	void loadInt(GLint location, GLint i);
+	void loadFloat(GLint location, GLfloat f);
+	void loadVec3(GLint location, vec3 &v);
+	void loadVec4(GLint location, vec4 &v);
+	void loadMat3(GLint location, float* m);
+	void loadMat4(GLint location, float* m);
 	//void LoadTexture(GLint location, Texture *t);
 
 
-	void BindAttribute(GLint attribute, const GLchar* variableName);
-	GLint GetUniformLocation(const GLchar* source);
+	void bindAttribute(GLint attribute, const GLchar* variableName);
+	GLint getUniformLocation(const GLchar* source);
 	//void BindUniformBlock(GLuint uniformBlockIndex, GLuint uniformBlockBinding);
-	GLint GetUniformBlockIndex(const GLchar* source);
+	GLint getUniformBlockIndex(const GLchar* source);
 
 
-	void DeleteProgram();
+	void deleteProgram();
 
 private:
 	enum ShaderType { VERTEX_SHADER, FRAGMENT_SHADER };

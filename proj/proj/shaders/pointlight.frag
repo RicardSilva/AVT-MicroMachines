@@ -1,12 +1,11 @@
 #version 330
-in vec4 colour;
 out vec4 colorOut;
 
 struct Materials {
-	vec4 diffuse;
-	vec4 ambient;
-	vec4 specular;
-	vec4 emissive;
+	vec3 diffuse;
+	vec3 ambient;
+	vec3 specular;
+	vec3 emissive;
 	float shininess;
 	int texCount;
 };
@@ -21,7 +20,8 @@ in Data {
 
 void main() {
 
-/*
+	colorOut = vec4(mat.diffuse.xyz, 1.0f);
+	/*
 	vec4 spec = vec4(0.0);
 
 	vec3 n = normalize(DataIn.normal);
@@ -35,11 +35,10 @@ void main() {
 
 		vec3 h = normalize(l + e);
 		float intSpec = max(dot(h,n), 0.0);
-		spec = mat.specular * pow(intSpec, mat.shininess);
+		spec = vec4(mat.specular.xyz, 1.0) * pow(intSpec, mat.shininess);
 	}
 	
-	colorOut = max(intensity * mat.diffuse + spec, mat.ambient);
+	colorOut = max(intensity * vec4(mat.diffuse.xyz, 1.0) + spec, vec4(mat.ambient.xyz, 1.0f));
 	*/
-	//colorOut=colour;
-	colorOut = vec4(1.0f,0.0f,0.0f,1.0f);
+	
 }

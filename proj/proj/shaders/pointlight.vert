@@ -15,8 +15,6 @@ out Data {
 	vec3 lightDir;
 } DataOut;
 
-out vec4 colour;
-
 void main () {
 
 	vec4 pos = m_viewModel * position;
@@ -24,7 +22,6 @@ void main () {
 	DataOut.normal = normalize(m_normal * normal.xyz);
 	DataOut.lightDir = vec3(l_pos - pos);
 	DataOut.eye = vec3(-pos);
-	colour= gl_Position;
 
 	gl_Position = m_pvm * position;	
 }

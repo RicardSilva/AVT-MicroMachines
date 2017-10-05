@@ -7,6 +7,7 @@
 #include <cmath>
 #include <algorithm>
 #include <array>
+#include "GameObject.h"
 #include "Car.h"
 #include "Track.h"
 #include "OrthoCamera.h"
@@ -14,14 +15,15 @@
 #include "time.h"
 
 // Use Very Simple Libs
-#include "VSShaderlib.h"
+#include "Shader.h"
+#include "LightShader.h"
 #include "AVTmathLib.h"
 
 
 
 
-#define WIDTH 640
-#define HEIGHT 480
+#define WIDTH 800
+#define HEIGHT 600
 #define CAR_LIVES 5
 #define PI 3.141592657
 #define MES_WIDTH 700.0f
@@ -47,8 +49,7 @@ class GameManager {
 	bool gameOver = false;
 	int carLives = CAR_LIVES;
 	
-
-	VSShaderLib shader;
+	Shader* shader;
 
 	//External array storage defined in AVTmathLib.cpp
 	GLint pvm_uniformId;
@@ -59,8 +60,8 @@ class GameManager {
 	// Camera Position
 	float camX, camY, camZ;
 
-	Car* car;
-	Track* track;
+	GameObject* car;
+	GameObject* track;
 	Camera* cameras[3];
 	Camera* activeCamera;
 
@@ -73,8 +74,8 @@ public:
 
 	void onTimer(int value);
 
-	bool init();
-	bool initShaders();
+	void init();
+	void initShaders();
 	void initCameras();
 	void initLights();
 	void initTrack();

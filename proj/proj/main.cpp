@@ -13,7 +13,7 @@
 
 #define CAPTION "MicroMachines"
 int WindowHandle = 0;
-int WinX = 640, WinY = 480;
+int WinX = 800, WinY = 600;
 
 GameManager* gm;
 
@@ -115,10 +115,8 @@ int main(int argc, char **argv) {
 	printf("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 	gm = new GameManager();
-	if (!gm->init())
-		return(1);
-
-
+	gm->init();
+	
 	//  GLUT main loop
 	glutMainLoop();
 

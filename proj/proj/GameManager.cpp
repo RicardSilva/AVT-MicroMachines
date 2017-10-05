@@ -36,12 +36,12 @@ void GameManager::onTimer(int value) {
 }
 
 
-bool GameManager::init() {
+void GameManager::init() {
 
 	srand(time(NULL));	// initialize seed of random
-	if (!initShaders())
-		return(false);
-	car = new Car();
+
+	initShaders();
+	car = new Car(vec3(0,0,0), shader);
 	initCameras();
 	initLights();
 	initTrack();
@@ -51,40 +51,20 @@ bool GameManager::init() {
 	glEnable(GL_MULTISAMPLE);
 	glClearColor(0.1f, 0.1f, 0.1f, 0.1f);
 
-	return true;
 
 }
 
-bool GameManager::initShaders() {
-	// Shader for models
-	shader.init();
-	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/pointlight.vert");
-	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/pointlight.frag");
-
-	// set semantics for the shader variables
-	glBindFragDataLocation(shader.getProgramIndex(), 0, "colorOut");
-	glBindAttribLocation(shader.getProgramIndex(), VERTICES, "position");
-	glBindAttribLocation(shader.getProgramIndex(), NORMALS, "normal");
-	glBindAttribLocation(shader.getProgramIndex(), TEXCOORDS, "texCoord");
-
-	glLinkProgram(shader.getProgramIndex());
-
-	pvm_uniformId = glGetUniformLocation(shader.getProgramIndex(), "m_pvm");
-	vm_uniformId = glGetUniformLocation(shader.getProgramIndex(), "m_viewModel");
-	normal_uniformId = glGetUniformLocation(shader.getProgramIndex(), "m_normal");
-	lPos_uniformId = glGetUniformLocation(shader.getProgramIndex(), "l_pos");
-
-	printf("InfoLog for Hello World Shader\n%s\n\n", shader.getAllInfoLogs().c_str());
-	return(shader.isProgramValid());
+void GameManager::initShaders() {
+	shader = new LightShader("shaders/pointlight.vert", "shaders/pointlight.frag");
 }
 
 void GameManager::initCameras() {
 	// set the camera position based on its spherical coordinates
 
-	Camera* topCamera = new OrthoCamera(-5,5,-5,5,0.1f,10);
-	topCamera->setEye(vec3(5,5,-5));
+	Camera* topCamera = new OrthoCamera(-800,800,-800,800, 0.1,100);
+	topCamera->setEye(vec3(0,20,0));
 	topCamera->setTarget(vec3(0,0,0));
-	topCamera->setUp(vec3(0,1,0));
+	topCamera->setUp(vec3(0,0,-1));
 
 	cameras[0] = topCamera;
 
@@ -111,7 +91,7 @@ void GameManager::initLights() {
 }
 
 void GameManager::initTrack() {
-	track = new Track();
+	track = new Track(vec3(0,0,0), shader);
 }
 
 
@@ -185,21 +165,17 @@ void GameManager::display() {
 	
 	activeCamera->computeView();
 	activeCamera->computeProjection(WIDTH, HEIGHT);
-	// use our shader
-	glUseProgram(shader.getProgramIndex());
+	shader->use();
 
 	//send the light position in eye coordinates
-
-	//glUniform4fv(lPos_uniformId, 1, lightPos); //efeito capacete do mineiro, ou seja lighPos foi definido em eye coord 
-
-	//float res[4];
-	//multMatrixPoint(VIEW, lightPos, res);   //lightPos definido em World Coord so is converted to eye space
-	//glUniform4fv(lPos_uniformId, 1, res);
-
+	float lightPos[4] = { 0.0f, 5.0f, 0.0f, 1.0f };
+	float res[4];
+	multMatrixPoint(VIEW, lightPos, res);   //lightPos definido em World Coord so is converted to eye space
+	glUniform4fv(lPos_uniformId, 1, res);
+	shader->unUse();
 	// Render objects
-	drawCar();
-	drawTrack();
-	
+	car->draw();
+	track->draw();
 	
 
 
@@ -211,39 +187,6 @@ void GameManager::displayHUD() {
 	
 
 
-}
-
-void GameManager::drawCar() {
-	pushMatrix(MODEL);
-	loadIdentity(MODEL);
-	translate(MODEL, car->getPosition());
-
-	sendMatricesToShader();
-
-	car->draw();
-	popMatrix(MODEL);
-
-}
-
-void GameManager::drawTrack() {
-	pushMatrix(MODEL);
-	loadIdentity(MODEL);
-	scale(MODEL, 50,0.5f,50);
-	translate(MODEL, 0, 0, 0);
-
-	sendMatricesToShader();
-
-	track->draw();
-	popMatrix(MODEL);
-}
-
-void GameManager::sendMatricesToShader() {
-	// send matrices to OGL
-	computeDerivedMatrix(PROJ_VIEW_MODEL);
-	glUniformMatrix4fv(vm_uniformId, 1, GL_FALSE, mCompMatrix[VIEW_MODEL]);
-	glUniformMatrix4fv(pvm_uniformId, 1, GL_FALSE, mCompMatrix[PROJ_VIEW_MODEL]);
-	computeNormalMatrix3x3();
-	glUniformMatrix3fv(normal_uniformId, 1, GL_FALSE, mNormal3x3);
 }
 
 void GameManager::teste(GLfloat *value) {

@@ -20,13 +20,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AVTmathLib.h" />
+    <ClInclude Include="Butter.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Car.h" />
+    <ClInclude Include="Cheerio.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="LightShader.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="ObjLoader.h" />
+    <ClInclude Include="Orange.h" />
     <ClInclude Include="OrthoCamera.h" />
     <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="resource.h" />
@@ -34,7 +38,6 @@
     <ClInclude Include="Track.h" />
     <ClInclude Include="vec3.h" />
     <ClInclude Include="vec4.h" />
-    <ClInclude Include="vsShaderLib.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="proj.rc" />
@@ -44,6 +47,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Car.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OrthoCamera.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
@@ -51,7 +55,6 @@
     <ClCompile Include="Track.cpp" />
     <ClCompile Include="vec3.cpp" />
     <ClCompile Include="vec4.cpp" />
-    <ClCompile Include="vsShaderLib.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{5882F5A5-B6D5-4CC8-91C0-EAB1FEAA21FD}</ProjectGuid>

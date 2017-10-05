@@ -4,26 +4,7 @@
 
 using namespace std;
 
-
-
-Shader::Shader(const std::string& vertexShader, const std::string& fragmentShader) {
-	totalShaders = 0;
-	shaders[VERTEX_SHADER] = 0;
-	shaders[FRAGMENT_SHADER] = 0;
-
-	LoadFromFile(GL_VERTEX_SHADER, vertexShader);
-	LoadFromFile(GL_FRAGMENT_SHADER, fragmentShader);
-	CreateProgram();
-	LinkProgram();
-
-}
-
-Shader::~Shader()
-{
-	DeleteProgram();
-}
-
-void Shader::LoadFromString(GLenum type, const string& source) {
+void Shader::loadFromString(GLenum type, const string& source) {
 	GLuint shader = glCreateShader(type);
 
 	const char * ptmp = source.c_str();
@@ -38,14 +19,17 @@ void Shader::LoadFromString(GLenum type, const string& source) {
 		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
 		GLchar *infoLog = new GLchar[infoLogLength];
 		glGetShaderInfoLog(shader, infoLogLength, NULL, infoLog);
-		cerr << "Compile log: " << infoLog << endl;
+		GLchar *shaderType = "";
+		if (type == GL_VERTEX_SHADER) shaderType = "Vertex Shader: ";
+		if (type == GL_FRAGMENT_SHADER) shaderType = "Fragment Shader: ";
+		cerr << shaderType << "Compile log: " << infoLog << endl;
 		delete[] infoLog;
 		glDeleteShader(shader);
 	}
 	shaders[totalShaders++] = shader;
 }
 
-GLuint Shader::CreateProgram() {
+GLuint Shader::createProgram() {
 	program = glCreateProgram();
 	if (shaders[VERTEX_SHADER] != 0) {
 		glAttachShader(program, shaders[VERTEX_SHADER]);
@@ -57,7 +41,7 @@ GLuint Shader::CreateProgram() {
 	return program;
 }
 
-void Shader::LinkProgram() {
+void Shader::linkProgram() {
 	//link and check whether the program links fine
 	GLint status;
 	glLinkProgram(program);
@@ -79,30 +63,30 @@ void Shader::LinkProgram() {
 
 }
 
-void Shader::Use() {
+void Shader::use() {
 	glUseProgram(program);
 }
 
-void Shader::UnUse() {
+void Shader::unUse() {
 	glUseProgram(0);
 }
 
-void Shader::LoadInt(GLint location, GLint i) {
+void Shader::loadInt(GLint location, GLint i) {
 	glUniform1i(location, i);
 }
-void Shader::LoadFloat(GLint location, GLfloat f) {
+void Shader::loadFloat(GLint location, GLfloat f) {
 	glUniform1f(location, f);
 }
-void Shader::LoadVec3(GLint location, vec3 &v) {
+void Shader::loadVec3(GLint location, vec3 &v) {
 	glUniform3fv(location, 1, v.toPointer());
 }
-void Shader::LoadVec4(GLint location, vec4 &v) {
+void Shader::loadVec4(GLint location, vec4 &v) {
 	glUniform4fv(location, 1, v.toPointer());
 }
-void Shader::LoadMat3(GLint location, float* m) {
+void Shader::loadMat3(GLint location, float* m) {
 	glUniformMatrix3fv(location, 1, GL_FALSE, m);
 }
-void Shader::LoadMat4(GLint location, float* m) {
+void Shader::loadMat4(GLint location, float* m) {
 	glUniformMatrix4fv(location, 1, GL_FALSE, m);
 }
 //void Shader::LoadTexture(GLint location, Texture *t) {
@@ -110,21 +94,21 @@ void Shader::LoadMat4(GLint location, float* m) {
 //}
 
 
-void Shader::BindAttribute(GLint attribute, const GLchar* variableName) {
+void Shader::bindAttribute(GLint attribute, const GLchar* variableName) {
 	glBindAttribLocation(program, attribute, variableName);
 }
-GLint Shader::GetUniformLocation(const GLchar* source) {
+GLint Shader::getUniformLocation(const GLchar* source) {
 	return glGetUniformLocation(program, source);
 }
 
 
-GLint Shader::GetUniformBlockIndex(const GLchar* source) {
+GLint Shader::getUniformBlockIndex(const GLchar* source) {
 	return glGetUniformBlockIndex(program, source);
 }
 
 
-void Shader::DeleteProgram() {
-	UnUse();
+void Shader::deleteProgram() {
+	unUse();
 	glDetachShader(program, shaders[VERTEX_SHADER]);
 	glDetachShader(program, shaders[FRAGMENT_SHADER]);
 
@@ -135,14 +119,14 @@ void Shader::DeleteProgram() {
 }
 
 
-void Shader::LoadFromFile(GLenum whichShader, const string& filename) {
+void Shader::loadFromFile(GLenum whichShader, const string& filename) {
 	ifstream fp;
 	fp.open(filename.c_str(), ios_base::in);
 	if (fp) {
 
 		string buffer(std::istreambuf_iterator<char>(fp), (std::istreambuf_iterator<char>()));
 		//copy to source
-		LoadFromString(whichShader, buffer);
+		loadFromString(whichShader, buffer);
 	}
 	else {
 		cerr << "Error loading shader: " << filename << endl;

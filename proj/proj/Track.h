@@ -1,24 +1,32 @@
 #pragma once
 #include "vec3.h"
-#include "Mesh.h"
-#include "AVTmathLib.h"
-#include "Material.h"
-class Track {
+#include "GameObject.h"
+#include "Cheerio.h"
+#include "Orange.h"
+#include "Butter.h"
 
-	Mesh* mesh;
-	Material material;
-	vec3 position;
+class Track : public GameObject {
+
+	std::vector<objl::Mesh> meshes;
+	std::vector<Cheerio*> cheerios;
+	std::vector<Butter*> butters;
+	std::vector<Orange*> oranges;
+
+	vec3 startingPosition;
 
 
 public:
-	Track() {
-		position = vec3(0.0f, 0.0f, 0.0f);
-		mesh = new Mesh(std::string("objs/cube.obj"));
+	Track(vec3& position, Shader* shader) 
+		: GameObject(position, shader, std::string("objs/cube.obj")) {
+		importFromFile(std::string("tracks/track.txt"));
+		int i = 2;
 	}
 	virtual ~Track() {}
-
+	void setStartingPosition(vec3& position) {
+		startingPosition = position;
+	}
+	void importFromFile(std::string& s);
 	void update(float timeStep);
-	void draw();
-
+	void draw() override;
 
 };

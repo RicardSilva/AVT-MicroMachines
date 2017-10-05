@@ -1,28 +1,24 @@
 #pragma once
 #include "vec3.h"
 #include "AVTmathLib.h"
-#include "ObjLoader.h"
+#include "GameObject.h"
 
-class Car {
+class Car : public GameObject {
 	
-	std::vector<objl::Mesh> meshes;
 	vec3 position;
 	float angle;
 	
-	objl::Loader* Loader;
+	
 
 public:
-	Car() {
-		position = vec3(0.0f, 5.0f,0.0f);
-		Loader = new objl::Loader();
-		Loader->LoadFile("objs/car2.obj");
-		meshes = Loader->LoadedMeshes;
-		//delete Loader;
+	Car(vec3& position, Shader* shader) 
+		: GameObject(position, shader, std::string("objs/car2.obj")) {
+		
 	}
 	virtual ~Car() {}
-	vec3 getPosition() { return position; }
+
+	
 	void update(float timeStep);
-	void draw();
 
 
 };

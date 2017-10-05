@@ -3,12 +3,18 @@
 #include "Shader.h"
 #include <map>
 #include <string>
-#include "ObjLoader.h"
+#include "AVTmathLib.h"
 
 #define VERTICES 0
 #define TEXCOORDS 1
 #define NORMALS 2
 
+// The storage for matrices
+extern float mMatrix[COUNT_MATRICES][16];
+extern float mCompMatrix[COUNT_COMPUTED_MATRICES][16];
+
+// The normal matrix
+extern float mNormal3x3[9];
 
 class LightShader : public Shader {
 
@@ -25,49 +31,54 @@ private:
 
 public:
 	LightShader(const std::string& vertexShader, const std::string& fragmentShader) : Shader(vertexShader, fragmentShader) {
-		BindAttributes();
-		GetUniformLocations();
+		bindAttributes();
+		getUniformLocations();
 	}
 	virtual ~LightShader() {}
 
-	void BindAttributes(void) {
-		BindAttribute(VERTICES, "position");
-		BindAttribute(TEXCOORDS, "texCoord");
-		BindAttribute(NORMALS, "normal");
+	void bindAttributes(void) {
+		bindAttribute(VERTICES, "position");
+		bindAttribute(TEXCOORDS, "texCoord");
+		bindAttribute(NORMALS, "normal");
 	}
 
 
-	void GetUniformLocations(void) {
-		projViewModelID = GetUniformLocation("m_pvm");
-		viewModelID = GetUniformLocation("m_viewModel");
-		normalID = GetUniformLocation("m_normal");
-		lightPosID = GetUniformLocation("l_pos");
-		matAmbientID = GetUniformLocation("mat.ambient");
-		matDiffuseID = GetUniformLocation("mat.diffuse");
-		matSpecularID = GetUniformLocation("mat.specular");
-		matShininessID = GetUniformLocation("mat.shininess");
+	void getUniformLocations(void) {
+		projViewModelID = getUniformLocation("m_pvm");
+		viewModelID = getUniformLocation("m_viewModel");
+		normalID = getUniformLocation("m_normal");
+		lightPosID = getUniformLocation("l_pos");
+		matAmbientID = getUniformLocation("mat.ambient");
+		matDiffuseID = getUniformLocation("mat.diffuse");
+		matSpecularID = getUniformLocation("mat.specular");
+		matShininessID = getUniformLocation("mat.shininess");
 	}
 
-	void LoadProjViewModelMatrix(float* matrix) {
-		Shader::LoadMat4(projViewModelID, matrix);
+	void loadProjViewModelMatrix(float* matrix) {
+		Shader::loadMat4(projViewModelID, matrix);
 	}
-	void LoadViewModelMatrix(float* matrix) {
-		Shader::LoadMat4(viewModelID, matrix);
+	void loadViewModelMatrix(float* matrix) {
+		Shader::loadMat4(viewModelID, matrix);
 	}
-	void LoadNormalMatrix(float* matrix) {
-		Shader::LoadMat3(normalID, matrix);
+	void loadNormalMatrix(float* matrix) {
+		Shader::loadMat3(normalID, matrix);
 	}
-	void LoadNormalMatrix(float* matrix) {
-		Shader::LoadMat3(normalID, matrix);
+	void loadLightPosition(vec3& vec) {
+		Shader::loadVec3(normalID, vec);
 	}
-	void LoadLightPosition(vec3& vec) {
-		Shader::LoadVec3(normalID, vec);
+	void loadMaterial(objl::Material material) {
+		Shader::loadVec3(matAmbientID, material.Ka);
+		Shader::loadVec3(matDiffuseID, material.Kd);
+		Shader::loadVec3(matSpecularID, material.Ks);
+		Shader::loadFloat(matShininessID, material.Ns);
 	}
-	void LoadMaterial(objl::Material material) {
-		Shader::LoadVec3(matAmbientID, material.Ka);
-		Shader::LoadVec3(matDiffuseID, material.Kd);
-		Shader::LoadVec3(matSpecularID, material.Ks);
-		Shader::LoadFloat(matShininessID, material.Ns);
+
+	void loadMatrices() {
+		computeDerivedMatrix(PROJ_VIEW_MODEL);
+		loadViewModelMatrix(mCompMatrix[VIEW_MODEL]);
+		loadProjViewModelMatrix(mCompMatrix[PROJ_VIEW_MODEL]);
+		computeNormalMatrix3x3();
+		loadNormalMatrix(mNormal3x3);
 	}
 
 
