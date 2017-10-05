@@ -23,12 +23,14 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Car.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="LightShader.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="ObjLoader.h" />
     <ClInclude Include="OrthoCamera.h" />
     <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="Track.h" />
     <ClInclude Include="vec3.h" />
     <ClInclude Include="vec4.h" />
@@ -45,6 +47,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OrthoCamera.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Track.cpp" />
     <ClCompile Include="vec3.cpp" />
     <ClCompile Include="vec4.cpp" />

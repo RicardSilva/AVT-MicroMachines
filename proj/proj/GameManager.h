@@ -93,6 +93,7 @@ public:
 	void drawCar();
 	void drawTrack();
 	void sendMatricesToShader();
+	void teste(GLfloat *value);
 	void update(double timeStep);
 	void reshape(GLsizei w, GLsizei h);
 	void reshapeAVT(GLsizei w, GLsizei h);

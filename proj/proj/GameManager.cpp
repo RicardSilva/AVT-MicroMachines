@@ -1,5 +1,23 @@
 #include "GameManager.h"
-
+bool isOpenGLError() {
+	bool isError = false;
+	GLenum errCode;
+	const GLubyte *errString;
+	while ((errCode = glGetError()) != GL_NO_ERROR) {
+		isError = true;
+		errString = gluErrorString(errCode);
+		std::cerr << "OpenGL ERROR [" << errString << "]." << std::endl;
+	}
+	return isError;
+}
+void checkOpenGLError(std::string error)
+{
+	if (isOpenGLError()) {
+		std::cerr << error << std::endl;
+		getchar();
+		exit(EXIT_FAILURE);
+	}
+}
 GameManager::GameManager() { }
 
 GameManager::~GameManager() { }
@@ -23,7 +41,6 @@ bool GameManager::init() {
 	srand(time(NULL));	// initialize seed of random
 	if (!initShaders())
 		return(false);
-
 	car = new Car();
 	initCameras();
 	initLights();
@@ -58,7 +75,6 @@ bool GameManager::initShaders() {
 	lPos_uniformId = glGetUniformLocation(shader.getProgramIndex(), "l_pos");
 
 	printf("InfoLog for Hello World Shader\n%s\n\n", shader.getAllInfoLogs().c_str());
-
 	return(shader.isProgramValid());
 }
 
@@ -230,6 +246,9 @@ void GameManager::sendMatricesToShader() {
 	glUniformMatrix3fv(normal_uniformId, 1, GL_FALSE, mNormal3x3);
 }
 
+void GameManager::teste(GLfloat *value) {
+	glUniformMatrix4fv(vm_uniformId, 1, GL_FALSE, value);
+}
 void GameManager::update(double timeStep) {
 
 
