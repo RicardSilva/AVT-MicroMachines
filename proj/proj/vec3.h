@@ -74,15 +74,21 @@ struct vec3 {
 		friend vec3 lerp(const vec3& v1, const vec3& v2, float k) {
 			return (1 - k) * v1 + k * v2;
 		}
+		friend float angleBetween(const vec3& a, const vec3& b)
+		{
+			float angle = dotProduct(a, b);
+			angle /= (a.magnitude() * b.magnitude());
+			return angle = acosf(angle);
+		}
 
 		void clean();
 		void makeZero();
-		bool isZero();
+		bool isZero() const;
 
-		float sqrMagnitude();
-		float magnitude();
+		float sqrMagnitude() const;
+		float magnitude() const;
 		void normalize();
-		vec3 normalized();
+		vec3 normalized() const;
 
 		const float* toPointer() const;
 	};

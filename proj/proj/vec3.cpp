@@ -43,16 +43,16 @@ void vec3::clean() {
 void vec3::makeZero() {
 	Set(0.0f, 0.0f, 0.0f);
 }
-bool vec3::isZero() {
+bool vec3::isZero() const {
 	return (fabs(x) < TOLERANCE
 		&& fabs(y) < TOLERANCE
 		&& fabs(z) < TOLERANCE);
 }
 
-float vec3::sqrMagnitude() {
+float vec3::sqrMagnitude() const {
 	return x*x + y*y + z*z;
 }
-float vec3::magnitude() {
+float vec3::magnitude() const  {
 	return sqrt(sqrMagnitude());
 }
 
@@ -66,7 +66,7 @@ void vec3::normalize() {
 		z *= m;
 	}
 }
-vec3 vec3::normalized() {
+vec3 vec3::normalized() const {
 	float m = magnitude();
 	if (m != 0) {
 		m = 1.0f / m;

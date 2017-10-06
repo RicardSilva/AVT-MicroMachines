@@ -11,8 +11,8 @@ void GameObject::draw(){
 	shader->loadMatrices();
 
 	for (auto mesh : meshes) {
-		shader->loadMaterial(mesh.MeshMaterial);
-		mesh.draw();
+		shader->loadMaterial(mesh->MeshMaterial);
+		mesh->draw();
 	}
 
 

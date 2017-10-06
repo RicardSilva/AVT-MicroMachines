@@ -10,6 +10,11 @@
 #include "GL/glew.h"
 #include "GL/freeglut.h"
 
+
+#define VERTICES 0
+#define TEXCOORDS 1
+#define NORMALS 2
+
 namespace objl
 {
 	namespace {
@@ -51,47 +56,36 @@ namespace objl
 			GLfloat Y;
 		};
 
-		/*struct vec3
-		{
-			vec3()
-			{
-				X = 0.0f;
-				Y = 0.0f;
-				Z = 0.0f;
+		struct Vertex {
+			GLfloat x, y, z;
+			Vertex() {}
+			Vertex(const vec3& v) {
+				x = v.x;
+				y = v.y;
+				z = v.z;
 			}
-			vec3(float X_, float Y_, float Z_)
-			{
-				X = X_;
-				Y = Y_;
-				Z = Z_;
-			}
-			bool operator==(const vec3& other) const
-			{
-				return (this->X == other.X && this->Y == other.Y && this->Z == other.Z);
-			}
-			bool operator!=(const vec3& other) const
-			{
-				return !(this->X == other.X && this->Y == other.Y && this->Z == other.Z);
-			}
-			vec3 operator+(const vec3& right) const
-			{
-				return vec3(this->X + right.X, this->Y + right.Y, this->Z + right.Z);
-			}
-			vec3 operator-(const vec3& right) const
-			{
-				return vec3(this->X - right.X, this->Y - right.Y, this->Z - right.Z);
-			}
-			vec3 operator*(const float& other) const
-			{
-				return vec3(this->X *other, this->Y * other, this->Z - other);
-			}
+		};
 
-			GLfloat X;
-			GLfloat Y;
-			GLfloat Z;
-		};*/
+		struct Texcoord {
+			GLfloat u, v;
+			Texcoord() {}
+			Texcoord(const Vector2& w) {
+				u = w.X;
+				v = w.Y;
+			}
+		};
 
-		struct Vertex
+		struct Normal  {
+			GLfloat nx, ny, nz;
+			Normal() {}
+			Normal(const vec3& v) {
+				nx = v.x;
+				ny = v.y;
+				nz = v.z;
+			}
+		};
+
+		struct VertexOld
 		{
 			vec3 Position;
 			vec3 Normal;
@@ -135,68 +129,62 @@ namespace objl
 		struct Mesh
 		{
 			std::string MeshName;
-			std::vector<Vertex> Vertices;
-			std::vector<unsigned int> Indices;
 
+			std::vector <Vertex> Positions;
+			std::vector <Normal> Normals;
+			std::vector <Texcoord> Texcoords;
+			
 			Material MeshMaterial;
 
-			#define VERTICES 0
-			#define TEXCOORDS 1
-			#define NORMALS 2
 
 			GLuint VaoId;
 			GLuint VboVertices, VboTexcoords, VboNormals;
 			Mesh() {}
-			Mesh(std::vector<Vertex>& _Vertices, std::vector<unsigned int>& _Indices)
+			Mesh(std::vector<Vertex>& positions, 
+				std::vector <Normal>& normals, 
+				std::vector <Texcoord>& texcoords)
 			{
-				Vertices = _Vertices;
-				Indices = _Indices;
+				Positions = positions;
+				Normals = normals;
+				Texcoords = texcoords;
 				CreateBufferObjects();
 			}
 			~Mesh() { 
-				//DestroyBufferObjects(); 
+				DestroyBufferObjects(); 
 			}
 
 			
 		public:
 			void draw() {
 				glBindVertexArray(VaoId);
-				glDrawArrays(GL_TRIANGLES, 0, (GLsizei)Vertices.size());
+				glDrawArrays(GL_TRIANGLES, 0, (GLsizei)Positions.size());
 				glBindVertexArray(0);
 			}
 		private:
 			void CreateBufferObjects()
 			{
-				std::vector <vec3> Positions;
-				std::vector <vec3> Normals;
-				std::vector <Vector2> Texcoords;
-
-				for (auto vert : Vertices) {
-					Positions.push_back(vert.Position);
-					Normals.push_back(vert.Normal);
-					Texcoords.push_back(vert.TextureCoordinate);
-				}
+				
 				glGenVertexArrays(1, &VaoId);
 				glBindVertexArray(VaoId);
 
 				glGenBuffers(1, &VboVertices);
 				glBindBuffer(GL_ARRAY_BUFFER, VboVertices);
-				glBufferData(GL_ARRAY_BUFFER, Positions.size() * sizeof(vec3), &Positions[0], GL_STATIC_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, Positions.size() * sizeof(Vertex), &Positions[0], GL_STATIC_DRAW);
 				glEnableVertexAttribArray(VERTICES);
-				glVertexAttribPointer(VERTICES, 3, GL_FLOAT, GL_FALSE, sizeof(vec3), 0);
+				glVertexAttribPointer(VERTICES, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
 
 				
 				glGenBuffers(1, &VboTexcoords);
 				glBindBuffer(GL_ARRAY_BUFFER, VboTexcoords);
-				glBufferData(GL_ARRAY_BUFFER, Texcoords.size() * sizeof(Vector2), &Texcoords[0], GL_STATIC_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, Texcoords.size() * sizeof(Texcoord), &Texcoords[0], GL_STATIC_DRAW);
 				glEnableVertexAttribArray(TEXCOORDS);
-				glVertexAttribPointer(TEXCOORDS, 2, GL_FLOAT, GL_FALSE, sizeof(Vector2), 0);
+				glVertexAttribPointer(TEXCOORDS, 2, GL_FLOAT, GL_FALSE, sizeof(Texcoord), 0);
 				
 				glGenBuffers(1, &VboNormals);
 				glBindBuffer(GL_ARRAY_BUFFER, VboNormals);
-				glBufferData(GL_ARRAY_BUFFER, Normals.size() * sizeof(vec3), &Normals[0], GL_STATIC_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, Normals.size() * sizeof(Normal), &Normals[0], GL_STATIC_DRAW);
 				glEnableVertexAttribArray(NORMALS);
-				glVertexAttribPointer(NORMALS, 3, GL_FLOAT, GL_FALSE, sizeof(vec3), 0);
+				glVertexAttribPointer(NORMALS, 3, GL_FLOAT, GL_FALSE, sizeof(Normal), 0);
 
 				glBindVertexArray(0);
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -221,37 +209,6 @@ namespace objl
 			}
 		};
 
-		namespace math
-		{
-			// vec3 Cross Product
-			vec3 CrossV3(const vec3 a, const vec3 b)
-			{
-				return vec3(a.y * b.z - a.z * b.y,
-					a.z * b.x - a.x * b.z,
-					a.x * b.y - a.y * b.x);
-			}
-
-			// vec3 Magnitude
-			float MagnitudeV3(const vec3 in)
-			{
-				return (sqrtf(powf(in.x, 2) + powf(in.z, 2) + powf(in.z, 2)));
-			}
-
-			// vec3 DotProduct
-			float DotV3(const vec3 a, const vec3 b)
-			{
-				return (a.x * b.x) + (a.y * b.y) + (a.z * b.z);
-			}
-
-			// Angle between 2 vec3
-			float AngleBetweenV3(const vec3 a, const vec3 b)
-			{
-				float angle = DotV3(a, b);
-				angle /= (MagnitudeV3(a) * MagnitudeV3(b));
-				return angle = acosf(angle);
-			}
-		}
-
 		namespace algorithm
 		{
 
@@ -262,10 +219,10 @@ namespace objl
 				vec3 u = tri2 - tri1;
 				vec3 v = tri3 - tri1;
 				vec3 w = point - tri1;
-				vec3 n = math::CrossV3(u, v);
+				vec3 n = crossProduct(u, v);
 
-				float y = (math::DotV3(math::CrossV3(u, w), n) / math::DotV3(n, n));
-				float b = (math::DotV3(math::CrossV3(u, w), n) / math::DotV3(n, n));
+				float y = (dotProduct(crossProduct(u, w), n) / dotProduct(n, n));
+				float b = (dotProduct(crossProduct(u, w), n) / dotProduct(n, n));
 				float a = 1 - y - b;
 
 				// Projected point
@@ -373,19 +330,21 @@ namespace objl
 		class Loader
 		{
 		public:
+
+			// Loaded Mesh Objects
+			std::vector<Mesh*> LoadedMeshes;
+			// Loaded VertexOld Objects
+			std::vector<VertexOld> LoadedVertices;
+			// Loaded Material Objects
+			std::vector<Material> LoadedMaterials;
+
 			Loader() {}
 			~Loader() {
 				LoadedMeshes.clear();
 			}
 
-
-			// If file is loaded return true
-			//
-			// If the file is unable to be found
-			// or unable to be loaded return false
 			bool LoadFile(std::string Path)
 			{
-				
 				// If the file is not an .obj file return false
 				if (Path.substr(Path.size() - 4, 4) != ".obj")
 					return false;
@@ -398,21 +357,21 @@ namespace objl
 
 				LoadedMeshes.clear();
 				LoadedVertices.clear();
-				LoadedIndices.clear();
 
 				std::vector<vec3> Positions;
 				std::vector<Vector2> TCoords;
 				std::vector<vec3> Normals;
 
-				std::vector<Vertex> Vertices;
-				std::vector<unsigned int> Indices;
+				std::vector <Vertex> MeshPositions;
+				std::vector <Texcoord> MeshTexcoords;
+				std::vector <Normal> MeshNormals;
 
 				std::vector<std::string> MeshMatNames;
 
 				bool listening = false;
 				std::string meshname;
 
-				Mesh tempMesh;
+				Mesh* tempMesh;
 
 				std::string curline;
 				while (std::getline(file, curline))
@@ -437,18 +396,19 @@ namespace objl
 						else
 						{
 							// Generate the mesh to put into the array
-							if (!Indices.empty() && !Vertices.empty())
+							if (!MeshPositions.empty())
 							{
 								// Create Mesh
-								tempMesh = Mesh(Vertices, Indices);
-								tempMesh.MeshName = meshname;
+								tempMesh = new Mesh(MeshPositions, MeshNormals, MeshTexcoords);
+								tempMesh->MeshName = meshname;
 
 								// Insert Mesh
 								LoadedMeshes.push_back(tempMesh);
 
 								// Cleanup
-								Vertices.clear();
-								Indices.clear();
+								MeshPositions.clear();
+								MeshNormals.clear();
+								MeshTexcoords.clear();
 								meshname.clear();
 
 								meshname = algorithm::tail(curline);
@@ -467,7 +427,7 @@ namespace objl
 						}
 
 					}
-					// Generate a Vertex Position
+					// Generate a Position
 					if (algorithm::firstToken(curline) == "v")
 					{
 						std::vector<std::string> spos;
@@ -480,7 +440,7 @@ namespace objl
 
 						Positions.push_back(vpos);
 					}
-					// Generate a Vertex Texture Coordinate
+					// Generate Texture Coordinate
 					if (algorithm::firstToken(curline) == "vt")
 					{
 						std::vector<std::string> stex;
@@ -492,7 +452,7 @@ namespace objl
 
 						TCoords.push_back(vtex);
 					}
-					// Generate a Vertex Normal;
+					// Generate a Normal;
 					if (algorithm::firstToken(curline) == "vn")
 					{
 						std::vector<std::string> snor;
@@ -508,32 +468,21 @@ namespace objl
 					// Generate a Face (vertices & indices)
 					if (algorithm::firstToken(curline) == "f")
 					{
-						// Generate the vertices
+						// Generate the vertices (position, texture coords, normal)
 						std::vector<Vertex> vVerts;
-						GenVerticesFromRawOBJ(vVerts, Positions, TCoords, Normals, curline);
+						std::vector<Texcoord> vTexcoords;
+						std::vector<Normal> vNormals;
+						GenVerticesFromRawOBJ(vVerts, vTexcoords, vNormals,
+							Positions, TCoords, Normals, curline);
 
 						// Add Vertices
 						for (int i = 0; i < int(vVerts.size()); i++)
 						{
-							Vertices.push_back(vVerts[i]);
-
-							//LoadedVertices.push_back(vVerts[i]);
+							MeshPositions.push_back(vVerts[i]);
+							MeshTexcoords.push_back(vTexcoords[i]);
+							MeshNormals.push_back(vNormals[i]);
 						}
 
-						std::vector<unsigned int> iIndices;
-
-						VertexTriangluation(iIndices, vVerts);
-
-						// Add Indices
-						for (int i = 0; i < int(iIndices.size()); i++)
-						{
-							unsigned int indnum = (unsigned int)((Vertices.size()) - vVerts.size()) + iIndices[i];
-							Indices.push_back(indnum);
-
-							//indnum = (unsigned int)((LoadedVertices.size()) - vVerts.size()) + iIndices[i];
-							//LoadedIndices.push_back(indnum);
-
-						}
 					}
 					// Get Mesh Material Name
 					if (algorithm::firstToken(curline) == "usemtl")
@@ -541,17 +490,17 @@ namespace objl
 						MeshMatNames.push_back(algorithm::tail(curline));
 
 						// Create new Mesh, if Material changes within a group
-						if (!Indices.empty() && !Vertices.empty())
+						if (!MeshPositions.empty())
 						{
 							// Create Mesh
-							tempMesh = Mesh(Vertices, Indices);
-							tempMesh.MeshName = meshname;
+							tempMesh = new Mesh(MeshPositions, MeshNormals, MeshTexcoords);
+							tempMesh->MeshName = meshname;
 							int i = 2;
 							while (1) {
-								tempMesh.MeshName = meshname + "_" + std::to_string(i);
+								tempMesh->MeshName = meshname + "_" + std::to_string(i);
 
 								for (auto &m : LoadedMeshes)
-									if (m.MeshName == tempMesh.MeshName)
+									if (m->MeshName == tempMesh->MeshName)
 										continue;
 								break;
 							}
@@ -560,8 +509,9 @@ namespace objl
 							LoadedMeshes.push_back(tempMesh);
 
 							// Cleanup
-							Vertices.clear();
-							Indices.clear();
+							MeshPositions.clear();
+							MeshNormals.clear();
+							MeshTexcoords.clear();
 						}
 
 					}
@@ -594,11 +544,11 @@ namespace objl
 
 
 				// Deal with last mesh
-				if (!Indices.empty() && !Vertices.empty())
+				if (!MeshPositions.empty())
 				{
 					// Create Mesh
-					tempMesh = Mesh(Vertices, Indices);
-					tempMesh.MeshName = meshname;
+					tempMesh = new Mesh(MeshPositions, MeshNormals, MeshTexcoords);
+					tempMesh->MeshName = meshname;
 
 					// Insert Mesh
 					LoadedMeshes.push_back(tempMesh);
@@ -617,38 +567,32 @@ namespace objl
 					{
 						if (LoadedMaterials[j].name == matname)
 						{
-							LoadedMeshes[i].MeshMaterial = LoadedMaterials[j];
+							LoadedMeshes[i]->MeshMaterial = LoadedMaterials[j];
 							break;
 						}
 					}
 				}
 
-				if (LoadedMeshes.empty() && LoadedVertices.empty() && LoadedIndices.empty())
+				if (LoadedMeshes.empty() && LoadedVertices.empty())
 				{
 					return false;
 				}
 				else
 				{
 					LoadedVertices.clear();
-					LoadedIndices.clear();
 					LoadedMaterials.clear();
 					return true;
 				}
 			}
 
-			// Loaded Mesh Objects
-			std::vector<Mesh> LoadedMeshes;
-			// Loaded Vertex Objects
-			std::vector<Vertex> LoadedVertices;
-			// Loaded Index Positions
-			std::vector<unsigned int> LoadedIndices;
-			// Loaded Material Objects
-			std::vector<Material> LoadedMaterials;
+			
 
 		private:
 			// Generate vertices from a list of positions, 
 			//	tcoords, normals and a face line
 			void GenVerticesFromRawOBJ(std::vector<Vertex>& oVerts,
+				std::vector<Texcoord>& oTexcoords,
+				std::vector<Normal>& oNormals,
 				const std::vector<vec3>& iPositions,
 				const std::vector<Vector2>& iTCoords,
 				const std::vector<vec3>& iNormals,
@@ -656,6 +600,8 @@ namespace objl
 			{
 				std::vector<std::string> sface, svert;
 				Vertex vVert;
+				Texcoord vTexcoord;
+				Normal vNormal;
 				algorithm::split(algorithm::tail(icurline), sface, " ");
 
 				bool noNormal = false;
@@ -698,39 +644,45 @@ namespace objl
 						}
 					}
 
-					// Calculate and store the vertex
+					// Calculate and store the VertexOld
 					switch (vtype)
 					{
 					case 1: // P
 					{
-						vVert.Position = algorithm::getElement(iPositions, svert[0]);
-						vVert.TextureCoordinate = Vector2(0, 0);
+						vVert = algorithm::getElement(iPositions, svert[0]);
+						vTexcoord = Vector2(0, 0);
 						noNormal = true;
 						oVerts.push_back(vVert);
+						oTexcoords.push_back(vTexcoord);
 						break;
 					}
 					case 2: // P/T
 					{
-						vVert.Position = algorithm::getElement(iPositions, svert[0]);
-						vVert.TextureCoordinate = algorithm::getElement(iTCoords, svert[1]);
+						vVert = algorithm::getElement(iPositions, svert[0]);
+						vTexcoord = algorithm::getElement(iTCoords, svert[1]);
 						noNormal = true;
 						oVerts.push_back(vVert);
+						oTexcoords.push_back(vTexcoord);
 						break;
 					}
 					case 3: // P//N
 					{
-						vVert.Position = algorithm::getElement(iPositions, svert[0]);
-						vVert.TextureCoordinate = Vector2(0, 0);
-						vVert.Normal = algorithm::getElement(iNormals, svert[2]);
+						vVert = algorithm::getElement(iPositions, svert[0]);
+						vTexcoord = Vector2(0, 0);
+						vNormal = algorithm::getElement(iNormals, svert[2]);
 						oVerts.push_back(vVert);
+						oTexcoords.push_back(vTexcoord);
+						oNormals.push_back(vNormal);
 						break;
 					}
 					case 4: // P/T/N
 					{
-						vVert.Position = algorithm::getElement(iPositions, svert[0]);
-						vVert.TextureCoordinate = algorithm::getElement(iTCoords, svert[1]);
-						vVert.Normal = algorithm::getElement(iNormals, svert[2]);
+						vVert = algorithm::getElement(iPositions, svert[0]);
+						vTexcoord = algorithm::getElement(iTCoords, svert[1]);
+						vNormal = algorithm::getElement(iNormals, svert[2]);
 						oVerts.push_back(vVert);
+						oTexcoords.push_back(vTexcoord);
+						oNormals.push_back(vNormal);
 						break;
 					}
 					default:
@@ -745,187 +697,23 @@ namespace objl
 				// best they get for not compiling a mesh with normals	
 				if (noNormal)
 				{
-					vec3 A = oVerts[0].Position - oVerts[1].Position;
-					vec3 B = oVerts[2].Position - oVerts[1].Position;
+					vec3 A = vec3(oVerts[0].x - oVerts[1].x,
+								oVerts[0].y - oVerts[1].y,
+								oVerts[0].z - oVerts[1].z);
+					vec3 B = vec3(oVerts[2].x - oVerts[1].x,
+								oVerts[2].y - oVerts[1].y,
+								oVerts[2].z - oVerts[1].z);
 
-					vec3 normal = math::CrossV3(A, B);
+					vec3 normal = crossProduct(A, B);
 
 					for (int i = 0; i < int(oVerts.size()); i++)
 					{
-						oVerts[i].Normal = normal;
+						oNormals.push_back(normal);
 					}
 				}
 			}
 
-			// Triangulate a list of vertices into a face by printing
-			//	inducies corresponding with triangles within it
-			void VertexTriangluation(std::vector<unsigned int>& oIndices,
-				const std::vector<Vertex>& iVerts)
-			{
-				// If there are 2 or less verts,
-				// no triangle can be created,
-				// so exit
-				if (iVerts.size() < 3)
-				{
-					return;
-				}
-				// If it is a triangle no need to calculate it
-				if (iVerts.size() == 3)
-				{
-					oIndices.push_back(0);
-					oIndices.push_back(1);
-					oIndices.push_back(2);
-					return;
-				}
-
-				// Create a list of vertices
-				std::vector<Vertex> tVerts = iVerts;
-
-				while (true)
-				{
-					// For every vertex
-					for (int i = 0; i < int(tVerts.size()); i++)
-					{
-						// pPrev = the previous vertex in the list
-						Vertex pPrev;
-						if (i == 0)
-						{
-							pPrev = tVerts[tVerts.size() - 1];
-						}
-						else
-						{
-							pPrev = tVerts[i - 1];
-						}
-
-						// pCur = the current vertex;
-						Vertex pCur = tVerts[i];
-
-						// pNext = the next vertex in the list
-						Vertex pNext;
-						if (i == tVerts.size() - 1)
-						{
-							pNext = tVerts[0];
-						}
-						else
-						{
-							pNext = tVerts[i + 1];
-						}
-
-						// Check to see if there are only 3 verts left
-						// if so this is the last triangle
-						if (tVerts.size() == 3)
-						{
-							// Create a triangle from pCur, pPrev, pNext
-							for (int j = 0; j < int(tVerts.size()); j++)
-							{
-								if (iVerts[j].Position == pCur.Position)
-									oIndices.push_back(j);
-								if (iVerts[j].Position == pPrev.Position)
-									oIndices.push_back(j);
-								if (iVerts[j].Position == pNext.Position)
-									oIndices.push_back(j);
-							}
-
-							tVerts.clear();
-							break;
-						}
-						if (tVerts.size() == 4)
-						{
-							// Create a triangle from pCur, pPrev, pNext
-							for (int j = 0; j < int(iVerts.size()); j++)
-							{
-								if (iVerts[j].Position == pCur.Position)
-									oIndices.push_back(j);
-								if (iVerts[j].Position == pPrev.Position)
-									oIndices.push_back(j);
-								if (iVerts[j].Position == pNext.Position)
-									oIndices.push_back(j);
-							}
-
-							vec3 tempVec;
-							for (int j = 0; j < int(tVerts.size()); j++)
-							{
-								if (tVerts[j].Position != pCur.Position
-									&& tVerts[j].Position != pPrev.Position
-									&& tVerts[j].Position != pNext.Position)
-								{
-									tempVec = tVerts[j].Position;
-									break;
-								}
-							}
-
-							// Create a triangle from pCur, pPrev, pNext
-							for (int j = 0; j < int(iVerts.size()); j++)
-							{
-								if (iVerts[j].Position == pPrev.Position)
-									oIndices.push_back(j);
-								if (iVerts[j].Position == pNext.Position)
-									oIndices.push_back(j);
-								if (iVerts[j].Position == tempVec)
-									oIndices.push_back(j);
-							}
-
-							tVerts.clear();
-							break;
-						}
-
-						// If Vertex is not an interior vertex
-						float angle = math::AngleBetweenV3(pPrev.Position - pCur.Position, pNext.Position - pCur.Position) * (180 / 3.14159265359);
-						if (angle <= 0 && angle >= 180)
-							continue;
-
-						// If any vertices are within this triangle
-						bool inTri = false;
-						for (int j = 0; j < int(iVerts.size()); j++)
-						{
-							if (algorithm::inTriangle(iVerts[j].Position, pPrev.Position, pCur.Position, pNext.Position)
-								&& iVerts[j].Position != pPrev.Position
-								&& iVerts[j].Position != pCur.Position
-								&& iVerts[j].Position != pNext.Position)
-							{
-								inTri = true;
-								break;
-							}
-						}
-						if (inTri)
-							continue;
-
-						// Create a triangle from pCur, pPrev, pNext
-						for (int j = 0; j < int(iVerts.size()); j++)
-						{
-							if (iVerts[j].Position == pCur.Position)
-								oIndices.push_back(j);
-							if (iVerts[j].Position == pPrev.Position)
-								oIndices.push_back(j);
-							if (iVerts[j].Position == pNext.Position)
-								oIndices.push_back(j);
-						}
-
-						// Delete pCur from the list
-						for (int j = 0; j < int(tVerts.size()); j++)
-						{
-							if (tVerts[j].Position == pCur.Position)
-							{
-								tVerts.erase(tVerts.begin() + j);
-								break;
-							}
-						}
-
-						// reset i to the start
-						// -1 since loop will add 1 to it
-						i = -1;
-					}
-
-					// if no triangles were created
-					if (oIndices.size() == 0)
-						break;
-
-					// if no more vertices
-					if (tVerts.size() == 0)
-						break;
-				}
-			}
-
+			
 			// Load Materials from .mtl file
 			bool LoadMaterials(std::string path)
 			{

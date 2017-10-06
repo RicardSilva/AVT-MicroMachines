@@ -7,7 +7,6 @@
 
 class Track : public GameObject {
 
-	std::vector<objl::Mesh> meshes;
 	std::vector<Cheerio*> cheerios;
 	std::vector<Butter*> butters;
 	std::vector<Orange*> oranges;

@@ -61,8 +61,8 @@ void GameManager::initShaders() {
 void GameManager::initCameras() {
 	// set the camera position based on its spherical coordinates
 
-	Camera* topCamera = new OrthoCamera(-800,800,-800,800, 0.1,100);
-	topCamera->setEye(vec3(0,20,0));
+	Camera* topCamera = new OrthoCamera(-100,100,-100,100, 0.1,100);
+	topCamera->setEye(vec3(0,10,0));
 	topCamera->setTarget(vec3(0,0,0));
 	topCamera->setUp(vec3(0,0,-1));
 

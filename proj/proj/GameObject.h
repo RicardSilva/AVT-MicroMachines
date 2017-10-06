@@ -12,7 +12,7 @@ class GameObject {
 
 protected:
 	Shader* shader;
-	std::vector<objl::Mesh> meshes;
+	std::vector<objl::Mesh*> meshes;
 	vec3 position;
 
 public:

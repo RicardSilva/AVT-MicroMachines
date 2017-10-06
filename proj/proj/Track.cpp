@@ -13,7 +13,7 @@ void Track::importFromFile(std::string& file) {
 		i = a - '0';
 		if (i == 1) {
 			//new cheerio
-			cheerios.push_back(new Cheerio(vec3((x * 10 - 700), -(y * 10 - 500), 0), shader));
+			//cheerios.push_back(new Cheerio(vec3((x * 10 - 700), -(y * 10 - 500), 0), shader));
 		}
 		else if (i == 2) {
 			//new candle
@@ -48,8 +48,8 @@ void Track::draw() {
 	shader->loadMatrices();
 
 	for (auto mesh : meshes) {
-		shader->loadMaterial(mesh.MeshMaterial);
-		mesh.draw();
+		shader->loadMaterial(mesh->MeshMaterial);
+		mesh->draw();
 	}
 
 
