@@ -62,7 +62,7 @@ class GameManager {
 	// Camera Position
 	float camX, camY, camZ;
 
-	GameObject* car;
+	Car* car;
 	GameObject* track;
 	Camera* cameras[3];
 	Camera* activeCamera;

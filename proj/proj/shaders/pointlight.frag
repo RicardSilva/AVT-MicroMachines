@@ -41,4 +41,5 @@ void main() {
 	colorOut = max(intensity * vec4(mat.diffuse.xyz, 1.0) + spec, vec4(mat.ambient.xyz, 1.0f));
 	*/
 	
+	
 }

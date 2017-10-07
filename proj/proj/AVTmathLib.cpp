@@ -341,6 +341,7 @@ void lookAt(vec3& pos, vec3& look, vec3& u)
 
 	multMatrix(VIEW, m1);
 	multMatrix(VIEW, m2);
+
 }
 // gluPerspective implementation
 void perspective(float fov, float ratio, float nearp, float farp)

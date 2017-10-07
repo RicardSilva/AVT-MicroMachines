@@ -58,6 +58,15 @@ void processKeys(unsigned char key, int xx, int yy)
 {
 	gm->keydown(key);
 }
+void processSpecialKeys(int key, int xx, int yy)
+{
+	gm->specialKeydown(key);
+}
+void processSpecialKeyUps(int key, int xx, int yy)
+{
+	gm->specialKeyup(key);
+}
+
 
 void processMouseButtons(int button, int state, int xx, int yy)
 {
@@ -95,6 +104,8 @@ int main(int argc, char **argv) {
 
 	//	Mouse and Keyboard Callbacks
 	glutKeyboardFunc(processKeys);
+	glutSpecialFunc(processSpecialKeys);
+	glutSpecialUpFunc(processSpecialKeyUps);
 	glutMouseFunc(processMouseButtons);
 	glutMotionFunc(processMouseMotion);
 	glutMouseWheelFunc(mouseWheel);

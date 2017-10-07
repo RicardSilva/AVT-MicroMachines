@@ -3,10 +3,28 @@
 #include "AVTmathLib.h"
 #include "GameObject.h"
 
+#define PI 3.14
+
 class Car : public GameObject {
 	
-	vec3 position;
-	float angle;
+	vec3 speed;
+	int angle;
+public:
+	// Input flags
+	bool turnLeft = false;
+	bool turnRight = false;
+	bool goForward = false;
+	bool goBack = false;
+
+private:
+	// Car physics
+	float angleInc = 3;
+	float maxSpeed = 325;
+	float maxBackwardsSpeed = -100;
+
+	float acceleration = 150;
+	float backwardsAcceleration = 200;
+	float inercia = 175;
 	
 	
 
@@ -17,7 +35,7 @@ public:
 		
 	}
 	virtual ~Car() {}
-
+	int getAngle() { return angle; }
 
 	virtual void draw();
 	void update(float timeStep);

@@ -64,7 +64,7 @@ void GameManager::initMeshes() {
 	ObjModel* model;
 		
 	std::vector<pair<string, string>> modelsToLoad;
-	modelsToLoad.push_back(std::make_pair("car", "objs/car3.obj"));
+	modelsToLoad.push_back(std::make_pair("car", "objs/car4.obj"));
 	modelsToLoad.push_back(std::make_pair("track", "objs/table.obj"));
 	modelsToLoad.push_back(std::make_pair("cheerio", "objs/donut1.obj"));
 	modelsToLoad.push_back(std::make_pair("butter", "objs/butter.obj"));
@@ -142,16 +142,16 @@ void GameManager::keydown(int key) {
 void GameManager::specialKeydown(int key) {
 	switch (key) {
 	case GLUT_KEY_RIGHT:
-		//_car->setRight(1);
+		car->turnRight = true;
 		break;
 	case GLUT_KEY_LEFT:
-		//_car->setLeft(1);
+		car->turnLeft = true;
 		break;
 	case GLUT_KEY_UP:
-		//_car->setThrottle(1);
+		car->goForward = true;
 		break;
 	case GLUT_KEY_DOWN:
-		//_car->setThrottle(-1);
+		car->goBack = true;
 		break;
 	}
 }
@@ -159,16 +159,16 @@ void GameManager::specialKeydown(int key) {
 void GameManager::specialKeyup(int key) {
 	switch (key) {
 	case GLUT_KEY_RIGHT:
-		//_car->setRight(0);
+		car->turnRight = false;
 		break;
 	case GLUT_KEY_LEFT:
-		//_car->setLeft(0);
+		car->turnLeft = false;
 		break;
 	case GLUT_KEY_UP:
-		//_car->setThrottle(0);
+		car->goForward = false;
 		break;
 	case GLUT_KEY_DOWN:
-		//_car->setThrottle(0);
+		car->goBack = false;
 		break;
 	}
 }
@@ -211,7 +211,8 @@ void GameManager::displayHUD() {
 }
 void GameManager::update(double timeStep) {
 
-
+	car->update(timeStep);
+	cameras[2]->computeCarCameraPosition(car->getPosition(), car->getAngle());
 	
 }
 
