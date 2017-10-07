@@ -11,13 +11,15 @@ class Car : public GameObject {
 	
 
 public:
-	Car(vec3& position, Shader* shader) 
-		: GameObject(position, shader, std::string("objs/car2.obj")) {
+	Car(vec3& position) 
+		: GameObject(position) {
+		model = ModelManager::instance()->getModel("car");
 		
 	}
 	virtual ~Car() {}
 
-	
+
+	virtual void draw();
 	void update(float timeStep);
 
 

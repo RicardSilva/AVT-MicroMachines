@@ -3,11 +3,13 @@
 class Cheerio : public GameObject {
 
 public:
-	Cheerio(vec3& position, Shader* shader) 
-		: GameObject(position, shader, std::string("objs/donut1.obj")) {
+	Cheerio(vec3& position) 
+		: GameObject(position) {
+		model = ModelManager::instance()->getModel("cheerio");
 	}
 	virtual ~Cheerio() {}
 
+	void draw();
 	void update(float timeStep) {}
 
 };

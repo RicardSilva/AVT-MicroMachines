@@ -15,10 +15,10 @@ class Track : public GameObject {
 
 
 public:
-	Track(vec3& position, Shader* shader) 
-		: GameObject(position, shader, std::string("objs/cube.obj")) {
+	Track(vec3& position) 
+		: GameObject(position) {
+		model = ModelManager::instance()->getModel("track");
 		importFromFile(std::string("tracks/track.txt"));
-		int i = 2;
 	}
 	virtual ~Track() {}
 	void setStartingPosition(vec3& position) {

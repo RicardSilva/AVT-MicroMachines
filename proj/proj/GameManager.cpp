@@ -41,7 +41,8 @@ void GameManager::init() {
 	srand(time(NULL));	// initialize seed of random
 
 	initShaders();
-	car = new Car(vec3(0,0,0), shader);
+	initMeshes();
+	car = new Car(vec3(0,20,0));
 	initCameras();
 	initLights();
 	initTrack();
@@ -56,27 +57,48 @@ void GameManager::init() {
 
 void GameManager::initShaders() {
 	shader = new LightShader("shaders/pointlight.vert", "shaders/pointlight.frag");
+	ShaderManager::instance()->addShader("lightShader", shader);
 }
+void GameManager::initMeshes() {
+	ObjLoader* loader = new ObjLoader();
+	ObjModel* model;
+		
+	std::vector<pair<string, string>> modelsToLoad;
+	modelsToLoad.push_back(std::make_pair("car", "objs/car3.obj"));
+	modelsToLoad.push_back(std::make_pair("track", "objs/table.obj"));
+	modelsToLoad.push_back(std::make_pair("cheerio", "objs/donut1.obj"));
+	modelsToLoad.push_back(std::make_pair("butter", "objs/butter.obj"));
+	modelsToLoad.push_back(std::make_pair("orange", "objs/orange.obj"));
 
+	for (auto m : modelsToLoad) {
+		if (loader->LoadFile(m.second)) {
+			model = loader->LoadedModel;
+			ModelManager::instance()->addModel(m.first, model);
+		}
+		else
+			std::cerr << m.second << ": invalid .obj file" << std::endl;
+	}
+	
+}
 void GameManager::initCameras() {
 	// set the camera position based on its spherical coordinates
 
-	Camera* topCamera = new OrthoCamera(-100,100,-100,100, 0.1,100);
-	topCamera->setEye(vec3(0,10,0));
+	Camera* topCamera = new OrthoCamera(-750, 750,-550,550, 0.1,120);
+	topCamera->setEye(vec3(0,100,0));
 	topCamera->setTarget(vec3(0,0,0));
 	topCamera->setUp(vec3(0,0,-1));
 
 	cameras[0] = topCamera;
 
-	Camera* topPerspCamera = new PerspectiveCamera(50, (float)WIDTH / HEIGHT, 0.1f, 10.0f);
-	topPerspCamera->setEye(vec3(5, 5, -5));
-	topPerspCamera->setTarget(vec3(0, 0, 0));
-	topPerspCamera->setUp(vec3(0, 1, 0));
+	Camera* topPerspCamera = new PerspectiveCamera(70, (float)WIDTH / HEIGHT, 0.1f, 1500.0f);
+	topPerspCamera->setEye(vec3(0, 600, 900));
+	topPerspCamera->setTarget(vec3(0, 0, -150));
+	topPerspCamera->setUp(vec3(0, 0, -1));
 
 	cameras[1] = topPerspCamera;
 
-	Camera* carCamera = new PerspectiveCamera(50, (float)WIDTH / HEIGHT, 0.1f, 10.0f);
-	carCamera->setEye(vec3(5, 5, -5));
+	Camera* carCamera = new PerspectiveCamera(60, (float)WIDTH / HEIGHT, 0.1f, 1000.0f);
+	carCamera->setEye(vec3(0, 50, -80));
 	carCamera->setTarget(vec3(0, 0, 0));
 	carCamera->setUp(vec3(0, 1, 0));
 
@@ -85,13 +107,11 @@ void GameManager::initCameras() {
 	activeCamera = cameras[0];
 
 }
-
 void GameManager::initLights() {
 	
 }
-
 void GameManager::initTrack() {
-	track = new Track(vec3(0,0,0), shader);
+	track = new Track(vec3(0,-0.1,0));
 }
 
 
@@ -174,8 +194,9 @@ void GameManager::display() {
 	glUniform4fv(lPos_uniformId, 1, res);
 	shader->unUse();
 	// Render objects
+	track->draw(); 
 	car->draw();
-	track->draw();
+	
 	
 
 
@@ -187,10 +208,6 @@ void GameManager::displayHUD() {
 	
 
 
-}
-
-void GameManager::teste(GLfloat *value) {
-	glUniformMatrix4fv(vm_uniformId, 1, GL_FALSE, value);
 }
 void GameManager::update(double timeStep) {
 

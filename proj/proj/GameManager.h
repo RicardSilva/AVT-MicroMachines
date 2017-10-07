@@ -7,15 +7,17 @@
 #include <cmath>
 #include <algorithm>
 #include <array>
-#include "GameObject.h"
-#include "Car.h"
-#include "Track.h"
-#include "OrthoCamera.h"
-#include "PerspectiveCamera.h"
 #include "time.h"
 
-// Use Very Simple Libs
-#include "Shader.h"
+#include "OrthoCamera.h"
+#include "PerspectiveCamera.h"
+
+#include "Car.h"
+#include "Track.h"
+
+#include "ShaderManager.h"
+#include "ModelManager.h"
+#include "ObjLoader.h"
 #include "LightShader.h"
 #include "AVTmathLib.h"
 
@@ -76,6 +78,7 @@ public:
 
 	void init();
 	void initShaders();
+	void initMeshes();
 	void initCameras();
 	void initLights();
 	void initTrack();

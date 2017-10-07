@@ -6,17 +6,17 @@
 class ShaderManager {
 
 private:
-	static ShaderManager* instance;
+	static ShaderManager* _instance;
 	map<string, Shader*> map;
 	ShaderManager() {};
 
 
 public:
 
-	void AddShader(const string& name, Shader* shader);
-	Shader* GetShader(const string& name);
+	void addShader(const string& name, Shader* shader);
+	Shader* getShader(const string& name);
 
-	static ShaderManager* Instance();
-	void Destroy();
+	static ShaderManager* instance();
+	void destroy();
 
 };

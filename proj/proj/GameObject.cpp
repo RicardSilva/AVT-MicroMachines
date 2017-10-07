@@ -7,10 +7,9 @@ void GameObject::draw(){
 	loadIdentity(MODEL);
 	
 	translate(MODEL, position);
-	scale(MODEL, vec3(20, 1, 20));
 	shader->loadMatrices();
 
-	for (auto mesh : meshes) {
+	for (auto mesh : model->meshes) {
 		shader->loadMaterial(mesh->MeshMaterial);
 		mesh->draw();
 	}

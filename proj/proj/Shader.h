@@ -46,7 +46,7 @@ public:
 	virtual void loadViewModelMatrix(float* matrix) {}
 	virtual void loadNormalMatrix(float* matrix) {}
 	virtual void loadLightPosition(vec3& vec) {}
-	virtual void loadMaterial(objl::Material material) {}
+	virtual void loadMaterial(Material material) {}
 	virtual void loadMatrices() {}
 
 	void loadInt(GLint location, GLint i);

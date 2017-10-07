@@ -29,7 +29,7 @@
     <ClInclude Include="LightShader.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
-    <ClInclude Include="MeshManager.h" />
+    <ClInclude Include="ModelManager.h" />
     <ClInclude Include="ObjLoader.h" />
     <ClInclude Include="Orange.h" />
     <ClInclude Include="OrthoCamera.h" />
@@ -38,6 +38,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="Track.h" />
+    <ClInclude Include="vec2.h" />
     <ClInclude Include="vec3.h" />
     <ClInclude Include="vec4.h" />
   </ItemGroup>
@@ -46,12 +47,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AVTmathLib.cpp" />
+    <ClCompile Include="Butter.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Car.cpp" />
+    <ClCompile Include="cheerio.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MeshManager.cpp" />
+    <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="OrthoCamera.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="Shader.cpp" />
