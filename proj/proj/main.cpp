@@ -70,14 +70,15 @@ void processSpecialKeyUps(int key, int xx, int yy)
 
 void processMouseButtons(int button, int state, int xx, int yy)
 {
-	
+	gm->mouseButtons(button, state, xx, yy);
 }
 void processMouseMotion(int xx, int yy)
 {
+	gm->mouseMotion(xx, yy);
 }
-void mouseWheel(int wheel, int direction, int x, int y) {
-
-	
+void mouseWheel(int wheel, int direction, int x, int y)
+{
+	gm->mouseWheel(wheel, direction, x, y);
 }
 
 

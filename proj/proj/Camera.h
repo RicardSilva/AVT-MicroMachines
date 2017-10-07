@@ -21,6 +21,9 @@ public:
 	void setEye(vec3& v) {
 		eye = v;
 	}
+	vec3 getEye() {
+		return eye;
+	}
 	void setTarget(vec3& v) {
 		target = v;
 	}

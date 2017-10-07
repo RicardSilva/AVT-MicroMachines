@@ -59,8 +59,12 @@ class GameManager {
 	GLint normal_uniformId;
 	GLint lPos_uniformId;
 
-	// Camera Position
-	float camX, camY, camZ;
+	// Mouse Tracking Variables
+	int startX, startY, tracking = 0;
+
+	// Camera Spherical Coordinates
+	float alpha = 39.0f, beta = 51.0f;
+	float r = 10.0f;
 
 	Car* car;
 	GameObject* track;
@@ -90,6 +94,9 @@ public:
 	void specialKeydown(int key);
 	void specialKeyup(int key);
 
+	void mouseButtons(int button, int state, int xx, int yy);
+	void mouseMotion(int xx, int yy);
+	void mouseWheel(int wheel, int direction, int x, int y);
 
 	void display();
 	void displayHUD();
