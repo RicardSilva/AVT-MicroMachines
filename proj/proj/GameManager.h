@@ -63,8 +63,7 @@ class GameManager {
 	int startX, startY, tracking = 0;
 	int deltaX = 0, deltaY = 0;
 	float cameraRotationAngle = 0;
-
-
+	
 	Car* car;
 	GameObject* track;
 	Camera* cameras[3];

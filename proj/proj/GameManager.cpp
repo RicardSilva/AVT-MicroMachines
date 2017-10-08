@@ -1,9 +1,4 @@
 #include "GameManager.h"
-
-//extern "C" {
-//	_declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
-//}
-
 bool isOpenGLError() {
 	bool isError = false;
 	GLenum errCode;
@@ -225,11 +220,6 @@ void GameManager::mouseButtons(int button, int state, int xx, int yy)
 
 	//stop tracking the mouse
 	else if (state == GLUT_UP) {
-		if (tracking == 1) {
-			
-		}
-		else if (tracking == 2) {
-		}
 		tracking = 0;
 	}
 }
@@ -237,6 +227,7 @@ void GameManager::mouseButtons(int button, int state, int xx, int yy)
 // Track mouse motion while buttons are pressed
 
 void GameManager::mouseMotion(int xx, int yy) {
+	
 	// left mouse button: move camera
 	if (tracking == 1) {
 		if (deltaX > xx) {
@@ -264,12 +255,10 @@ void GameManager::mouseWheel(int wheel, int direction, int x, int y) {
 	//	//	glutPostRedisplay();
 }
 
-void GameManager::display() {
-
+void GameManager::display() {	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
-	loadIdentity(MODEL);
-	
+
+	loadIdentity(MODEL);	
 	activeCamera->computeView();
 	//car camera rotation
 	if (cameraRotationAngle != 0 && activeCamera == cameras[2]) {
@@ -286,16 +275,17 @@ void GameManager::display() {
 	shader->use();
 
 	//send the light position in eye coordinates
-	float lightPos[4] = { 0.0f, 10.0f, 0.0f, 1.0f };
+	float lightPos[4] = { 0.0f, 5.0f, 0.0f, 1.0f };
 	float res[4];
 	multMatrixPoint(VIEW, lightPos, res);   //lightPos definido em World Coord so is converted to eye space
 	glUniform4fv(lPos_uniformId, 1, res);
 	shader->unUse();
-
 	// Render objects
 	track->draw(); 
 	car->draw();
 	
+	
+
 
 	glutSwapBuffers();
 	displayHUD();
@@ -309,6 +299,7 @@ void GameManager::displayHUD() {
 void GameManager::update(double timeStep) {
 
 	car->update(timeStep);
+	track->update(timeStep);
 	cameras[2]->computeCarCameraPosition(car->getPosition(), car->getAngle());
 	
 }

@@ -5,9 +5,10 @@
 #include "vec4.h"
 #include <string>
 #include "ObjLoader.h"
-#include "DirectionalLight.h"
 #include <GL/glew.h>
 
+
+struct DirectionalLight;
 
 using namespace std;
 class Shader
