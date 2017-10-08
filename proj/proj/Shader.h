@@ -5,6 +5,7 @@
 #include "vec4.h"
 #include <string>
 #include "ObjLoader.h"
+#include "DirectionalLight.h"
 #include <GL/glew.h>
 
 
@@ -46,7 +47,8 @@ public:
 	virtual void loadViewModelMatrix(float* matrix) {}
 	virtual void loadNormalMatrix(float* matrix) {}
 	virtual void loadLightPosition(vec3& vec) {}
-	virtual void loadMaterial(Material material) {}
+	virtual void loadDirectionalLight(DirectionalLight& light) {}
+	virtual void loadMaterial(Material& material) {}
 	virtual void loadMatrices() {}
 
 	void loadInt(GLint location, GLint i);

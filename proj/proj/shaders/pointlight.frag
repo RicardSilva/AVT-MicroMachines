@@ -1,5 +1,4 @@
 #version 330
-out vec4 colorOut;
 
 struct Materials {
 	vec3 diffuse;
@@ -10,6 +9,35 @@ struct Materials {
 	int texCount;
 };
 
+struct LightProperties {
+	bool isEnabled; // true to apply this light in this invocation
+	
+	bool isLocal; // true for a point light or a spotlight,
+				  // false for a directional light
+				  
+	bool isSpot; // true if the light is a spotlight
+	
+	vec3 ambient; // light’s contribution to ambient light
+	
+	vec3 position; // location of light, if is Local is true,
+				   // otherwise the direction toward the light
+	vec3 color; // color of light
+				   
+	vec3 halfVector; // direction of highlights for directional light
+	vec3 coneDirection; // spotlight attributes
+	
+	float spotCosCutoff;
+	float spotExponent;
+	
+	float constantAttenuation; // local light attenuation coefficients
+	float linearAttenuation;
+	float quadraticAttenuation;
+}; 
+
+// the set of lights to apply, per invocation of this shader
+const int MaxLights = 10;
+uniform LightProperties Lights[MaxLights];
+
 uniform Materials mat;
 
 in Data {
@@ -17,6 +45,8 @@ in Data {
 	vec3 eye;
 	vec3 lightDir;
 } DataIn;
+
+out vec4 colorOut;
 
 void main() {
 

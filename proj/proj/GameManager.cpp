@@ -277,9 +277,9 @@ void GameManager::display() {
 		
 		if (tracking == 0) { //mouse released -> return to original rotation
 			if (cameraRotationAngle > 0)
-				cameraRotationAngle = max(cameraRotationAngle - 2.0f, 0.0f);
+				cameraRotationAngle = max(cameraRotationAngle - 2.5f, 0.0f);
 			else
-				cameraRotationAngle = min(cameraRotationAngle + 2.0f, 0.0f);
+				cameraRotationAngle = min(cameraRotationAngle + 2.5f, 0.0f);
 		}
 	}
 	activeCamera->computeProjection(WIDTH, HEIGHT);

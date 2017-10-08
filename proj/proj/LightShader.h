@@ -66,11 +66,14 @@ public:
 	void loadLightPosition(vec3& vec) {
 		Shader::loadVec3(normalID, vec);
 	}
-	void loadMaterial(Material material) {
+	void loadMaterial(Material& material) {
 		Shader::loadVec3(matAmbientID, material.Ka);
 		Shader::loadVec3(matDiffuseID, material.Kd);
 		Shader::loadVec3(matSpecularID, material.Ks);
 		Shader::loadFloat(matShininessID, material.Ns);
+	}
+	void loadDirectionalLight(DirectionalLight& light) {
+
 	}
 
 	void loadMatrices() {
