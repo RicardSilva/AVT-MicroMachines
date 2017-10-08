@@ -110,7 +110,7 @@ void Car::draw() {
 
 	translate(MODEL, position);
 	rotate(MODEL, angle, vec3(0, 1, 0));
-	scale(MODEL, 10, 10, 8);
+	scale(MODEL, 2, 2, 1.5);
 	shader->loadMatrices();
 
 	for (auto mesh : model->meshes) {

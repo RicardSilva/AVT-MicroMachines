@@ -1,4 +1,9 @@
 #include "GameManager.h"
+
+//extern "C" {
+//	_declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
+//}
+
 bool isOpenGLError() {
 	bool isError = false;
 	GLenum errCode;
@@ -64,7 +69,7 @@ void GameManager::initMeshes() {
 	ObjModel* model;
 		
 	std::vector<pair<string, string>> modelsToLoad;
-	modelsToLoad.push_back(std::make_pair("car", "objs/car4.obj"));
+	modelsToLoad.push_back(std::make_pair("car", "objs/car.obj"));
 	modelsToLoad.push_back(std::make_pair("track", "objs/table.obj"));
 	modelsToLoad.push_back(std::make_pair("cheerio", "objs/donut1.obj"));
 	modelsToLoad.push_back(std::make_pair("butter", "objs/butter.obj"));
@@ -276,7 +281,7 @@ void GameManager::display() {
 	shader->use();
 
 	//send the light position in eye coordinates
-	float lightPos[4] = { 0.0f, 5.0f, 0.0f, 1.0f };
+	float lightPos[4] = { 0.0f, 10.0f, 0.0f, 1.0f };
 	float res[4];
 	multMatrixPoint(VIEW, lightPos, res);   //lightPos definido em World Coord so is converted to eye space
 	glUniform4fv(lPos_uniformId, 1, res);
