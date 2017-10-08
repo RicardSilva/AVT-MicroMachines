@@ -61,6 +61,8 @@ class GameManager {
 
 	// Mouse Tracking Variables
 	int startX, startY, tracking = 0;
+	int deltaX = 0, deltaY = 0;
+	float mov = 0;
 
 	// Camera Spherical Coordinates
 	float alpha = 39.0f, beta = 51.0f;

@@ -211,6 +211,7 @@ void GameManager::mouseButtons(int button, int state, int xx, int yy)
 	if (state == GLUT_DOWN) {
 		startX = xx;
 		startY = yy;
+		deltaX = startX;
 		if (button == GLUT_LEFT_BUTTON)
 			tracking = 1;
 		else if (button == GLUT_RIGHT_BUTTON)
@@ -222,6 +223,7 @@ void GameManager::mouseButtons(int button, int state, int xx, int yy)
 		if (tracking == 1) {
 			alpha -= (xx - startX);
 			beta += (yy - startY);
+			mov = 0;
 		}
 		else if (tracking == 2) {
 			/*r += (yy - startY) * 0.01f;
@@ -257,9 +259,13 @@ void GameManager::mouseMotion(int xx, int yy) {
 		else if (betaAux < -85.0f)
 			betaAux = -85.0f;
 		rAux = r;*/
-		pushMatrix(VIEW);
-		rotate(VIEW, 10, vec3(0, 1, 0));
-		popMatrix(VIEW);
+		if (deltaX > xx) {
+			mov += 0.5f;
+		}
+		else if (deltaX < xx) {
+			mov -= 0.5f;
+		}
+		deltaX = xx;
 
 	}
 	// right mouse button: zoom
@@ -277,9 +283,6 @@ void GameManager::mouseMotion(int xx, int yy) {
 	//camY = rAux *   						       sin(betaAux * 3.14f / 180.0f);
 
 	//cameras[2]->setEye(vec3(camX, camY, camZ));
-	pushMatrix(VIEW);
-	rotate(VIEW, 40, vec3(0, 1, 0));
-	popMatrix(VIEW);
 
 	//  uncomment this if not using an idle func
 	//	glutPostRedisplay();
@@ -310,6 +313,9 @@ void GameManager::display() {
 	// set the camera using a function similar to gluLookAt
 	
 	activeCamera->computeView();
+	if (tracking == 1) {
+		rotate(VIEW, mov, vec3(0, 1, 0));
+	}
 	activeCamera->computeProjection(WIDTH, HEIGHT);
 	shader->use();
 
