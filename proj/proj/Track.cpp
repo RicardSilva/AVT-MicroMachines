@@ -7,6 +7,7 @@ void Track::importFromFile(std::string& file) {
 	int i;
 	fstream myfile;
 	myfile.open(file);
+	
 	while (x < 140 && y > 0) {
 		
 		myfile >> a;
@@ -35,7 +36,14 @@ void Track::importFromFile(std::string& file) {
 
 }
 
-void Track::update(float timeStep) {}
+void Track::update(float timeStep) {
+	for (auto cheerio : cheerios)
+		cheerio->update(timeStep);
+	for (auto butter : butters)
+		butter->update(timeStep);
+	for (auto orange : oranges)
+		orange->update(timeStep);
+}
 
 void Track::draw() {
 
@@ -61,4 +69,6 @@ void Track::draw() {
 		cheerio->draw();
 	for (auto butter : butters)
 		butter->draw();
+	for (auto orange : oranges)
+		orange->draw();
 }

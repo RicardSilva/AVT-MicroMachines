@@ -1,9 +1,4 @@
 #include "GameManager.h"
-
-//extern "C" {
-//	_declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
-//}
-
 bool isOpenGLError() {
 	bool isError = false;
 	GLenum errCode;
@@ -69,7 +64,7 @@ void GameManager::initMeshes() {
 	ObjModel* model;
 		
 	std::vector<pair<string, string>> modelsToLoad;
-	modelsToLoad.push_back(std::make_pair("car", "objs/car.obj"));
+	modelsToLoad.push_back(std::make_pair("car", "objs/car4.obj"));
 	modelsToLoad.push_back(std::make_pair("track", "objs/table.obj"));
 	modelsToLoad.push_back(std::make_pair("cheerio", "objs/donut1.obj"));
 	modelsToLoad.push_back(std::make_pair("butter", "objs/butter.obj"));
@@ -226,9 +221,14 @@ void GameManager::mouseButtons(int button, int state, int xx, int yy)
 	//stop tracking the mouse
 	else if (state == GLUT_UP) {
 		if (tracking == 1) {
-			
+			alpha -= (xx - startX);
+			beta += (yy - startY);
+			mov = 0;
 		}
 		else if (tracking == 2) {
+			/*r += (yy - startY) * 0.01f;
+			if (r < 0.1f)
+				r = 0.1f;*/
 		}
 		tracking = 0;
 	}
@@ -237,17 +237,55 @@ void GameManager::mouseButtons(int button, int state, int xx, int yy)
 // Track mouse motion while buttons are pressed
 
 void GameManager::mouseMotion(int xx, int yy) {
+
+	//int deltaX, deltaY;
+	//float alphaAux, betaAux;
+	//float rAux;
+
+	//// Camera Position
+	//float camX, camY, camZ;
+
+	//deltaX = -xx + startX;
+	//deltaY = yy - startY;
+
 	// left mouse button: move camera
 	if (tracking == 1) {
+
+		/*alphaAux = alpha + deltaX;
+		betaAux = beta + deltaY;
+
+		if (betaAux > 85.0f)
+			betaAux = 85.0f;
+		else if (betaAux < -85.0f)
+			betaAux = -85.0f;
+		rAux = r;*/
 		if (deltaX > xx) {
-			cameraRotationAngle += 1.0f;
+			mov += 0.5f;
 		}
 		else if (deltaX < xx) {
-			cameraRotationAngle -= 1.0f;
+			mov -= 0.5f;
 		}
 		deltaX = xx;
 
 	}
+	// right mouse button: zoom
+	else if (tracking == 2) {
+
+		//alphaAux = alpha;
+		//betaAux = beta;
+		//rAux = r + (deltaY * 0.01f);
+		//if (rAux < 0.1f)
+		//	rAux = 0.1f;
+	}
+
+	//camX = rAux * sin(alphaAux * 3.14f / 180.0f) * cos(betaAux * 3.14f / 180.0f);
+	//camZ = rAux * cos(alphaAux * 3.14f / 180.0f) * cos(betaAux * 3.14f / 180.0f);
+	//camY = rAux *   						       sin(betaAux * 3.14f / 180.0f);
+
+	//cameras[2]->setEye(vec3(camX, camY, camZ));
+
+	//  uncomment this if not using an idle func
+	//	glutPostRedisplay();
 }
 
 void GameManager::mouseWheel(int wheel, int direction, int x, int y) {
@@ -265,37 +303,34 @@ void GameManager::mouseWheel(int wheel, int direction, int x, int y) {
 }
 
 void GameManager::display() {
+	//GLint loc;
 
+	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	// load identity matrices
 	
 	loadIdentity(MODEL);
+	// set the camera using a function similar to gluLookAt
 	
 	activeCamera->computeView();
-	//car camera rotation
-	if (cameraRotationAngle != 0 && activeCamera == cameras[2]) {
-		rotate(VIEW, cameraRotationAngle, vec3(0, 1, 0));
-		
-		if (tracking == 0) { //mouse released -> return to original rotation
-			if (cameraRotationAngle > 0)
-				cameraRotationAngle = max(cameraRotationAngle - 2.0f, 0.0f);
-			else
-				cameraRotationAngle = min(cameraRotationAngle + 2.0f, 0.0f);
-		}
+	if (tracking == 1) {
+		rotate(VIEW, mov, vec3(0, 1, 0));
 	}
 	activeCamera->computeProjection(WIDTH, HEIGHT);
 	shader->use();
 
 	//send the light position in eye coordinates
-	float lightPos[4] = { 0.0f, 10.0f, 0.0f, 1.0f };
+	float lightPos[4] = { 0.0f, 5.0f, 0.0f, 1.0f };
 	float res[4];
 	multMatrixPoint(VIEW, lightPos, res);   //lightPos definido em World Coord so is converted to eye space
 	glUniform4fv(lPos_uniformId, 1, res);
 	shader->unUse();
-
 	// Render objects
 	track->draw(); 
 	car->draw();
 	
+	
+
 
 	glutSwapBuffers();
 	displayHUD();
@@ -309,6 +344,7 @@ void GameManager::displayHUD() {
 void GameManager::update(double timeStep) {
 
 	car->update(timeStep);
+	track->update(timeStep);
 	cameras[2]->computeCarCameraPosition(car->getPosition(), car->getAngle());
 	
 }

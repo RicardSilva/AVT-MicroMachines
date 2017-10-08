@@ -19,6 +19,7 @@ public:
 		: GameObject(position) {
 		model = ModelManager::instance()->getModel("track");
 		importFromFile(std::string("tracks/track.txt"));
+		this->oranges.push_back(new Orange(vec3(0,50, 0)));
 	}
 	virtual ~Track() {}
 	void setStartingPosition(vec3& position) {
