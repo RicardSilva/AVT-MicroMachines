@@ -91,6 +91,7 @@ public:
 	void idle();
 
 	void keydown(int key);
+	void keyup(int key);
 	void specialKeydown(int key);
 	void specialKeyup(int key);
 
