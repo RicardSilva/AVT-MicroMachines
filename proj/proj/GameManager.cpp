@@ -140,6 +140,38 @@ void GameManager::keydown(int key) {
 	case '3':
 		activeCamera = cameras[2];
 		break;
+	case 'p':
+		car->turnRight = true;
+		break;
+	case 'o':
+		car->turnLeft = true;
+		break;
+	case 'q':
+		car->goForward = true;
+		break;
+	case 'a':
+		car->goBack = true;
+		break;
+	}
+
+}
+
+void GameManager::keyup(int key) {
+	// key = pressed key
+	key = tolower(key);
+	switch (key) {
+	case 'p':
+		car->turnRight = false;
+		break;
+	case 'o':
+		car->turnLeft = false;
+		break;
+	case 'q':
+		car->goForward = false;
+		break;
+	case 'a':
+		car->goBack = false;
+		break;
 	}
 
 }
@@ -184,6 +216,7 @@ void GameManager::mouseButtons(int button, int state, int xx, int yy)
 	if (state == GLUT_DOWN) {
 		startX = xx;
 		startY = yy;
+		deltaX = startX;
 		if (button == GLUT_LEFT_BUTTON)
 			tracking = 1;
 		else if (button == GLUT_RIGHT_BUTTON)
@@ -195,6 +228,7 @@ void GameManager::mouseButtons(int button, int state, int xx, int yy)
 		if (tracking == 1) {
 			alpha -= (xx - startX);
 			beta += (yy - startY);
+			mov = 0;
 		}
 		else if (tracking == 2) {
 			/*r += (yy - startY) * 0.01f;
@@ -209,27 +243,34 @@ void GameManager::mouseButtons(int button, int state, int xx, int yy)
 
 void GameManager::mouseMotion(int xx, int yy) {
 
-	int deltaX, deltaY;
-	float alphaAux, betaAux;
-	float rAux;
+	//int deltaX, deltaY;
+	//float alphaAux, betaAux;
+	//float rAux;
 
-	// Camera Position
-	float camX, camY, camZ;
+	//// Camera Position
+	//float camX, camY, camZ;
 
-	deltaX = -xx + startX;
-	deltaY = yy - startY;
+	//deltaX = -xx + startX;
+	//deltaY = yy - startY;
 
 	// left mouse button: move camera
 	if (tracking == 1) {
 
-		alphaAux = alpha + deltaX;
+		/*alphaAux = alpha + deltaX;
 		betaAux = beta + deltaY;
 
 		if (betaAux > 85.0f)
 			betaAux = 85.0f;
 		else if (betaAux < -85.0f)
 			betaAux = -85.0f;
-		rAux = r;
+		rAux = r;*/
+		if (deltaX > xx) {
+			mov += 0.5f;
+		}
+		else if (deltaX < xx) {
+			mov -= 0.5f;
+		}
+		deltaX = xx;
 
 	}
 	// right mouse button: zoom
@@ -242,11 +283,11 @@ void GameManager::mouseMotion(int xx, int yy) {
 		//	rAux = 0.1f;
 	}
 
-	camX = rAux * sin(alphaAux * 3.14f / 180.0f) * cos(betaAux * 3.14f / 180.0f);
-	camZ = rAux * cos(alphaAux * 3.14f / 180.0f) * cos(betaAux * 3.14f / 180.0f);
-	camY = rAux *   						       sin(betaAux * 3.14f / 180.0f);
+	//camX = rAux * sin(alphaAux * 3.14f / 180.0f) * cos(betaAux * 3.14f / 180.0f);
+	//camZ = rAux * cos(alphaAux * 3.14f / 180.0f) * cos(betaAux * 3.14f / 180.0f);
+	//camY = rAux *   						       sin(betaAux * 3.14f / 180.0f);
 
-	cameras[2]->setEye(vec3(camX, camY, camZ));
+	//cameras[2]->setEye(vec3(camX, camY, camZ));
 
 	//  uncomment this if not using an idle func
 	//	glutPostRedisplay();
@@ -277,6 +318,9 @@ void GameManager::display() {
 	// set the camera using a function similar to gluLookAt
 	
 	activeCamera->computeView();
+	if (tracking == 1) {
+		rotate(VIEW, mov, vec3(0, 1, 0));
+	}
 	activeCamera->computeProjection(WIDTH, HEIGHT);
 	shader->use();
 
