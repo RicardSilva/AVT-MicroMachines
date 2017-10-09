@@ -22,7 +22,7 @@ GameManager::GameManager() { }
 
 GameManager::~GameManager() { }
 
-void GameManager::onTimer(int value) {
+void GameManager::onRefreshTimer(int value) {
 	if (!pause && !gameOver) {
 		int time = glutGet(GLUT_ELAPSED_TIME);
 		int timeStep = time - oldTime;
@@ -33,6 +33,9 @@ void GameManager::onTimer(int value) {
 		oldTime = glutGet(GLUT_ELAPSED_TIME);
 	}
 	glutPostRedisplay();
+}
+void GameManager::onSpawnOrangeTimer() {
+	track->attemptToSpawnOrange();
 }
 
 
@@ -83,7 +86,7 @@ void GameManager::initMeshes() {
 void GameManager::initCameras() {
 	// set the camera position based on its spherical coordinates
 
-	Camera* topCamera = new OrthoCamera(-750, 750,-550,550, 0.1,120);
+	Camera* topCamera = new OrthoCamera(-750, 750,-550,550, 0.1,150);
 	topCamera->setEye(vec3(0,100,0));
 	topCamera->setTarget(vec3(0,0,0));
 	topCamera->setUp(vec3(0,0,-1));
@@ -92,7 +95,7 @@ void GameManager::initCameras() {
 
 	Camera* topPerspCamera = new PerspectiveCamera(70, (float)WIDTH / HEIGHT, 0.1f, 1500.0f);
 	topPerspCamera->setEye(vec3(0, 600, 900));
-	topPerspCamera->setTarget(vec3(0, 0, -150));
+	topPerspCamera->setTarget(vec3(0, 0, 150));
 	topPerspCamera->setUp(vec3(0, 0, -1));
 
 	cameras[1] = topPerspCamera;
@@ -262,7 +265,10 @@ void GameManager::display() {
 	activeCamera->computeView();
 	//car camera rotation
 	if (cameraRotationAngle != 0 && activeCamera == cameras[2]) {
+		//rotate around car
+		translate(VIEW, car->getPosition());
 		rotate(VIEW, cameraRotationAngle, vec3(0, 1, 0));
+		translate(VIEW, -(car->getPosition()));
 		
 		if (tracking == 0) { //mouse released -> return to original rotation
 			if (cameraRotationAngle > 0)

@@ -30,6 +30,7 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightShader.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="MathHelper.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="ModelManager.h" />
     <ClInclude Include="ObjLoader.h" />
@@ -57,6 +58,7 @@
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MathHelper.cpp" />
     <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="Orange.cpp" />
     <ClCompile Include="OrthoCamera.cpp" />

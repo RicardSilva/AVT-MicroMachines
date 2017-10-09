@@ -372,12 +372,12 @@ void ortho(float left, float right,
 
 	setIdentityMatrix(m,4);
 
-	m[0 * 4 + 0] = 2 / (right - left);
-	m[1 * 4 + 1] = 2 / (top - bottom);	
-	m[2 * 4 + 2] = -2 / (farp - nearp);
-	m[3 * 4 + 0] = -(right + left) / (right - left);
-	m[3 * 4 + 1] = -(top + bottom) / (top - bottom);
-	m[3 * 4 + 2] = -(farp + nearp) / (farp - nearp);
+	m[0] = 2 / (right - left);
+	m[5] = 2 / (top - bottom);	
+	m[10] = -2 / (farp - nearp);
+	m[12] = -(right + left) / (right - left);
+	m[13] = -(top + bottom) / (top - bottom);
+	m[14] = -(farp + nearp) / (farp - nearp);
 
 	multMatrix(PROJECTION, m);
 }

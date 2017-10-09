@@ -7,7 +7,8 @@ void Orange::draw() {
 	loadIdentity(MODEL);
 
 	translate(MODEL, position);
-	scale(MODEL,50, 50, 50);
+	//rotate(MODEL, rotationAngle, rotationAxle);
+	scale(MODEL, 40, 40, 40);
 	shader->loadMatrices();
 
 	for (auto mesh : model->meshes) {
@@ -19,30 +20,34 @@ void Orange::draw() {
 	popMatrix(MODEL);
 	shader->unUse();
 }
-void Orange::reset() {
-	position.x = std::rand() % 400;
-	position.z = std::rand() % 400;
-	angle=std::rand() % 360;
-}
+
 bool Orange::outOfBounds() {
 	return (abs(position.x) > edgeX | (abs(position.z) > edgeZ));
 }
 void Orange::update(float timeStep) {
-	timeStep = timeStep / 1000;
-	float speedX = speed.x;
-	float speedZ = speed.z;
+	timeStep = timeStep / 1000;	// convert ms to seconds
 
-	absSpeed += acceleration * timeStep;
-	
-	speedX = cos(angle) * absSpeed;
-	speedZ = sin(angle) * absSpeed;
-	
+	float cosAngle = cos(degToRad(angle));	// convert from degrees to rads
+	float sinAngle = sin(degToRad(angle));
+
+	float posX = position.x;
+	float posZ = position.z;
+
+	float speedX = speed.x * acceleration * timeStep;
+	float speedZ = speed.z * acceleration * timeStep;
+
+	if (speedX > maxSpeed) speedX = maxSpeed;
 	speed.x = speedX;
+
+	if (speedZ > maxSpeed) speedZ = maxSpeed;
 	speed.z = speedZ;
 
-	position.x += speedX * timeStep;
-	position.z += speedZ * timeStep;
-	if (outOfBounds()) reset();
+	// update position
+	position.x = posX + speedX * cosAngle * timeStep;
+	position.z = posZ + speedZ * sinAngle * timeStep;
 
+	// update rotation angle
+	rotationAngle = rotationAngle + speedX * 0.04;
+	rotationAngle = rotationAngle % 360;
 
 }

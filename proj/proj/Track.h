@@ -4,6 +4,13 @@
 #include "Cheerio.h"
 #include "Orange.h"
 #include "Butter.h"
+#include "MathHelper.h"
+
+#define TRACK_WIDTH 700
+#define TRACK_HEIGHT 500
+#define MAX_ORANGES 3
+
+#define ORANGE_BASE_SPEED 50
 
 class Track : public GameObject {
 
@@ -12,21 +19,31 @@ class Track : public GameObject {
 	std::vector<Orange*> oranges;
 
 	vec3 startingPosition;
-
+	int orangeCounter;
 
 public:
 	Track(vec3& position) 
-		: GameObject(position) {
+		: GameObject(position), orangeCounter(0) {
 		model = ModelManager::instance()->getModel("track");
 		importFromFile(std::string("tracks/track.txt"));
-		this->oranges.push_back(new Orange(vec3(0,50, 0)));
+		Orange* o;
+		for (int i = 0; i < MAX_ORANGES; i++) {
+			o = new Orange();
+			o->isActive = false;
+			oranges.push_back(o);
+		}
 	}
 	virtual ~Track() {}
 	void setStartingPosition(vec3& position) {
 		startingPosition = position;
 	}
-	void importFromFile(std::string& s);
+
+	void attemptToSpawnOrange();
+	
 	void update(float timeStep);
 	void draw() override;
+
+private:
+	void importFromFile(std::string& s);
 
 };

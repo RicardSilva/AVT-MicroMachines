@@ -98,8 +98,8 @@ void Car::update(float timeStep) {
 	}
 
 	// update position
-	position.x = posX + speedX * sinAngle * timeStep;
-	position.z = posZ + speedZ * cosAngle * timeStep;
+	position.x = posX + speedX * cosAngle * timeStep;
+	position.z = posZ + speedZ * -sinAngle * timeStep;
 }
 
 void Car::draw() {
@@ -110,7 +110,7 @@ void Car::draw() {
 
 	translate(MODEL, position);
 	rotate(MODEL, angle, vec3(0, 1, 0));
-	scale(MODEL, 2, 2, 1.5);
+	scale(MODEL, 1.5, 2, 2);
 	shader->loadMatrices();
 
 	for (auto mesh : model->meshes) {

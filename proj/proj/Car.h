@@ -7,8 +7,6 @@
 
 class Car : public GameObject {
 	
-	vec3 speed;
-	int angle;
 public:
 	// Input flags
 	bool turnLeft = false;

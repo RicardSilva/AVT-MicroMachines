@@ -65,7 +65,7 @@ class GameManager {
 	float cameraRotationAngle = 0;
 	
 	Car* car;
-	GameObject* track;
+	Track* track;
 	Camera* cameras[3];
 	Camera* activeCamera;
 
@@ -76,7 +76,8 @@ public:
 
 	bool getPause() { return pause; }
 
-	void onTimer(int value);
+	void onRefreshTimer(int value);
+	void onSpawnOrangeTimer();
 
 	void init();
 	void initShaders();

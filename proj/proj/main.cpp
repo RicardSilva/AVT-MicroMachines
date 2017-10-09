@@ -10,6 +10,8 @@
 
 
 
+#define ORANGE_DELAY 7000
+#define ORANGE_INIT 2000
 
 #define CAPTION "MicroMachines"
 int WindowHandle = 0;
@@ -33,12 +35,16 @@ void FPScounter(int value)
 	glutTimerFunc(1000, FPScounter, 0);
 }
 
-void refresh(int value)
+void refreshTimer(int value)
 {
-	gm->onTimer(value);
-	glutTimerFunc(1000 / 60, refresh, 0);
+	gm->onRefreshTimer(value);
+	glutTimerFunc(1000 / 60, refreshTimer, 0);
 }
 
+void spawnOrangeTimer(int value) {
+	gm->onSpawnOrangeTimer();
+	glutTimerFunc(rand() % ORANGE_DELAY + ORANGE_INIT, spawnOrangeTimer, 0);
+}
 
 
 void reshape(int w, int h) {
@@ -116,7 +122,8 @@ int main(int argc, char **argv) {
 	glutMotionFunc(processMouseMotion);
 	glutMouseWheelFunc(mouseWheel);
 	glutTimerFunc(0, FPScounter, 0);
-	glutTimerFunc(0, refresh, 0);
+	glutTimerFunc(0, refreshTimer, 0);
+	glutTimerFunc(rand() % ORANGE_DELAY + ORANGE_INIT, spawnOrangeTimer, 0);
 
 
 	//	return from main loop

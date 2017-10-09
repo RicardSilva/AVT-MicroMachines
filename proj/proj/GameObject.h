@@ -15,10 +15,22 @@ class GameObject {
 protected:
 	Shader* shader;
 	ObjModel* model;
+
+	
+
 	vec3 position;
+	vec3 speed;
+	int angle;
 
 public:
-	GameObject(vec3& position) : position(position) {
+	bool isActive;
+
+	GameObject() {}
+	GameObject(vec3& position, vec3& speed, float angle)
+		: position(position), speed(speed), angle(angle), isActive(true) {
+		shader = ShaderManager::instance()->getShader("lightShader");
+	}
+	GameObject(vec3& position) : position(position), speed(vec3(0, 0, 0)), angle(0) {
 		shader = ShaderManager::instance()->getShader("lightShader");
 	}
 	virtual ~GameObject() {}

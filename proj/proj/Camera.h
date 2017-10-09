@@ -27,6 +27,7 @@ public:
 	void setTarget(vec3& v) {
 		target = v;
 	}
+	vec3 getTarget() { return target;}
 	void setUp(vec3& v) {
 		up = v;
 	}

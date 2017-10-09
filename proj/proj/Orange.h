@@ -1,23 +1,27 @@
 #pragma once
 #include "GameObject.h"
-#define edgeX 650
-#define edgeZ 450
+#include "MathHelper.h"
+#define edgeX 800
+#define edgeZ 600
+
 class Orange : public GameObject {
-	vec3 speed;
-	vec3 trajectory;
-	float absSpeed=0;
-	int angle=std::rand() % 360;
-	float speedCap = 1500;
-	float acceleration = 10;
+
+	float maxSpeed = 300;
+	float acceleration = 80;
+
+	int rotationAngle;
+	vec3 rotationAxle;
+
 public:
-	Orange(vec3& position)
-		: GameObject(position) {
+	Orange() {}
+	Orange(vec3& position, vec3& speed, int angle, vec3& rotationAxle)
+		: GameObject(position, speed, angle), rotationAxle(rotationAxle), rotationAngle(0) {
 		model = ModelManager::instance()->getModel("orange");
 	}
 	virtual ~Orange() {}
-	void reset();
+
 	bool outOfBounds();
-	int getAngle() { return angle; }
+
 	void draw();
 	void update(float timeStep);
 };
