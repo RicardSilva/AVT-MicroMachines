@@ -36,7 +36,7 @@ public:
 			oranges.push_back(o);
 		}
 
-		dirLight = DirectionalLight(vec3(-1, 1, -1), vec3(0,0,1));
+		dirLight = DirectionalLight(vec3(-1, 1, -1), vec3(1,1,1));
 	}
 	virtual ~Track() {}
 	void setStartingPosition(vec3& position) {
