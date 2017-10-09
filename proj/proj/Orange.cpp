@@ -6,9 +6,11 @@ void Orange::draw() {
 	pushMatrix(MODEL);
 	loadIdentity(MODEL);
 
-	translate(MODEL, position);
-	//rotate(MODEL, rotationAngle, rotationAxle);
-	scale(MODEL, 40, 40, 40);
+	
+	translate(MODEL, vec3(0,30,0) +  position); 
+	rotate(MODEL, -rotationAngle, rotationAxle);
+
+	scale(MODEL, 30, 30, 30);
 	shader->loadMatrices();
 
 	for (auto mesh : model->meshes) {
@@ -16,9 +18,8 @@ void Orange::draw() {
 		mesh->draw();
 	}
 
-
-	popMatrix(MODEL);
 	shader->unUse();
+	popMatrix(MODEL);
 }
 
 bool Orange::outOfBounds() {

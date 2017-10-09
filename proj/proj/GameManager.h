@@ -24,16 +24,12 @@
 
 
 
-#define WIDTH 800
-#define HEIGHT 600
+#define WIDTH 1200
+#define HEIGHT 900
 #define CAR_LIVES 5
 #define PI 3.141592657
 #define MES_WIDTH 700.0f
 #define MES_HEIGHT 500.0f
-
-#define VERTICES 0
-#define TEXCOORDS 1
-#define NORMALS 2
 
 // The storage for matrices
 extern float mMatrix[COUNT_MATRICES][16];

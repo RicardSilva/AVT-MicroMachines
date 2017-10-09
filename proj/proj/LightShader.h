@@ -28,6 +28,9 @@ private:
 	GLint matSpecularID;
 	GLint matShininessID;
 
+	GLint lightDirectionID;
+	GLint lightColorID;
+
 
 public:
 	LightShader(const std::string& vertexShader, const std::string& fragmentShader) : Shader(vertexShader, fragmentShader) {
@@ -52,6 +55,8 @@ public:
 		matDiffuseID = getUniformLocation("mat.diffuse");
 		matSpecularID = getUniformLocation("mat.specular");
 		matShininessID = getUniformLocation("mat.shininess");
+		lightDirectionID = getUniformLocation("light.direction");
+		lightColorID = getUniformLocation("light.color");
 	}
 
 	void loadProjViewModelMatrix(float* matrix) {
@@ -73,7 +78,8 @@ public:
 		Shader::loadFloat(matShininessID, material.Ns);
 	}
 	void loadDirectionalLight(DirectionalLight& light) {
-
+		Shader::loadVec3(lightDirectionID, light.direction);
+		Shader::loadVec3(lightColorID, light.color);
 	}
 
 	void loadMatrices() {

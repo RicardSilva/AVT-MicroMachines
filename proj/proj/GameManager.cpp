@@ -45,7 +45,7 @@ void GameManager::init() {
 
 	initShaders();
 	initMeshes();
-	car = new Car(vec3(0,20,0));
+	car = new Car(vec3(0,0,0));
 	initCameras();
 	initLights();
 	initTrack();

@@ -38,9 +38,9 @@ void Track::importFromFile(std::string& file) {
 
 void Track::attemptToSpawnOrange() {
 	int randomNumber;
-	int trackPerimeter = 2 * TRACK_WIDTH + 2 * TRACK_HEIGHT;
-	int x = -TRACK_WIDTH - 50; // bottom left corner
-	int z = -TRACK_HEIGHT - 50;
+	int trackPerimeter = 2 * (TRACK_WIDTH + 50) + 2 *(TRACK_HEIGHT + 50);
+	int x = -TRACK_WIDTH / 2- 50; // bottom left corner
+	int z = -TRACK_HEIGHT / 2 - 50;
 	float speed = 0;
 	float angle = 0;	// degrees
 	Orange* orange;
@@ -65,7 +65,7 @@ void Track::attemptToSpawnOrange() {
 		x = x + 4100 - (randomNumber);
 		z = z + 1100;
 	}
-	else if (randomNumber < 5200) {
+	else if (randomNumber <= 5200) {
 		z = z + 5200 - (randomNumber);
 	}
 
@@ -121,13 +121,17 @@ void Track::update(float timeStep) {
 }
 
 void Track::draw() {
+	dirLight.draw();
+
 
 	shader->use();
+
+
 
 	pushMatrix(MODEL);
 	loadIdentity(MODEL);
 	translate(MODEL, position);
-	scale(MODEL, TRACK_WIDTH + 10, 0.1, TRACK_HEIGHT + 10);
+	scale(MODEL, TRACK_WIDTH / 2 + 10, 0.1, TRACK_HEIGHT / 2 + 10);
 
 	shader->loadMatrices();
 

@@ -4,11 +4,10 @@
 #include "vec3.h"
 
 struct DirectionalLight : public Light {
-
-	vec3 direction;
-
+	
 	void draw();
 
-	DirectionalLight() : Light() {}
+	DirectionalLight() {}
+	DirectionalLight(vec3& direction, vec3& color) : Light(direction, color) {}
 
 };

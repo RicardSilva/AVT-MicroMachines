@@ -15,7 +15,7 @@
 
 #define CAPTION "MicroMachines"
 int WindowHandle = 0;
-int WinX = 800, WinY = 600;
+int WinX = 1200, WinY = 900;
 
 GameManager* gm;
 

@@ -5,9 +5,11 @@
 #include "Orange.h"
 #include "Butter.h"
 #include "MathHelper.h"
+#include "Light.h"
+#include "DirectionalLight.h"
 
-#define TRACK_WIDTH 700
-#define TRACK_HEIGHT 500
+#define TRACK_WIDTH 1400
+#define TRACK_HEIGHT 1000
 #define MAX_ORANGES 3
 
 #define ORANGE_BASE_SPEED 50
@@ -17,6 +19,7 @@ class Track : public GameObject {
 	std::vector<Cheerio*> cheerios;
 	std::vector<Butter*> butters;
 	std::vector<Orange*> oranges;
+	DirectionalLight dirLight;
 
 	vec3 startingPosition;
 	int orangeCounter;
@@ -32,6 +35,8 @@ public:
 			o->isActive = false;
 			oranges.push_back(o);
 		}
+
+		dirLight = DirectionalLight(vec3(-1, 1, -1), vec3(0,0,1));
 	}
 	virtual ~Track() {}
 	void setStartingPosition(vec3& position) {
