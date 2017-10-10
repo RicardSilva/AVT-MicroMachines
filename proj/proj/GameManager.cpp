@@ -278,14 +278,7 @@ void GameManager::display() {
 		}
 	}
 	activeCamera->computeProjection(WIDTH, HEIGHT);
-	shader->use();
 
-	//send the light position in eye coordinates
-	float lightPos[4] = { 0.0f, 5.0f, 0.0f, 1.0f };
-	float res[4];
-	multMatrixPoint(VIEW, lightPos, res);   //lightPos definido em World Coord so is converted to eye space
-	glUniform4fv(lPos_uniformId, 1, res);
-	shader->unUse();
 	// Render objects
 	track->draw(); 
 	car->draw();

@@ -24,16 +24,16 @@ uniform Material mat;
 in Data {
 	vec3 normal;
 	vec3 eye;
-	//vec3 lightDir;
 } DataIn;
 
 out vec4 colorOut;
 
 void main() {
+
+	vec3 lightDir = -light.direction;
+	vec3 halfVector = normalize(lightDir + DataIn.eye / 2);
 	
-	vec3 halfVector = normalize(light.direction + DataIn.eye);
-	
-	float diffuse = max(0.0, dot(DataIn.normal, light.direction));
+	float diffuse = max(0.0, dot(DataIn.normal, lightDir));
 	float specular = max(0.0, dot(DataIn.normal, halfVector));
 	
 	if (diffuse == 0)
@@ -42,10 +42,10 @@ void main() {
 		specular = pow(specular, mat.shininess);
 
 		
-	vec3 scatteredLight = light.color * mat.diffuse.xyz;
-	vec3 reflectedLight = light.color * specular;
+	vec3 scatteredLight = mat.ambient.xyz + light.color * diffuse;
+	vec3 reflectedLight = light.color * mat.specular.xyz * specular * 0.5;
 	
-	colorOut = vec4((scatteredLight + reflectedLight).xyz, 1.0);
+	colorOut = vec4((mat.diffuse.xyz * scatteredLight + reflectedLight).xyz, 1.0);
 		
 	//colorOut = vec4(mat.diffuse.xyz, 1.0f);
 	

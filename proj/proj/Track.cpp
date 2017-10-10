@@ -123,15 +123,12 @@ void Track::update(float timeStep) {
 void Track::draw() {
 	dirLight.draw();
 
-
 	shader->use();
 
-
-
 	pushMatrix(MODEL);
+	
 	loadIdentity(MODEL);
 	translate(MODEL, position);
-	scale(MODEL, TRACK_WIDTH / 2 + 10, 0.1, TRACK_HEIGHT / 2 + 10);
 
 	shader->loadMatrices();
 
@@ -139,6 +136,7 @@ void Track::draw() {
 		shader->loadMaterial(mesh->MeshMaterial);
 		mesh->draw();
 	}
+
 	
 	shader->unUse();
 

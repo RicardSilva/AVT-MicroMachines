@@ -10,6 +10,8 @@
 
 #define TRACK_WIDTH 1400
 #define TRACK_HEIGHT 1000
+#define HALF_TRACK_WIDTH 700
+#define HALF_TRACK_HEIGHT 500
 #define MAX_ORANGES 3
 
 #define ORANGE_BASE_SPEED 50
@@ -36,7 +38,7 @@ public:
 			oranges.push_back(o);
 		}
 
-		dirLight = DirectionalLight(vec3(-1, 1, -1), vec3(1,1,1));
+		dirLight = DirectionalLight(vec3(1, -1, 1), vec3(1,1,1));
 	}
 	virtual ~Track() {}
 	void setStartingPosition(vec3& position) {
