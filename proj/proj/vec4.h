@@ -2,6 +2,7 @@
 
 #include "Math.h"
 #include <iostream>
+#include "vec3.h"
 
 #define TOLERANCE 1.0e-6
 
@@ -14,6 +15,7 @@ struct vec4 {
 	vec4() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) {}
 	vec4(float X, float Y, float Z, float W) : x(X), y(Y), z(Z), w(W) {}
 	vec4(const vec4& v) : x(v.x), y(v.y), z(v.z), w(v.w) {}
+	vec4(const vec3& v, float f) : x(v.x), y(v.y), z(v.z), w(f) {}
 
 	void Set(float X, float Y, float Z, float W) {
 		x = X;

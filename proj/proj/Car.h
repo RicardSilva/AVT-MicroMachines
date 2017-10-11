@@ -35,6 +35,7 @@ public:
 	virtual ~Car() {}
 	int getAngle() { return angle; }
 
+	void drawLights();
 	virtual void draw();
 	void update(float timeStep);
 

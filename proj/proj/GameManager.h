@@ -31,12 +31,7 @@
 #define MES_WIDTH 700.0f
 #define MES_HEIGHT 500.0f
 
-// The storage for matrices
-extern float mMatrix[COUNT_MATRICES][16];
-extern float mCompMatrix[COUNT_COMPUTED_MATRICES][16];
 
-// The normal matrix
-extern float mNormal3x3[9];
 
 
 class GameManager {

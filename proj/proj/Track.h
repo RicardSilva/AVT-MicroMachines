@@ -48,6 +48,7 @@ public:
 	void attemptToSpawnOrange();
 	
 	void update(float timeStep);
+	void drawLights();
 	void draw() override;
 
 private:

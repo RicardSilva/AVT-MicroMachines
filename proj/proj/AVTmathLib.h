@@ -16,6 +16,7 @@
 #include <vector>
 #include <string>
 #include "vec3.h"
+#include "vec4.h"
 #include <GL/glew.h>
 
 	/// number of settable matrices
@@ -157,6 +158,8 @@
 
 
 		void multMatrixPoint(MatrixTypes aType, float *point, float *res);
+		vec3 multMatrixPoint(MatrixTypes aType, vec3& v);
+		vec4 multMatrixPoint(MatrixTypes aType, vec4& v);
 
 
 		/** Computes the multiplication of a computed matrix and a point 

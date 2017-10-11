@@ -6,8 +6,8 @@
 #include "AVTmathLib.h"
 
 #define VERTICES 0
-#define TEXCOORDS 1
-#define NORMALS 2
+#define NORMALS 1
+#define TEXCOORDS 2
 
 // The storage for matrices
 extern float mMatrix[COUNT_MATRICES][16];
@@ -41,8 +41,8 @@ public:
 
 	void bindAttributes(void) {
 		bindAttribute(VERTICES, "position");
-		bindAttribute(TEXCOORDS, "texCoord");
 		bindAttribute(NORMALS, "normal");
+		bindAttribute(TEXCOORDS, "texCoord");
 	}
 
 
@@ -78,7 +78,9 @@ public:
 		Shader::loadFloat(matShininessID, material.Ns);
 	}
 	void loadDirectionalLight(DirectionalLight& light) {
-		Shader::loadVec3(lightDirectionID, light.direction);
+		vec4 lightDir4 = multMatrixPoint(VIEW, vec4(light.direction, 0));
+		vec3 lightDir = vec3(lightDir4.x, lightDir4.y, lightDir4.z);
+		Shader::loadVec3(lightDirectionID, lightDir);
 		Shader::loadVec3(lightColorID, light.color);
 	}
 

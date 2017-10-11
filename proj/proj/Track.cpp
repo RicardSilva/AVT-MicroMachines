@@ -120,9 +120,11 @@ void Track::update(float timeStep) {
 	}
 }
 
-void Track::draw() {
+void Track::drawLights() {
 	dirLight.draw();
-
+}
+void Track::draw() {
+	
 	shader->use();
 
 	pushMatrix(MODEL);

@@ -102,6 +102,9 @@ void Car::update(float timeStep) {
 	position.z = posZ + speedZ * -sinAngle * timeStep;
 }
 
+void Car::drawLights() {
+
+}
 void Car::draw() {
 	shader->use();
 

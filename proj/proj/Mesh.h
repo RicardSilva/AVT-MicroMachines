@@ -7,8 +7,9 @@
 #include "vec3.h"
 
 #define VERTICES 0
-#define TEXCOORDS 1
-#define NORMALS 2
+#define NORMALS 1
+#define TEXCOORDS 2
+
 
 struct Vertex {
 	GLfloat x, y, z;
@@ -120,17 +121,18 @@ private:
 		glVertexAttribPointer(VERTICES, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
 
 
+		glGenBuffers(1, &VboNormals);
+		glBindBuffer(GL_ARRAY_BUFFER, VboNormals);
+		glBufferData(GL_ARRAY_BUFFER, Normals.size() * sizeof(Normal), &Normals[0], GL_STATIC_DRAW);
+		glEnableVertexAttribArray(NORMALS);
+		glVertexAttribPointer(NORMALS, 3, GL_FLOAT, GL_FALSE, sizeof(Normal), 0);
+
 		glGenBuffers(1, &VboTexcoords);
 		glBindBuffer(GL_ARRAY_BUFFER, VboTexcoords);
 		glBufferData(GL_ARRAY_BUFFER, Texcoords.size() * sizeof(Texcoord), &Texcoords[0], GL_STATIC_DRAW);
 		glEnableVertexAttribArray(TEXCOORDS);
 		glVertexAttribPointer(TEXCOORDS, 2, GL_FLOAT, GL_FALSE, sizeof(Texcoord), 0);
 
-		glGenBuffers(1, &VboNormals);
-		glBindBuffer(GL_ARRAY_BUFFER, VboNormals);
-		glBufferData(GL_ARRAY_BUFFER, Normals.size() * sizeof(Normal), &Normals[0], GL_STATIC_DRAW);
-		glEnableVertexAttribArray(NORMALS);
-		glVertexAttribPointer(NORMALS, 3, GL_FLOAT, GL_FALSE, sizeof(Normal), 0);
 
 		glBindVertexArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);

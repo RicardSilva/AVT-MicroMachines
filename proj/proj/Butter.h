@@ -3,6 +3,9 @@
 
 class Butter : public GameObject {
 public:
+
+	int angle = 0;
+
 	Butter(vec3& position)
 		: GameObject(position) {
 
@@ -11,5 +14,5 @@ public:
 	virtual ~Butter() {}
 
 	void draw();
-	void update(float timeStep) {}
+	void update(float timeStep);
 };

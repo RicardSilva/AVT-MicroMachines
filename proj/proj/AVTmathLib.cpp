@@ -447,6 +447,24 @@ void multMatrixPoint(MatrixTypes aType, float *point, float *res) {
 		} 
 	}
 }
+vec3 multMatrixPoint(MatrixTypes aType, vec3& v) {
+
+	float in[4] = { v.x, v.y, v.z, 1 };
+	float res[4];
+
+	multMatrixPoint(aType, in, res);
+	return vec3(res[0], res[1], res[2]);
+	
+}
+vec4 multMatrixPoint(MatrixTypes aType, vec4& v) {
+
+	float in[4] = { v.x, v.y, v.z, v.w };
+	float res[4];
+
+	multMatrixPoint(aType, in, res);
+	return vec4(res[0], res[1], res[2], res[3]);
+
+}
 
 // res = a cross b;
 void  crossProduct( float *a, float *b, float *res) {

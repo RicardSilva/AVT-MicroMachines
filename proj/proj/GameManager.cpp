@@ -69,9 +69,9 @@ void GameManager::initMeshes() {
 	std::vector<pair<string, string>> modelsToLoad;
 	modelsToLoad.push_back(std::make_pair("car", "objs/car.obj"));
 	modelsToLoad.push_back(std::make_pair("track", "objs/table.obj"));
-	modelsToLoad.push_back(std::make_pair("cheerio", "objs/donut1.obj"));
+	modelsToLoad.push_back(std::make_pair("cheerio", "objs/donut.obj"));
 	modelsToLoad.push_back(std::make_pair("butter", "objs/butter.obj"));
-	modelsToLoad.push_back(std::make_pair("orange", "objs/orange.obj"));
+	modelsToLoad.push_back(std::make_pair("orange", "objs/Orange.obj"));
 
 	for (auto m : modelsToLoad) {
 		if (loader->LoadFile(m.second)) {
@@ -138,17 +138,17 @@ void GameManager::keydown(int key) {
 	case '3':
 		activeCamera = cameras[2];
 		break;
-	case 'p':
+	case 'd':
 		car->turnRight = true;
 		break;
-	case 'o':
-		car->turnLeft = true;
+	case 's':
+		car->goBack = true;
 		break;
-	case 'q':
+	case 'w':
 		car->goForward = true;
 		break;
 	case 'a':
-		car->goBack = true;
+		car->turnLeft = true;
 		break;
 	}
 
@@ -158,17 +158,17 @@ void GameManager::keyup(int key) {
 	// key = pressed key
 	key = tolower(key);
 	switch (key) {
-	case 'p':
+	case 'd':
 		car->turnRight = false;
 		break;
-	case 'o':
-		car->turnLeft = false;
+	case 's':
+		car->goBack = false;
 		break;
-	case 'q':
+	case 'w':
 		car->goForward = false;
 		break;
 	case 'a':
-		car->goBack = false;
+		car->turnLeft = false;
 		break;
 	}
 
@@ -280,6 +280,9 @@ void GameManager::display() {
 	activeCamera->computeProjection(WIDTH, HEIGHT);
 
 	// Render objects
+	track->drawLights();
+	car->drawLights();
+
 	track->draw(); 
 	car->draw();
 	

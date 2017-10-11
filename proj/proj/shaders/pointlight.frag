@@ -28,58 +28,47 @@ in Data {
 
 out vec4 colorOut;
 
-void main() {
+vec4 CalcDirLight(Light light, vec3 normal, vec3 viewDir) {
+	vec3 lightDir = normalize(-light.direction);
+	// Diffuse shading
+	float diff = max(dot(normal, lightDir), 0.0);
+	// Specular shading
+	vec3 reflectDir = reflect(-lightDir, normal);
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), mat.shininess);
+	// Combine results
+	vec3 ambient = light.color * mat.ambient;
+	vec3 diffuse = light.color * diff * mat.diffuse;
+	vec3 specular = light.color * spec * mat.specular;
+	
+	return vec4((ambient + diffuse + specular).xyz, 1.0);
+}
 
-	vec3 lightDir = -light.direction;
-	vec3 halfVector = normalize(lightDir + DataIn.eye / 2);
+vec4 CalcDirLight2(Light light, vec3 normal, vec3 viewDir) {
+
+	vec3 lightDir = normalize(-light.direction);
+	float diff = max(0.0, dot(normal, lightDir));
 	
-	float diffuse = max(0.0, dot(DataIn.normal, lightDir));
-	float specular = max(0.0, dot(DataIn.normal, halfVector));
+	vec3 HalfVector = normalize(lightDir + viewDir);
+	float spec = max(0.0, dot(normal, HalfVector));
 	
-	if (diffuse == 0)
-		specular = 0.0;
+	// surfaces facing away from the light (negative dot products)
+	// won’t be lit by the directional light
+	if (diff == 0.0)
+		spec = 0.0;
 	else
-		specular = pow(specular, mat.shininess);
+		spec = pow(spec, mat.shininess); // sharpen the highlight
+		
+	vec3 ambient = light.color * mat.ambient;	
+	vec3 diffuse = light.color * diff * mat.diffuse;
+	vec3 specular = light.color * spec * mat.specular;
+	return vec4((ambient + diffuse + specular).xyz, 1.0);
+}
 
-		
-	vec3 scatteredLight = mat.ambient.xyz + light.color * diffuse;
-	vec3 reflectedLight = light.color * mat.specular.xyz * specular * 0.5;
-	
-	colorOut = vec4((mat.diffuse.xyz * scatteredLight + reflectedLight).xyz, 1.0);
-		
-	//colorOut = vec4(mat.diffuse.xyz, 1.0f);
-	
+void main() {
+	colorOut = CalcDirLight(light, DataIn.normal, DataIn.eye);
+	//colorOut = vec4(mat.ambient.xyz, 1.0f);
+	//colorOut = vec4(DataIn.normal.x / 2 + 0.5, DataIn.normal.y / 2 + 0.5, DataIn.normal.z / 2 + 0.5, 1.0f);
 	
 	
 	
 }
-
-
-
-
-
-
-
-
-
-
-/*
-	vec4 spec = vec4(0.0);
-
-	vec3 n = normalize(DataIn.normal);
-	vec3 l = normalize(DataIn.lightDir);
-	vec3 e = normalize(DataIn.eye);
-
-	float intensity = max(dot(n,l), 0.0);
-
-	
-	if (intensity > 0.0) {
-
-		vec3 h = normalize(l + e);
-		float intSpec = max(dot(h,n), 0.0);
-		spec = vec4(mat.specular.xyz, 1.0) * pow(intSpec, mat.shininess);
-	}
-	
-	colorOut = max(intensity * vec4(mat.diffuse.xyz, 1.0) + spec, vec4(mat.ambient.xyz, 1.0f));
-	*/
-
