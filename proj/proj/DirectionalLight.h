@@ -8,6 +8,11 @@ struct DirectionalLight : public Light {
 	void draw();
 
 	DirectionalLight() {}
-	DirectionalLight(vec3& direction, vec3& color) : Light(direction, color) {}
+	DirectionalLight(vec4& direction, vec3& color, float intensity) : Light() {
+		this->type = directionalLight;
+		this->direction = direction;
+		this->color = color;
+		this->intensity = intensity;
+	}
 
 };

@@ -7,6 +7,7 @@
 #include "MathHelper.h"
 #include "Light.h"
 #include "DirectionalLight.h"
+#include "PointLight.h"
 
 #define TRACK_WIDTH 1400
 #define TRACK_HEIGHT 1000
@@ -22,6 +23,7 @@ class Track : public GameObject {
 	std::vector<Butter*> butters;
 	std::vector<Orange*> oranges;
 	DirectionalLight dirLight;
+	std::vector<PointLight*> pointLights;
 
 	vec3 startingPosition;
 	int orangeCounter;
@@ -30,7 +32,7 @@ public:
 	Track(vec3& position) 
 		: GameObject(position), orangeCounter(0) {
 		model = ModelManager::instance()->getModel("track");
-		importFromFile(std::string("tracks/track.txt"));
+		loadFromFile(std::string("tracks/track.txt"));
 		Orange* o;
 		for (int i = 0; i < MAX_ORANGES; i++) {
 			o = new Orange();
@@ -38,7 +40,7 @@ public:
 			oranges.push_back(o);
 		}
 
-		dirLight = DirectionalLight(vec3(1, -1, 1), vec3(1,1,1));
+		dirLight = DirectionalLight(vec4(1, -1, 1, 0), vec3(1,1,1), 0.5f);
 	}
 	virtual ~Track() {}
 	void setStartingPosition(vec3& position) {
@@ -52,6 +54,6 @@ public:
 	void draw() override;
 
 private:
-	void importFromFile(std::string& s);
+	void loadFromFile(std::string& s);
 
 };

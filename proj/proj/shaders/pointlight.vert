@@ -9,6 +9,7 @@ in vec2 texCoord;
 in vec3 normal; 
 
 out Data {
+	vec4 pos;
 	vec3 normal;
 	vec3 eye;
 } DataOut;
@@ -16,7 +17,7 @@ out Data {
 void main () {
 
 	vec4 pos = m_viewModel * vec4(position.xyz, 1.0);
-
+	DataOut.pos = pos;
 	DataOut.normal = normalize(m_normal * normal);
 	//DataOut.normal = normalize(normal);
 	DataOut.eye = normalize(vec3(-pos));

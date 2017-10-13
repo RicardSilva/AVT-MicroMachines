@@ -10,8 +10,15 @@ struct Material {
 };
 
 struct Light {
+	int type;
+	vec3 position;
 	vec3 direction;
 	vec3 color;	
+	float intensity;
+	
+	float constantAttenuation;
+	float linearAttenuation;
+	float quadraticAttenuation;
 }; 
 
 // the set of lights to apply, per invocation of this shader
@@ -22,28 +29,15 @@ uniform Light light;
 uniform Material mat;
 
 in Data {
+	vec4 pos; 
 	vec3 normal;
 	vec3 eye;
 } DataIn;
 
 out vec4 colorOut;
 
-vec4 CalcDirLight(Light light, vec3 normal, vec3 viewDir) {
-	vec3 lightDir = normalize(-light.direction);
-	// Diffuse shading
-	float diff = max(dot(normal, lightDir), 0.0);
-	// Specular shading
-	vec3 reflectDir = reflect(-lightDir, normal);
-	float spec = pow(max(dot(viewDir, reflectDir), 0.0), mat.shininess);
-	// Combine results
-	vec3 ambient = light.color * mat.ambient;
-	vec3 diffuse = light.color * diff * mat.diffuse;
-	vec3 specular = light.color * spec * mat.specular;
-	
-	return vec4((ambient + diffuse + specular).xyz, 1.0);
-}
 
-vec4 CalcDirLight2(Light light, vec3 normal, vec3 viewDir) {
+vec4 calcDirLight(Light light, vec3 normal, vec3 viewDir) {
 
 	vec3 lightDir = normalize(-light.direction);
 	float diff = max(0.0, dot(normal, lightDir));
@@ -64,9 +58,40 @@ vec4 CalcDirLight2(Light light, vec3 normal, vec3 viewDir) {
 	return vec4((ambient + diffuse + specular).xyz, 1.0);
 }
 
+vec4 calcPointLight(Light light, vec4 position, vec3 normal, vec3 viewDir) {
+
+	vec3 lightDirection = light.position - vec3(position);
+	float lightDistance = length(lightDirection);
+	
+	// normalize the light direction vector, so
+	// that a dot products give cosines
+	lightDirection = lightDirection / lightDistance;
+	
+	// model how much light is available for this fragment
+	float attenuation = 1.0 / (light.constantAttenuation + light.linearAttenuation * lightDistance +
+	light.quadraticAttenuation * lightDistance * lightDistance);
+	
+	// the direction of maximum highlight also changes per fragment
+	vec3 halfVector = normalize(lightDirection + viewDir);
+	
+	float diff = max(0.0, dot(normal, lightDirection));
+	float spec = max(0.0, dot(normal, halfVector));
+	
+	if (diff == 0.0)
+		spec = 0.0;
+	else
+		spec = pow(spec, mat.shininess);
+		
+	vec3 ambient = light.color * mat.ambient;		
+	vec3 diffuse = light.color * diff * mat.diffuse * attenuation;
+	vec3 specular = light.color * spec * mat.specular * attenuation;
+	return vec4((ambient + diffuse + specular).xyz, 1.0);
+
+}
+
 void main() {
-	colorOut = CalcDirLight(light, DataIn.normal, DataIn.eye);
-	//colorOut = vec4(mat.ambient.xyz, 1.0f);
+	colorOut = calcDirLight(light, DataIn.normal, DataIn.eye);
+	//colorOut = vec4(matAmbient.xyz, 1.0f);
 	//colorOut = vec4(DataIn.normal.x / 2 + 0.5, DataIn.normal.y / 2 + 0.5, DataIn.normal.z / 2 + 0.5, 1.0f);
 	
 	

@@ -9,6 +9,7 @@
 
 
 struct DirectionalLight;
+struct PointLight;
 
 using namespace std;
 class Shader
@@ -49,6 +50,7 @@ public:
 	virtual void loadNormalMatrix(float* matrix) {}
 	virtual void loadLightPosition(vec3& vec) {}
 	virtual void loadDirectionalLight(DirectionalLight& light) {}
+	virtual void loadPointLight(PointLight& light) {}
 	virtual void loadMaterial(Material& material) {}
 	virtual void loadMatrices() {}
 

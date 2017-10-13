@@ -6,7 +6,6 @@ void Butter::draw() {
 	loadIdentity(MODEL);
 
 	translate(MODEL, position);
-	rotate(MODEL, angle, vec3(0, 1, 0));
 	scale(MODEL, 20, 20, 20);
 	shader->loadMatrices();
 
@@ -21,5 +20,4 @@ void Butter::draw() {
 }
 
 void Butter::update(float timeStep) {
-	angle += 1;
 }

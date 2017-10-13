@@ -1,36 +1,36 @@
 #include "Track.h"
 
-void Track::importFromFile(std::string& file) {
+void Track::loadFromFile(std::string& file) {
 	int x = 0;
-	int y = 100;
+	int z = 100;
 	char a;
 	int i;
 	fstream myfile;
 	myfile.open(file);
 	
-	while (x < 140 && y > 0) {
+	while (x < 140 && z > 0) {
 		
 		myfile >> a;
 		i = a - '0';
 		if (i == 1) {
 			//new cheerio
-			cheerios.push_back(new Cheerio(vec3((x * 10 - 700), 0, -(y * 10 - 500))));
+			cheerios.push_back(new Cheerio(vec3((x * 10 - 700), 0, -(z * 10 - 500))));
 		}
 		else if (i == 2) {
 			//new candle
-			
+			pointLights.push_back(new PointLight(vec4((x * 10 - 700), 0, -(z * 10 - 500), 0), vec3(1, 0.3, 0.3), 1));
 		}
 		else if (i == 3) {
 			//new butter
-			butters.push_back(new Butter(vec3((x * 10 - 700), 5, -(y * 10 - 500))));
+			butters.push_back(new Butter(vec3((x * 10 - 700), 5, -(z * 10 - 500))));
 		}
 		else if (i == 4) {
-			setStartingPosition(vec3((x * 10 - 700), 0, -(y * 10 - 500)));
+			setStartingPosition(vec3((x * 10 - 700), 0, -(z * 10 - 500)));
 		}
 		x++;
 		if (x == 140) {
 			x = 0;
-			y--;
+			z--;
 		}
 	}
 
@@ -122,6 +122,8 @@ void Track::update(float timeStep) {
 
 void Track::drawLights() {
 	dirLight.draw();
+	//for (auto light : pointLights)
+	//	light->draw();
 }
 void Track::draw() {
 	

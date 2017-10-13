@@ -4,20 +4,24 @@
 #include "ShaderManager.h"
 #include "Shader.h"
 
+enum lightType { directionalLight, pointLight, spotLight };
+
 struct Light {
 
 	Shader* shader;
 
+	lightType type;
 
-	vec3 position;
-	vec3 direction;
+	vec4 position;
+	vec4 direction;
 	vec3 color;
 	float intensity;
 
+	float constantAttenuation;
+	float linearAttenuation;
+	float quadraticAttenuation;
+
 	Light() {
-		shader = ShaderManager::instance()->getShader("lightShader");
-	}
-	Light(vec3& direction, vec3& color) : direction(direction), color(color) {
 		shader = ShaderManager::instance()->getShader("lightShader");
 	}
 
