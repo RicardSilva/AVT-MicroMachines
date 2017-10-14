@@ -9,6 +9,8 @@
 #define NORMALS 1
 #define TEXCOORDS 2
 
+#define MAX_LIGHTS 9
+
 // The storage for matrices
 extern float mMatrix[COUNT_MATRICES][16];
 extern float mCompMatrix[COUNT_COMPUTED_MATRICES][16];
@@ -39,6 +41,7 @@ private:
 	GLint matSpecularID;
 	GLint matShininessID;
 
+	int lightCounter;
 	GLuint lightsUboHandle;
 	GLuint lightsUboID;
 	GLubyte* lightsBlockBuffer;
@@ -52,6 +55,7 @@ private:
 
 public:
 	LightShader(const std::string& vertexShader, const std::string& fragmentShader) : Shader(vertexShader, fragmentShader) {
+		lightCounter = 0;
 		bindAttributes();
 		getUniformLocations();
 		initializeLightsUbo();
@@ -88,29 +92,20 @@ public:
 
 
 	void initializeLightsUbo() {
-		/*lightsUboHandle = 0;
-		lightsUboID = getUniformBlockIndex("material");
-		glGetActiveUniformBlockiv(program, materialUboID,
-			GL_UNIFORM_BLOCK_DATA_SIZE, &materialBlockSize);
-		materialBlockBuffer = (GLubyte*)malloc(materialBlockSize);
+		lightsUboHandle = 0;
+		lightsUboID = getUniformBlockIndex("lightsBuffer");
+		glGetActiveUniformBlockiv(program, lightsUboID,
+			GL_UNIFORM_BLOCK_DATA_SIZE, &lightsBlockSize);
+		lightsBlockBuffer = (GLubyte*)malloc(lightsBlockSize * MAX_LIGHTS);
 
-		glGetUniformIndices(program, 6, materialNames, materialIndices);
-		glGetActiveUniformsiv(program, 6, materialIndices, GL_UNIFORM_OFFSET, materialOffsets);
+		glGetUniformIndices(program, 8, lightsNames, lightsIndices);
+		glGetActiveUniformsiv(program, 8, lightsIndices, GL_UNIFORM_OFFSET, lightsOffsets);
 
-		float a = 0;
-		int b = 0;
-		memcpy(materialBlockBuffer + materialOffsets[0], vec3().toPointer(), sizeof(vec3));
-		memcpy(materialBlockBuffer + materialOffsets[1], vec3().toPointer(), sizeof(vec3));
-		memcpy(materialBlockBuffer + materialOffsets[2], vec3().toPointer(), sizeof(vec3));
-		memcpy(materialBlockBuffer + materialOffsets[3], vec3().toPointer(), sizeof(vec3));
-		memcpy(materialBlockBuffer + materialOffsets[4], &a, sizeof(float));
-		memcpy(materialBlockBuffer + materialOffsets[5], &b, sizeof(int));
+		glGenBuffers(1, &lightsUboHandle);
+		glBindBuffer(GL_UNIFORM_BUFFER, lightsUboHandle);
 
-		glGenBuffers(1, &materialUboHandle);
-		glBindBuffer(GL_UNIFORM_BUFFER, materialUboHandle);
-
-		glBufferData(GL_UNIFORM_BUFFER, materialBlockSize, materialBlockBuffer, GL_DYNAMIC_DRAW);
-		glBindBufferBase(GL_UNIFORM_BUFFER, materialUboID, materialUboHandle);*/
+		glBufferData(GL_UNIFORM_BUFFER, lightsBlockSize * MAX_LIGHTS, lightsBlockBuffer, GL_DYNAMIC_DRAW);
+		glBindBufferBase(GL_UNIFORM_BUFFER, lightsUboID, lightsUboHandle);
 
 	}
 	void deleteLightsUbo() {

@@ -22,8 +22,10 @@ struct Light {
 }; 
 
 // the set of lights to apply, per invocation of this shader
-//const int MaxLights = 10;
-//uniform Light Lights[MaxLights];
+const int MaxLights = 1;
+layout (std140) uniform lightsBuffer {
+	Light lights[MaxLights];
+};
 
 uniform Light light;
 uniform Material mat;
@@ -52,10 +54,9 @@ vec4 calcDirLight(Light light, vec3 normal, vec3 viewDir) {
 	else
 		spec = pow(spec, mat.shininess); // sharpen the highlight
 		
-	vec3 ambient = light.color * mat.ambient;	
 	vec3 diffuse = light.color * diff * mat.diffuse;
 	vec3 specular = light.color * spec * mat.specular;
-	return vec4((ambient + diffuse + specular).xyz, 1.0);
+	return vec4((diffuse + specular).xyz, 1.0);
 }
 
 vec4 calcPointLight(Light light, vec4 position, vec3 normal, vec3 viewDir) {
@@ -81,16 +82,21 @@ vec4 calcPointLight(Light light, vec4 position, vec3 normal, vec3 viewDir) {
 		spec = 0.0;
 	else
 		spec = pow(spec, mat.shininess);
-		
-	vec3 ambient = light.color * mat.ambient;		
+				
 	vec3 diffuse = light.color * diff * mat.diffuse * attenuation;
 	vec3 specular = light.color * spec * mat.specular * attenuation;
-	return vec4((ambient + diffuse + specular).xyz, 1.0);
+	return vec4((diffuse + specular).xyz, 1.0);
 
 }
 
 void main() {
-	colorOut = calcDirLight(light, DataIn.normal, DataIn.eye);
+
+	colorOut = vec4(0);
+	colorOut += vec4(mat.ambient.xyz, 1);
+	for (int i = 0; i < MaxLights; i++) {
+		colorOut += calcDirLight(light, DataIn.normal, DataIn.eye);
+	}
+	//colorOut = calcDirLight(light, DataIn.normal, DataIn.eye);
 	//colorOut = vec4(matAmbient.xyz, 1.0f);
 	//colorOut = vec4(DataIn.normal.x / 2 + 0.5, DataIn.normal.y / 2 + 0.5, DataIn.normal.z / 2 + 0.5, 1.0f);
 	
