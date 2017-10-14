@@ -280,11 +280,15 @@ void GameManager::display() {
 	activeCamera->computeProjection(WIDTH, HEIGHT);
 
 	// Render objects
-	track->drawLights();
-	car->drawLights();
+	if(track->isActive)
+		track->drawLights();
+	if (car->isActive)
+		car->drawLights();
 
-	track->draw(); 
-	car->draw();
+	if (track->isActive)
+		track->draw();
+	if (car->isActive)
+		car->draw();
 	
 	
 

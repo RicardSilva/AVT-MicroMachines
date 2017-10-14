@@ -161,4 +161,8 @@ private:
 
 struct ObjModel {
 	std::vector<Mesh*> meshes;
+
+	ObjModel() {
+		meshes = std::vector<Mesh*>();
+	}
 };

@@ -30,6 +30,8 @@ public:
 	Car(vec3& position) 
 		: GameObject(position) {
 		model = ModelManager::instance()->getModel("car");
+		if (model == NULL)
+			this->isActive = false;
 		
 	}
 	virtual ~Car() {}

@@ -22,7 +22,7 @@ void Track::loadFromFile(std::string& file) {
 		}
 		else if (i == 3) {
 			//new butter
-			butters.push_back(new Butter(vec3((x * 10 - 700), 5, -(z * 10 - 500))));
+			butters.push_back(new Butter(vec3((x * 10 - 700), 0, -(z * 10 - 500))));
 		}
 		else if (i == 4) {
 			setStartingPosition(vec3((x * 10 - 700), 0, -(z * 10 - 500)));
@@ -105,10 +105,14 @@ void Track::attemptToSpawnOrange() {
 }
 
 void Track::update(float timeStep) {
-	for (auto cheerio : cheerios)
-		cheerio->update(timeStep);
-	for (auto butter : butters)
-		butter->update(timeStep);
+	for (auto cheerio : cheerios) {
+		if (cheerio->isActive)
+			cheerio->update(timeStep);
+	}
+	for (auto butter : butters) {
+		if (butter->isActive)
+			butter->update(timeStep);
+	}
 	for (auto orange : oranges) {
 		if (orange->isActive) {
 			orange->update(timeStep);
@@ -145,8 +149,10 @@ void Track::draw() {
 	shader->unUse();
 
 	for (auto cheerio : cheerios)
+		if (cheerio->isActive)
 		cheerio->draw();
 	for (auto butter : butters)
+		if (butter->isActive)
 		butter->draw();
 	for (auto orange : oranges) {
 		if (orange->isActive)

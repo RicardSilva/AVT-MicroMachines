@@ -32,6 +32,9 @@ public:
 	Track(vec3& position) 
 		: GameObject(position), orangeCounter(0) {
 		model = ModelManager::instance()->getModel("track");
+
+		if (model == NULL)
+			this->isActive = false;
 		loadFromFile(std::string("tracks/track.txt"));
 		Orange* o;
 		for (int i = 0; i < MAX_ORANGES; i++) {

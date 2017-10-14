@@ -17,6 +17,9 @@ public:
 	Orange(vec3& position, vec3& speed, int angle, vec3& rotationAxle)
 		: GameObject(position, speed, angle), rotationAxle(rotationAxle), rotationAngle(0) {
 		model = ModelManager::instance()->getModel("orange");
+
+		if (model == NULL)
+			this->isActive = false;
 	}
 	virtual ~Orange() {}
 

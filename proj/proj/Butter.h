@@ -10,6 +10,9 @@ public:
 		: GameObject(position) {
 
 		model = ModelManager::instance()->getModel("butter");
+
+		if (model == NULL)
+			this->isActive = false;
 	}
 	virtual ~Butter() {}
 

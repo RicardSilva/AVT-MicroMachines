@@ -23,11 +23,11 @@ protected:
 	int angle;
 
 public:
-	bool isActive;
+	bool isActive = true;
 
 	GameObject() {}
 	GameObject(vec3& position, vec3& speed, float angle)
-		: position(position), speed(speed), angle(angle), isActive(true) {
+		: position(position), speed(speed), angle(angle) {
 		shader = ShaderManager::instance()->getShader("lightShader");
 	}
 	GameObject(vec3& position) : position(position), speed(vec3(0, 0, 0)), angle(0) {
