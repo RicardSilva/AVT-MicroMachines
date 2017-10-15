@@ -10,9 +10,10 @@ struct Material {
 };
 
 struct Light {
+	bool isActive;
 	int type;
-	vec3 position;
-	vec3 direction;
+	vec4 position;
+	vec4 direction;
 	vec3 color;	
 	float intensity;
 	
@@ -22,10 +23,8 @@ struct Light {
 }; 
 
 // the set of lights to apply, per invocation of this shader
-const int MaxLights = 1;
-layout (std140) uniform lightsBuffer {
-	Light lights[MaxLights];
-};
+const int MaxLights = 7;
+uniform Light lights[MaxLights];
 
 uniform Light light;
 uniform Material mat;
@@ -41,7 +40,8 @@ out vec4 colorOut;
 
 vec4 calcDirLight(Light light, vec3 normal, vec3 viewDir) {
 
-	vec3 lightDir = normalize(-light.direction);
+	vec4 lightDir4 = normalize(-light.direction);
+	vec3 lightDir = vec3(lightDir4);
 	float diff = max(0.0, dot(normal, lightDir));
 	
 	vec3 HalfVector = normalize(lightDir + viewDir);
@@ -61,7 +61,8 @@ vec4 calcDirLight(Light light, vec3 normal, vec3 viewDir) {
 
 vec4 calcPointLight(Light light, vec4 position, vec3 normal, vec3 viewDir) {
 
-	vec3 lightDirection = light.position - vec3(position);
+	vec4 lightDirection4 = light.position - position;
+	vec3 lightDirection = vec3(lightDirection4);
 	float lightDistance = length(lightDirection);
 	
 	// normalize the light direction vector, so
@@ -89,17 +90,31 @@ vec4 calcPointLight(Light light, vec4 position, vec3 normal, vec3 viewDir) {
 
 }
 
+vec4 calcSpotLight() {
+	return vec4(0);
+}
+
 void main() {
 
 	colorOut = vec4(0);
 	colorOut += vec4(mat.ambient.xyz, 1);
 	for (int i = 0; i < MaxLights; i++) {
-		colorOut += calcDirLight(light, DataIn.normal, DataIn.eye);
+		Light light = lights[i];
+		if(light.isActive) {
+			if(light.type == 0)
+				//colorOut += vec4(0);
+				colorOut += calcDirLight(light, DataIn.normal, DataIn.eye) * light.intensity;
+			else if (light.type == 1)
+				colorOut += calcPointLight(light, DataIn.pos, DataIn.normal, DataIn.eye) * light.intensity;
+				//colorOut += vec4(0);
+			else if (light.type == 2)
+				colorOut += calcSpotLight();
+		}
 	}
-	//colorOut = calcDirLight(light, DataIn.normal, DataIn.eye);
+	
+	
 	//colorOut = vec4(matAmbient.xyz, 1.0f);
-	//colorOut = vec4(DataIn.normal.x / 2 + 0.5, DataIn.normal.y / 2 + 0.5, DataIn.normal.z / 2 + 0.5, 1.0f);
 	
-	
+	//colorOut = vec4(DataIn.pos.x / 2000 + 1, DataIn.pos.y / 2000 + 1, DataIn.pos.z / 2000 + 1, 1);
 	
 }

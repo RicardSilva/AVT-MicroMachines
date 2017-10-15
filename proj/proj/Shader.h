@@ -56,6 +56,7 @@ public:
 
 	void loadInt(GLint location, GLint i);
 	void loadFloat(GLint location, GLfloat f);
+	void loadBool(GLint location, bool b);
 	void loadVec3(GLint location, vec3 &v);
 	void loadVec4(GLint location, vec4 &v);
 	void loadMat3(GLint location, float* m);

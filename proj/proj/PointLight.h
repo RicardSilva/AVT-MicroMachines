@@ -3,6 +3,7 @@
 
 struct PointLight : public Light {
 
+	PointLight() {}
 
 	PointLight(vec4& position, vec3& color, float intensity) : Light() {
 	
@@ -10,9 +11,9 @@ struct PointLight : public Light {
 		this->position = position;
 		this->color = color;
 		this->intensity = intensity;
-		this->constantAttenuation = 0.5;
-		this->linearAttenuation = 0.5;
-		this->quadraticAttenuation = 0.5;
+		this->constantAttenuation = 0.05;
+		this->linearAttenuation = 0.00005;
+		this->quadraticAttenuation = 0.0001;
 	
 	}
 	virtual ~PointLight() {}

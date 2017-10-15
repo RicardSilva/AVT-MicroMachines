@@ -4,12 +4,14 @@
 #include <map>
 #include <string>
 #include "AVTmathLib.h"
+#include <sstream>
 
 #define VERTICES 0
 #define NORMALS 1
 #define TEXCOORDS 2
 
-#define MAX_LIGHTS 9
+#define MAX_LIGHTS 7
+#define ATTRIBS_PER_LIGHT 9
 
 // The storage for matrices
 extern float mMatrix[COUNT_MATRICES][16];
@@ -42,15 +44,9 @@ private:
 	GLint matShininessID;
 
 	int lightCounter;
-	GLuint lightsUboHandle;
-	GLuint lightsUboID;
-	GLubyte* lightsBlockBuffer;
-	GLint lightsBlockSize;
-	GLuint lightsIndices[8];
-	GLint lightsOffsets[8];
-	GLchar* lightsNames[8] = { "type", "position", "direction", "color", "intensity", 
-		"constantAttenuation", "linearAttenuation", "quadraticAttenuation" };
-
+	GLint lightUniforms[MAX_LIGHTS][ATTRIBS_PER_LIGHT];
+	GLchar* lightAttribNames[ATTRIBS_PER_LIGHT] = { "isActive", "type", "position", "direction",
+		"color", "intensity", "constantAttenuation", "linearAttenuation", "quadraticAttenuation" };
 
 
 public:
@@ -58,7 +54,6 @@ public:
 		lightCounter = 0;
 		bindAttributes();
 		getUniformLocations();
-		initializeLightsUbo();
 	}
 	virtual ~LightShader() {
 	}
@@ -80,39 +75,33 @@ public:
 		matSpecularID = getUniformLocation("mat.specular");
 		matShininessID = getUniformLocation("mat.shininess");
 
-		lightTypeID = getUniformLocation("light.type");
+		/*lightTypeID = getUniformLocation("light.type");
 		lightPositionID = getUniformLocation("light.position");
 		lightDirectionID = getUniformLocation("light.direction");
 		lightColorID = getUniformLocation("light.color");
 		lightIntensityID = getUniformLocation("light.intensity");
 		lightConstAttenuationID = getUniformLocation("light.constantAttenuation");
 		lightLinAttenuationID = getUniformLocation("light.linearAttenuation");
-		lightQuadAttenuationID = getUniformLocation("light.quadraticAttenuation");
+		lightQuadAttenuationID = getUniformLocation("light.quadraticAttenuation");*/
+		
+
+		std::string uniformName;
+		for (int i = 0; i < MAX_LIGHTS; i++) {
+			for (int j = 0; j < ATTRIBS_PER_LIGHT; j++) {
+				uniformName = "lights[" + std::to_string(i) + "]." + lightAttribNames[j];
+				lightUniforms[i][j] = getUniformLocation(uniformName.c_str());
+			}
+			
+
+		}
 	}
 
-
-	void initializeLightsUbo() {
-		lightsUboHandle = 0;
-		lightsUboID = getUniformBlockIndex("lightsBuffer");
-		glGetActiveUniformBlockiv(program, lightsUboID,
-			GL_UNIFORM_BLOCK_DATA_SIZE, &lightsBlockSize);
-		lightsBlockBuffer = (GLubyte*)malloc(lightsBlockSize * MAX_LIGHTS);
-
-		glGetUniformIndices(program, 8, lightsNames, lightsIndices);
-		glGetActiveUniformsiv(program, 8, lightsIndices, GL_UNIFORM_OFFSET, lightsOffsets);
-
-		glGenBuffers(1, &lightsUboHandle);
-		glBindBuffer(GL_UNIFORM_BUFFER, lightsUboHandle);
-
-		glBufferData(GL_UNIFORM_BUFFER, lightsBlockSize * MAX_LIGHTS, lightsBlockBuffer, GL_DYNAMIC_DRAW);
-		glBindBufferBase(GL_UNIFORM_BUFFER, lightsUboID, lightsUboHandle);
-
+	void updateLightCounter() {
+		lightCounter++;
+		if (lightCounter >= MAX_LIGHTS)
+			lightCounter = 0;
 	}
-	void deleteLightsUbo() {
-		delete(lightsBlockBuffer);
-		glBindBuffer(GL_UNIFORM_BUFFER, 0);
-	}
-
+	
 	void loadProjViewModelMatrix(float* matrix) {
 		Shader::loadMat4(projViewModelID, matrix);
 	}
@@ -132,22 +121,31 @@ public:
 		Shader::loadFloat(matShininessID, material.Ns);		
 	}
 	void loadDirectionalLight(DirectionalLight& light) {
-		vec4 lightDir4 = multMatrixPoint(VIEW, light.direction);
-		vec3 lightDir = vec3(lightDir4.x, lightDir4.y, lightDir4.z);
-		Shader::loadInt(lightTypeID, light.type);
-		Shader::loadVec3(lightDirectionID, lightDir);
-		Shader::loadVec3(lightColorID, light.color);
+		vec4 lightDir = multMatrixPoint(VIEW, light.direction);
+
+		Shader::loadBool(lightUniforms[lightCounter][0], light.isActive);
+		Shader::loadInt(lightUniforms[lightCounter][1], light.type);
+		Shader::loadVec4(lightUniforms[lightCounter][3], lightDir);
+		Shader::loadVec3(lightUniforms[lightCounter][4], light.color);
+		Shader::loadFloat(lightUniforms[lightCounter][5], light.intensity);
+
+		updateLightCounter();
 	}
 	void loadPointLight(PointLight& light) {
-		vec4 lightPos4 = multMatrixPoint(VIEW, light.position);
-		vec3 lightPos = vec3(lightPos4.x, lightPos4.y, lightPos4.z);
-		Shader::loadInt(lightTypeID, light.type);
-		Shader::loadVec3(lightPositionID, lightPos);
-		Shader::loadVec3(lightColorID, light.color);
+		vec4 lightPos = multMatrixPoint(VIEW, light.position);
 
-		Shader::loadFloat(lightConstAttenuationID, light.constantAttenuation);
-		Shader::loadFloat(lightLinAttenuationID, light.linearAttenuation);
-		Shader::loadFloat(lightQuadAttenuationID, light.quadraticAttenuation);
+		Shader::loadBool(lightUniforms[lightCounter][0], light.isActive);
+		Shader::loadInt(lightUniforms[lightCounter][1], light.type);
+		Shader::loadVec4(lightUniforms[lightCounter][2], lightPos);
+		Shader::loadVec3(lightUniforms[lightCounter][4], light.color);
+		Shader::loadFloat(lightUniforms[lightCounter][5], light.intensity);
+
+		Shader::loadFloat(lightUniforms[lightCounter][6], light.constantAttenuation);
+		Shader::loadFloat(lightUniforms[lightCounter][7], light.linearAttenuation);
+		Shader::loadFloat(lightUniforms[lightCounter][8], light.quadraticAttenuation);
+
+
+		updateLightCounter();
 	}
 
 	void loadMatrices() {

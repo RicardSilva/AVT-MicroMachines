@@ -5,9 +5,8 @@
 #include "Orange.h"
 #include "Butter.h"
 #include "MathHelper.h"
-#include "Light.h"
+#include "Lamp.h"
 #include "DirectionalLight.h"
-#include "PointLight.h"
 
 #define TRACK_WIDTH 1400
 #define TRACK_HEIGHT 1000
@@ -23,7 +22,7 @@ class Track : public GameObject {
 	std::vector<Butter*> butters;
 	std::vector<Orange*> oranges;
 	DirectionalLight dirLight;
-	std::vector<PointLight*> pointLights;
+	std::vector<Lamp*> lamps;
 
 	vec3 startingPosition;
 	int orangeCounter;
@@ -43,7 +42,7 @@ public:
 			oranges.push_back(o);
 		}
 
-		dirLight = DirectionalLight(vec4(1, -1, 1, 0), vec3(1,1,1), 0.5f);
+		dirLight = DirectionalLight(vec4(1, -1, 1, 0), vec3(1,1,1), 0.2f);
 	}
 	virtual ~Track() {}
 	void setStartingPosition(vec3& position) {

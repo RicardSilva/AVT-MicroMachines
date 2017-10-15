@@ -71,7 +71,8 @@ void GameManager::initMeshes() {
 	modelsToLoad.push_back(std::make_pair("track", "objs/table.obj"));
 	modelsToLoad.push_back(std::make_pair("cheerio", "objs/donut.obj"));
 	modelsToLoad.push_back(std::make_pair("butter", "objs/butter.obj"));
-	modelsToLoad.push_back(std::make_pair("orange", "objs/Orange.obj"));
+	modelsToLoad.push_back(std::make_pair("orange", "objs/orange.obj"));
+	modelsToLoad.push_back(std::make_pair("lamp", "objs/lamp.obj"));
 
 	for (auto m : modelsToLoad) {
 		if (loader->LoadFile(m.second)) {

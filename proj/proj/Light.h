@@ -10,6 +10,7 @@ struct Light {
 
 	Shader* shader;
 
+	bool isActive = true;
 	lightType type;
 
 	vec4 position;

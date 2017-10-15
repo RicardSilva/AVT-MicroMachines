@@ -18,7 +18,7 @@ void Track::loadFromFile(std::string& file) {
 		}
 		else if (i == 2) {
 			//new candle
-			pointLights.push_back(new PointLight(vec4((x * 10 - 700), 0, -(z * 10 - 500), 0), vec3(1, 0.3, 0.3), 1));
+			lamps.push_back(new Lamp(vec3((x * 10 - 700), 0, -(z * 10 - 500))));
 		}
 		else if (i == 3) {
 			//new butter
@@ -126,8 +126,8 @@ void Track::update(float timeStep) {
 
 void Track::drawLights() {
 	dirLight.draw();
-	//for (auto light : pointLights)
-	//	light->draw();
+	for (auto lamp : lamps)
+		lamp->drawLights();
 }
 void Track::draw() {
 	
@@ -157,6 +157,10 @@ void Track::draw() {
 	for (auto orange : oranges) {
 		if (orange->isActive)
 			orange->draw();
+	}
+	for (auto lamp : lamps) {
+		if (lamp->isActive)
+			lamp->draw();
 	}
 
 	popMatrix(MODEL);

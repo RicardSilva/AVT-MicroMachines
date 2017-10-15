@@ -12,12 +12,13 @@
 
 
 struct Vertex {
-	GLfloat x, y, z;
+	GLfloat x, y, z, w;
 	Vertex() {}
 	Vertex(const vec3& v) {
 		x = v.x;
 		y = v.y;
 		z = v.z;
+		w = 1;
 	}
 };
 
@@ -118,7 +119,7 @@ private:
 		glBindBuffer(GL_ARRAY_BUFFER, VboVertices);
 		glBufferData(GL_ARRAY_BUFFER, Positions.size() * sizeof(Vertex), &Positions[0], GL_STATIC_DRAW);
 		glEnableVertexAttribArray(VERTICES);
-		glVertexAttribPointer(VERTICES, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+		glVertexAttribPointer(VERTICES, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
 
 
 		glGenBuffers(1, &VboNormals);
