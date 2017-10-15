@@ -51,4 +51,8 @@ void Orange::update(float timeStep) {
 	rotationAngle = rotationAngle + speedX * 0.04;
 	rotationAngle = rotationAngle % 360;
 
+	// update hitbox
+	getHitbox()->set(position.x - ORANGE_RADIUS, position.y - ORANGE_RADIUS, position.z - ORANGE_RADIUS,
+					position.x + ORANGE_RADIUS, position.y + ORANGE_RADIUS, position.z + ORANGE_RADIUS);
+
 }

@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AVTmathLib.h" />
+    <ClInclude Include="Border.h" />
     <ClInclude Include="Butter.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Car.h" />
@@ -27,6 +28,7 @@
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Hitbox.h" />
     <ClInclude Include="Lamp.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightShader.h" />
@@ -51,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AVTmathLib.cpp" />
+    <ClCompile Include="Border.cpp" />
     <ClCompile Include="Butter.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Car.cpp" />
@@ -58,6 +61,7 @@
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Hitbox.cpp" />
     <ClCompile Include="Lamp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathHelper.cpp" />
