@@ -156,6 +156,9 @@ void GameManager::keydown(int key) {
 	case 'a':
 		car->turnLeft = true;
 		break;
+	case 'p':
+		pause = !pause;
+
 	}
 
 }

@@ -125,7 +125,17 @@ void Car::update(float timeStep) {
 	position.x = posX + speedX * cosAngle * timeStep;
 	position.z = posZ + speedZ * -sinAngle * timeStep;
 
+
 	updateLights();
+
+	// update hitbox TODO
+	getHitbox()->set(position.x + DISTANCE_BETWEEN_AXLES / 2.0 - (CAR_LENGTH * fabs(sinAngle) + CAR_WIDTH * fabs(cosAngle)) / 2,
+					position.y - (CAR_LENGTH * fabs(cosAngle) + CAR_WIDTH * fabs(sinAngle)) / 2,
+					position.z - WHEEL_OUTER,
+					position.x + DISTANCE_BETWEEN_AXLES / 2.0 + (CAR_LENGTH * fabs(sinAngle) + CAR_WIDTH * fabs(cosAngle)) / 2,
+					position.y + (CAR_LENGTH * fabs(cosAngle) + CAR_WIDTH * fabs(sinAngle)) / 2,
+					position.z + CAR_HEIGHT + CAR_HEIGHT);
+
 }
 
 void Car::drawLights() {
@@ -149,4 +159,13 @@ void Car::draw() {
 	popMatrix(MODEL);
 
 	shader->unUse();
+}
+
+void Car::updateHitbox() { //TODO
+	getHitbox()->set(position.x + DISTANCE_BETWEEN_AXLES / 2.0 - (CAR_LENGTH * fabs(sin(getAngle() * PI / 180)) + CAR_WIDTH * fabs(cos(getAngle() * PI / 180))) / 2,
+					position.y - (CAR_LENGTH * fabs(cos(getAngle() * PI / 180)) + CAR_WIDTH * fabs(sin(getAngle() * PI / 180))) / 2,
+					position.z - WHEEL_OUTER,
+					position.x + DISTANCE_BETWEEN_AXLES / 2.0 + (CAR_LENGTH * fabs(sin(getAngle() * PI / 180)) + CAR_WIDTH * fabs(cos(getAngle() * PI / 180))) / 2,
+					position.y + (CAR_LENGTH * fabs(cos(getAngle() * PI / 180)) + CAR_WIDTH * fabs(sin(getAngle() * PI / 180))) / 2,
+					position.z + CAR_HEIGHT + CAR_HEIGHT);
 }
