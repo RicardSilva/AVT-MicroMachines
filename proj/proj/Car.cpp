@@ -1,5 +1,29 @@
 #include "Car.h"
 
+void Car::updateLights() {
+	float posX;
+	float posZ;
+
+	//left
+	//update light position
+	posX = position.x + cos(degToRad(angle)) * 14.4 - sin(degToRad(angle)) * -5;
+	posZ = position.z - sin(degToRad(angle))* -5 + cos(degToRad(angle) * 14.4);
+	lights[0].position = vec4(posX, 10, posZ, 1);
+
+	//update light direction
+	lights[0].direction = vec4(cos(degToRad(angle)), 0, -sin(degToRad(angle)), 0);
+
+	//right
+	posX = position.x + cos(degToRad(angle)) * 14.4 - sin(degToRad(angle)) * 5;
+	posZ = position.z - sin(degToRad(angle))* 5 + cos(degToRad(angle) * 14.4);
+	lights[1].position = vec4(posX, 10, posZ, 1);
+	
+	lights[1].direction = vec4(cos(degToRad(angle)), 0, -sin(degToRad(angle)), 0);
+
+	
+
+	
+}
 void Car::update(float timeStep) {
 	timeStep = timeStep / 1000;	// convert ms to seconds
 
@@ -100,28 +124,29 @@ void Car::update(float timeStep) {
 	// update position
 	position.x = posX + speedX * cosAngle * timeStep;
 	position.z = posZ + speedZ * -sinAngle * timeStep;
+
+	updateLights();
 }
 
 void Car::drawLights() {
-
+	lights[0].draw();
+	lights[1].draw();
 }
 void Car::draw() {
 	shader->use();
 
 	pushMatrix(MODEL);
-	loadIdentity(MODEL);
 
 	translate(MODEL, position);
 	rotate(MODEL, angle, vec3(0, 1, 0));
-	scale(MODEL, 1.5, 2, 2);
 	shader->loadMatrices();
 
 	for (auto mesh : model->meshes) {
 		shader->loadMaterial(mesh->MeshMaterial);
 		mesh->draw();
 	}
-
-
+	
 	popMatrix(MODEL);
+
 	shader->unUse();
 }

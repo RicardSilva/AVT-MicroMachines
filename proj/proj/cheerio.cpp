@@ -7,7 +7,6 @@ void Cheerio::draw() {
 	loadIdentity(MODEL);
 
 	translate(MODEL, position);
-	scale(MODEL, 15, 15, 15);
 	shader->loadMatrices();
 
 	for (auto mesh : model->meshes) {

@@ -10,7 +10,7 @@ public:
 	Lamp(vec3& position)
 		: GameObject(position) {
 		model = ModelManager::instance()->getModel("lamp");
-		light = PointLight(vec4(position.x, position.y + 33.5, position.z, 1), vec3(1, 0.0, 0.0), 3);
+		light = PointLight(vec4(position.x, position.y + 36, position.z, 1), vec3(1, 0.0, 0.0), 3);
 
 		if (model == NULL)
 			this->isActive = false;
@@ -21,5 +21,17 @@ public:
 	void drawLights();
 	void draw();
 	void update(float timeStep) {}
+
+	void toogleLight() {
+		if (light.isActive) {
+			light.isActive = false;
+			shader->decActiveLights();
+		}
+		else {
+			light.isActive = true;
+			shader->incActiveLights();
+		}
+
+	}
 
 };

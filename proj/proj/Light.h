@@ -22,6 +22,9 @@ struct Light {
 	float linearAttenuation;
 	float quadraticAttenuation;
 
+	float spotCosCutoff;
+	float spotExponent;
+
 	Light() {
 		shader = ShaderManager::instance()->getShader("lightShader");
 	}

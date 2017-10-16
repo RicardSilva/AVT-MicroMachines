@@ -8,8 +8,9 @@
 #include <GL/glew.h>
 
 
-struct DirectionalLight;
-struct PointLight;
+//struct DirectionalLight;
+//struct PointLight;
+struct Light;
 
 using namespace std;
 class Shader
@@ -49,10 +50,14 @@ public:
 	virtual void loadViewModelMatrix(float* matrix) {}
 	virtual void loadNormalMatrix(float* matrix) {}
 	virtual void loadLightPosition(vec3& vec) {}
-	virtual void loadDirectionalLight(DirectionalLight& light) {}
-	virtual void loadPointLight(PointLight& light) {}
+	virtual void loadDirectionalLight(Light& light) {}
+	virtual void loadPointLight(Light& light) {}
+	virtual void loadSpotLight(Light& light) {}
 	virtual void loadMaterial(Material& material) {}
 	virtual void loadMatrices() {}
+
+	virtual void decActiveLights() {}
+	virtual void incActiveLights() {}
 
 	void loadInt(GLint location, GLint i);
 	void loadFloat(GLint location, GLfloat f);
@@ -71,6 +76,8 @@ public:
 
 
 	void deleteProgram();
+
+	
 
 private:
 	enum ShaderType { VERTEX_SHADER, FRAGMENT_SHADER };

@@ -6,7 +6,6 @@ void Butter::draw() {
 	loadIdentity(MODEL);
 
 	translate(MODEL, position);
-	scale(MODEL, 20, 20, 20);
 	shader->loadMatrices();
 
 	for (auto mesh : model->meshes) {

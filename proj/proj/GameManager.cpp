@@ -50,10 +50,6 @@ void GameManager::init() {
 	initLights();
 	initTrack();
 
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
-	glEnable(GL_MULTISAMPLE);
-	glClearColor(0.1f, 0.1f, 0.1f, 0.1f);
 
 
 }
@@ -138,6 +134,15 @@ void GameManager::keydown(int key) {
 		break;
 	case '3':
 		activeCamera = cameras[2];
+		break;
+	case '8':
+		track->toogleDirectionalLight();
+		break;
+	case '9':
+		track->tooglePointLights();
+		break;
+	case '0':
+		car->toogleSpotLights();
 		break;
 	case 'd':
 		car->turnRight = true;

@@ -138,6 +138,12 @@ int main(int argc, char **argv) {
 	printf("Version: %s\n", glGetString(GL_VERSION));
 	printf("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_MULTISAMPLE);
+	glClearColor(0.53, 0.81, 0.92, 1);
+
 	gm = new GameManager();
 	gm->init();
 	

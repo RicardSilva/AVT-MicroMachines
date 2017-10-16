@@ -20,10 +20,13 @@ struct Light {
 	float constantAttenuation;
 	float linearAttenuation;
 	float quadraticAttenuation;
+	
+	float spotCosCutoff; 
+	float spotExponent;
 }; 
 
 // the set of lights to apply, per invocation of this shader
-const int MaxLights = 7;
+const int MaxLights = 9;
 uniform Light lights[MaxLights];
 
 uniform Light light;
@@ -70,8 +73,9 @@ vec4 calcPointLight(Light light, vec4 position, vec3 normal, vec3 viewDir) {
 	lightDirection = lightDirection / lightDistance;
 	
 	// model how much light is available for this fragment
-	float attenuation = 1.0 / (light.constantAttenuation + light.linearAttenuation * lightDistance +
-	light.quadraticAttenuation * lightDistance * lightDistance);
+	float attenuation = 1.0 / (light.constantAttenuation 
+	+ light.linearAttenuation * lightDistance 
+	+ light.quadraticAttenuation * lightDistance * lightDistance);
 	
 	// the direction of maximum highlight also changes per fragment
 	vec3 halfVector = normalize(lightDirection + viewDir);
@@ -90,8 +94,39 @@ vec4 calcPointLight(Light light, vec4 position, vec3 normal, vec3 viewDir) {
 
 }
 
-vec4 calcSpotLight() {
-	return vec4(0);
+vec4 calcSpotLight(Light light, vec4 position, vec3 normal, vec3 viewDir) {
+	
+	vec4 lightDirection4 = light.position - position;
+	vec3 lightDirection = vec3(lightDirection4);
+	float lightDistance = length(lightDirection);
+	lightDirection = lightDirection / lightDistance;
+	
+	float attenuation = 1.0 / (light.constantAttenuation 
+	+ light.linearAttenuation * lightDistance 
+	+ light.quadraticAttenuation * lightDistance * lightDistance);
+	
+	// how close are we to being in the spot?
+	float spotCos = dot(lightDirection, (vec3(-light.direction)));
+	// attenuate more, based on spot-relative position
+	if (spotCos < light.spotCosCutoff)
+		attenuation = 0.0;
+	else
+		attenuation *= pow(spotCos, light.spotExponent);
+	
+	vec3 halfVector = normalize(lightDirection + viewDir);
+	
+	float diff = max(0.0, dot(normal, lightDirection));
+	float spec = max(0.0, dot(normal, halfVector));
+	if (diff == 0.0)
+		spec = 0.0;
+	else
+		spec = pow(spec, mat.shininess);
+		
+	vec3 diffuse = light.color * diff * mat.diffuse * attenuation;
+	vec3 specular = light.color * spec * mat.specular * attenuation;
+	
+	return vec4((diffuse + specular).xyz, 1.0);
+
 }
 
 void main() {
@@ -108,13 +143,12 @@ void main() {
 				colorOut += calcPointLight(light, DataIn.pos, DataIn.normal, DataIn.eye) * light.intensity;
 				//colorOut += vec4(0);
 			else if (light.type == 2)
-				colorOut += calcSpotLight();
+				colorOut += calcSpotLight(light, DataIn.pos, DataIn.normal, DataIn.eye) * light.intensity;
 		}
 	}
 	
 	
-	//colorOut = vec4(matAmbient.xyz, 1.0f);
-	
+	//colorOut = vec4(lights[7].color.xyz, 1.0f);
 	//colorOut = vec4(DataIn.pos.x / 2000 + 1, DataIn.pos.y / 2000 + 1, DataIn.pos.z / 2000 + 1, 1);
 	
 }

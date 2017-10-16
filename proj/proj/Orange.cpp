@@ -10,7 +10,6 @@ void Orange::draw() {
 	translate(MODEL, vec3(0,30,0) +  position); 
 	rotate(MODEL, -rotationAngle, rotationAxle);
 
-	scale(MODEL, 30, 30, 30);
 	shader->loadMatrices();
 
 	for (auto mesh : model->meshes) {

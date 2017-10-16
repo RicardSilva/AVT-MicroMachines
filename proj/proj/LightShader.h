@@ -5,13 +5,14 @@
 #include <string>
 #include "AVTmathLib.h"
 #include <sstream>
+#include "Light.h"
 
 #define VERTICES 0
 #define NORMALS 1
 #define TEXCOORDS 2
 
-#define MAX_LIGHTS 7
-#define ATTRIBS_PER_LIGHT 9
+#define MAX_LIGHTS 9
+#define ATTRIBS_PER_LIGHT 11
 
 // The storage for matrices
 extern float mMatrix[COUNT_MATRICES][16];
@@ -23,21 +24,13 @@ extern float mNormal3x3[9];
 class LightShader : public Shader {
 
 private:
+
+	int activeLightsCounter = MAX_LIGHTS;
 	GLint projViewModelID;
 	GLint viewModelID;
 	GLint normalID;
 	GLint lightPosID;
-
-	GLint lightTypeID;
-	GLint lightPositionID;
-	GLint lightDirectionID;
-	GLint lightColorID;
-	GLint lightIntensityID;
-	GLint lightConstAttenuationID;
-	GLint lightLinAttenuationID;
-	GLint lightQuadAttenuationID;
-
-
+	
 	GLint matAmbientID;
 	GLint matDiffuseID;
 	GLint matSpecularID;
@@ -46,7 +39,7 @@ private:
 	int lightCounter;
 	GLint lightUniforms[MAX_LIGHTS][ATTRIBS_PER_LIGHT];
 	GLchar* lightAttribNames[ATTRIBS_PER_LIGHT] = { "isActive", "type", "position", "direction",
-		"color", "intensity", "constantAttenuation", "linearAttenuation", "quadraticAttenuation" };
+		"color", "intensity", "constantAttenuation", "linearAttenuation", "quadraticAttenuation", "spotCosCutoff", "spotExponent" };
 
 
 public:
@@ -98,7 +91,7 @@ public:
 
 	void updateLightCounter() {
 		lightCounter++;
-		if (lightCounter >= MAX_LIGHTS)
+		if (lightCounter >= MAX_LIGHTS )
 			lightCounter = 0;
 	}
 	
@@ -111,16 +104,13 @@ public:
 	void loadNormalMatrix(float* matrix) {
 		Shader::loadMat3(normalID, matrix);
 	}
-	void loadLightPosition(vec3& vec) {
-		Shader::loadVec3(normalID, vec);
-	}
 	void loadMaterial(Material& material) {
 		Shader::loadVec3(matAmbientID, material.Ka);
 		Shader::loadVec3(matDiffuseID, material.Kd);
 		Shader::loadVec3(matSpecularID, material.Ks);
 		Shader::loadFloat(matShininessID, material.Ns);		
 	}
-	void loadDirectionalLight(DirectionalLight& light) {
+	void loadDirectionalLight(Light& light) {
 		vec4 lightDir = multMatrixPoint(VIEW, light.direction);
 
 		Shader::loadBool(lightUniforms[lightCounter][0], light.isActive);
@@ -131,7 +121,7 @@ public:
 
 		updateLightCounter();
 	}
-	void loadPointLight(PointLight& light) {
+	void loadPointLight(Light& light) {
 		vec4 lightPos = multMatrixPoint(VIEW, light.position);
 
 		Shader::loadBool(lightUniforms[lightCounter][0], light.isActive);
@@ -147,6 +137,26 @@ public:
 
 		updateLightCounter();
 	}
+	void loadSpotLight(Light& light) {
+		vec4 lightPos = multMatrixPoint(VIEW, light.position);
+		vec4 lightDir = multMatrixPoint(VIEW, light.direction);
+
+		Shader::loadBool(lightUniforms[lightCounter][0], light.isActive);
+		Shader::loadInt(lightUniforms[lightCounter][1], light.type);
+		Shader::loadVec4(lightUniforms[lightCounter][2], lightPos);
+		Shader::loadVec4(lightUniforms[lightCounter][3], lightDir);
+		Shader::loadVec3(lightUniforms[lightCounter][4], light.color);
+		Shader::loadFloat(lightUniforms[lightCounter][5], light.intensity);
+
+		Shader::loadFloat(lightUniforms[lightCounter][6], light.constantAttenuation);
+		Shader::loadFloat(lightUniforms[lightCounter][7], light.linearAttenuation);
+		Shader::loadFloat(lightUniforms[lightCounter][8], light.quadraticAttenuation);
+
+		Shader::loadFloat(lightUniforms[lightCounter][9], light.spotCosCutoff);
+		Shader::loadFloat(lightUniforms[lightCounter][10], light.spotExponent);
+
+		updateLightCounter();
+	}
 
 	void loadMatrices() {
 		computeDerivedMatrix(PROJ_VIEW_MODEL);
@@ -156,7 +166,8 @@ public:
 		loadNormalMatrix(mNormal3x3);
 	}
 
-
+	void decActiveLights(){ activeLightsCounter--; }
+	void incActiveLights(){ activeLightsCounter++; }
 
 };
 

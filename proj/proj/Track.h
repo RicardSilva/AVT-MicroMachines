@@ -42,7 +42,7 @@ public:
 			oranges.push_back(o);
 		}
 
-		dirLight = DirectionalLight(vec4(1, -1, 1, 0), vec3(1,1,1), 0.2f);
+		dirLight = DirectionalLight(vec4(1, -1, 1, 0), vec3(1,1,1), 0.5f);
 	}
 	virtual ~Track() {}
 	void setStartingPosition(vec3& position) {
@@ -54,6 +54,24 @@ public:
 	void update(float timeStep);
 	void drawLights();
 	void draw() override;
+
+	void toogleDirectionalLight() {
+		if (dirLight.isActive) {
+			dirLight.isActive = false;
+			shader->decActiveLights();
+			glClearColor(0.1, 0.1, 0.1, 1);
+		}
+		else {
+			dirLight.isActive = true;
+			shader->incActiveLights();
+			glClearColor(0.53, 0.81, 0.92, 1);
+		}
+
+	}
+	void tooglePointLights() {
+		for (auto lamp : lamps)
+			lamp->toogleLight();
+	}
 
 private:
 	void loadFromFile(std::string& s);
