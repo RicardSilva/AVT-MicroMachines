@@ -36,7 +36,6 @@ public:
 
 	vec3 &getCenter() const;
 
-	//void draw();
 };
 
 #endif

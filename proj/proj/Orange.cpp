@@ -44,14 +44,16 @@ void Orange::update(float timeStep) {
 
 	// update position
 	position.x = posX + speedX * cosAngle * timeStep;
-	position.z = posZ + speedZ * sinAngle * timeStep;
+	position.z = posZ + speedZ * -sinAngle * timeStep;
 
 	// update rotation angle
 	rotationAngle = rotationAngle + speedX * 0.04;
 	rotationAngle = rotationAngle % 360;
 
-	// update hitbox
-	getHitbox()->set(position.x - ORANGE_RADIUS, position.y - ORANGE_RADIUS, position.z - ORANGE_RADIUS,
-					position.x + ORANGE_RADIUS, position.y + ORANGE_RADIUS, position.z + ORANGE_RADIUS);
+	updateHitbox();
+}
 
+void Orange::updateHitbox() {
+	getHitbox()->set(position.x - ORANGE_RADIUS, position.y - ORANGE_RADIUS, position.z - ORANGE_RADIUS,
+		position.x + ORANGE_RADIUS, position.y + ORANGE_RADIUS, position.z + ORANGE_RADIUS);
 }

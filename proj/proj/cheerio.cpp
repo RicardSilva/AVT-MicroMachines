@@ -19,7 +19,7 @@ void Cheerio::draw() {
 	shader->unUse();
 }
 
-void Cheerio::update(float timeStep) { //TODO
+void Cheerio::update(float timeStep) {
 
 	timeStep = timeStep / 1000;	// convert ms to seconds
 
@@ -66,12 +66,15 @@ void Cheerio::update(float timeStep) { //TODO
 	position.x = posX + speedX * cosAngle * timeStep;
 	position.z = posZ + speedZ * -sinAngle * timeStep;
 
-	// update hitbox
-	getHitbox()->set(position.x - CHEERIO_OUTER - (CHEERIO_OUTER - CHEERIO_INNER),
-					position.y - CHEERIO_OUTER - (CHEERIO_OUTER - CHEERIO_INNER),
-					position.z - (CHEERIO_OUTER - CHEERIO_INNER),
-					position.x + CHEERIO_OUTER + (CHEERIO_OUTER - CHEERIO_INNER),
-					position.y + CHEERIO_OUTER + (CHEERIO_OUTER - CHEERIO_INNER),
-					position.z + CHEERIO_OUTER - CHEERIO_INNER
+	updateHitbox();
+}
+
+void Cheerio::updateHitbox() {
+	getHitbox()->set(position.x - CHEERIO_LENGTH / 2.0,
+					position.y - CHEERIO_HEIGHT / 2.0,
+					position.z - CHEERIO_WIDTH / 2.0,
+					position.x + CHEERIO_LENGTH / 2.0,
+					position.y + CHEERIO_HEIGHT / 2.0,
+					position.z + CHEERIO_WIDTH / 2.0
 	);
 }

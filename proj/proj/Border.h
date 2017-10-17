@@ -17,7 +17,5 @@ public:
 	void draw() {}
 	void update(float timeStep) {}
 
-	//void drawHitbox();
-
 };
 #endif
