@@ -30,11 +30,13 @@ class Track : public GameObject {
 public:
 	Track(vec3& position) 
 		: GameObject(position), orangeCounter(0) {
+
 		model = ModelManager::instance()->getModel("track");
 
 		if (model == NULL)
 			this->isActive = false;
 		loadFromFile(std::string("tracks/track.txt"));
+
 		Orange* o;
 		for (int i = 0; i < MAX_ORANGES; i++) {
 			o = new Orange();
@@ -45,11 +47,13 @@ public:
 		dirLight = DirectionalLight(vec4(1, -1, 1, 0), vec3(1,1,1), 0.5f);
 	}
 	virtual ~Track() {}
-	void setStartingPosition(vec3& position) {
-		startingPosition = position;
+
+	vec3 getStartingPosition() {
+		return startingPosition;
 	}
 
 	void attemptToSpawnOrange();
+	void increaseOrangeSpeed();
 	
 	void update(float timeStep);
 	void drawLights();

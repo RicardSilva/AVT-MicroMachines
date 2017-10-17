@@ -16,7 +16,7 @@ public:
 		: GameObject(position, new Hitbox(vec3(position.x - LAMP_LENGTH / 2, position.y - LAMP_HEIGHT / 2, position.z - LAMP_WIDTH / 2),
 										vec3(position.x + LAMP_LENGTH / 2, position.y + LAMP_HEIGHT / 2, position.z + LAMP_WIDTH / 2))) {
 		model = ModelManager::instance()->getModel("lamp");
-		light = PointLight(vec4(position.x, position.y + 25, position.z, 1), vec3(0.5, 0.5, 0.3), 1);
+		light = PointLight(vec4(position.x, position.y + 35, position.z, 1), vec3(0.5, 0.5, 0.3), 1);
 
 		if (model == NULL)
 			this->isActive = false;

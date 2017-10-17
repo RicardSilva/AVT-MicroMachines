@@ -1,7 +1,6 @@
 #include "Orange.h"
 #include <cmath> 
 void Orange::draw() {
-	shader->use();
 
 	pushMatrix(MODEL);
 	loadIdentity(MODEL);
@@ -17,13 +16,16 @@ void Orange::draw() {
 		mesh->draw();
 	}
 
-	shader->unUse();
 	popMatrix(MODEL);
 }
 
 bool Orange::outOfBounds() {
 	return (abs(position.x) > edgeX | (abs(position.z) > edgeZ));
 }
+void Orange::increaseMaxSpeed() {
+	maxSpeed += 100;
+}
+
 void Orange::update(float timeStep) {
 	timeStep = timeStep / 1000;	// convert ms to seconds
 

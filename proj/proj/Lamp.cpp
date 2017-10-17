@@ -5,7 +5,6 @@ void Lamp::drawLights (){
 }
 
 void Lamp::draw() {
-	shader->use();
 
 	pushMatrix(MODEL);
 	loadIdentity(MODEL);
@@ -20,7 +19,6 @@ void Lamp::draw() {
 
 
 	popMatrix(MODEL);
-	shader->unUse();
 }
 
 void Lamp::update(float timeStep) { //TODO

@@ -46,6 +46,10 @@ void spawnOrangeTimer(int value) {
 	glutTimerFunc(rand() % ORANGE_DELAY + ORANGE_INIT, spawnOrangeTimer, 0);
 }
 
+void increaseOrangeSpeedTimer(int value) {
+	gm->onIncreaseOrangeSpeedTimer();
+	glutTimerFunc(60000, spawnOrangeTimer, 0);
+}
 
 void reshape(int w, int h) {
 

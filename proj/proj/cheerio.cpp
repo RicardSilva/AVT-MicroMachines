@@ -1,7 +1,6 @@
 #include "Cheerio.h"
 
 void Cheerio::draw() {
-	shader->use();
 
 	pushMatrix(MODEL);
 	loadIdentity(MODEL);
@@ -16,7 +15,6 @@ void Cheerio::draw() {
 
 
 	popMatrix(MODEL);
-	shader->unUse();
 }
 
 void Cheerio::update(float timeStep) {

@@ -29,7 +29,7 @@ public:
 	virtual ~Orange() {}
 
 	bool outOfBounds();
-
+	void increaseMaxSpeed();
 	void draw();
 	void update(float timeStep);
 

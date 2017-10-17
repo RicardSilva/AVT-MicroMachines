@@ -25,7 +25,7 @@ void Track::loadFromFile(std::string& file) {
 			butters.push_back(new Butter(vec3((x * 10 - 700), 0, -(z * 10 - 500))));
 		}
 		else if (i == 4) {
-			setStartingPosition(vec3((x * 10 - 700), 0, -(z * 10 - 500)));
+			startingPosition = vec3((x * 10 - 700), 0, -(z * 10 - 500));
 		}
 		x++;
 		if (x == 140) {
@@ -89,7 +89,7 @@ void Track::attemptToSpawnOrange() {
 
 	angle = angle + rand() % 80 - 40;	// randomize angle
 
-	speed = rand() % 20 + ORANGE_BASE_SPEED;	// SELECT RANDOM SPEED dependent on time since game started
+	speed = rand() % 20 + ORANGE_BASE_SPEED;	
 
 												// compute rotation axle angle
 	axleAngle = angle + 90;	// axle is perpendicular to direction of movement
@@ -102,6 +102,12 @@ void Track::attemptToSpawnOrange() {
 	o->isActive = true;
 	oranges.push_back(o);
 	orangeCounter++;
+}
+void Track::increaseOrangeSpeed() {
+	for (auto orange : oranges)
+	{
+		orange->increaseMaxSpeed();
+	}
 }
 
 void Track::update(float timeStep) {
@@ -146,7 +152,7 @@ void Track::draw() {
 	}
 
 	
-	shader->unUse();
+	
 
 	for (auto cheerio : cheerios)
 		if (cheerio->isActive)
@@ -163,5 +169,6 @@ void Track::draw() {
 			lamp->draw();
 	}
 
+	shader->unUse();
 	popMatrix(MODEL);
 }

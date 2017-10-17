@@ -37,6 +37,9 @@ void GameManager::onRefreshTimer(int value) {
 void GameManager::onSpawnOrangeTimer() {
 	track->attemptToSpawnOrange();
 }
+void GameManager::onIncreaseOrangeSpeedTimer(){
+	track->increaseOrangeSpeed();
+}
 
 
 void GameManager::init() {
@@ -45,10 +48,9 @@ void GameManager::init() {
 
 	initShaders();
 	initMeshes();
-	car = new Car(vec3(0,0,0));
 	initCameras();
 	initLights();
-	initTrack();
+	initGameObjects();
 
 
 
@@ -110,8 +112,9 @@ void GameManager::initCameras() {
 void GameManager::initLights() {
 	
 }
-void GameManager::initTrack() {
+void GameManager::initGameObjects() {
 	track = new Track(vec3(0,-0.1,0));
+	car = new Car(track->getStartingPosition());
 }
 
 

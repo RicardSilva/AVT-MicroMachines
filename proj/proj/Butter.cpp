@@ -1,6 +1,5 @@
 #include "Butter.h"
 void Butter::draw() {
-	shader->use();
 
 	pushMatrix(MODEL);
 	loadIdentity(MODEL);
@@ -15,7 +14,6 @@ void Butter::draw() {
 
 
 	popMatrix(MODEL);
-	shader->unUse();
 }
 
 void Butter::update(float timeStep) {

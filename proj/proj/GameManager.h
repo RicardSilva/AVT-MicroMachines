@@ -69,13 +69,14 @@ public:
 
 	void onRefreshTimer(int value);
 	void onSpawnOrangeTimer();
+	void onIncreaseOrangeSpeedTimer();
 
 	void init();
 	void initShaders();
 	void initMeshes();
 	void initCameras();
 	void initLights();
-	void initTrack();
+	void initGameObjects();
 
 
 	void idle();
