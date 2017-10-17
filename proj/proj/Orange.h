@@ -5,7 +5,7 @@
 
 #define edgeX 800
 #define edgeZ 600
-#define ORANGE_RADIUS 40
+#define ORANGE_RADIUS 15
 
 class Orange : public GameObject {
 
@@ -32,4 +32,6 @@ public:
 
 	void draw();
 	void update(float timeStep);
+
+	void updateHitbox();
 };

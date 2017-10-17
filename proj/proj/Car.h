@@ -7,11 +7,9 @@
 
 #define PI 3.14
 
-#define WHEEL_OUTER 4.0
-#define CAR_WIDTH 4.0
-#define CAR_LENGTH 4.0
-#define CAR_HEIGHT 4.0
-#define DISTANCE_BETWEEN_AXLES 4.0
+#define CAR_WIDTH 16.2
+#define CAR_LENGTH 30
+#define CAR_HEIGHT 11.7
 
 class Car : public GameObject {
 	
@@ -38,9 +36,9 @@ private:
 	
 
 public:
-	Car(vec3& position)  //TODO
-		: GameObject(position, new Hitbox(vec3(position.x - CAR_WIDTH / 2.0 + DISTANCE_BETWEEN_AXLES / 2.0, position.y - CAR_LENGTH / 2, position.z - WHEEL_OUTER),
-			vec3(position.x + CAR_WIDTH / 2.0 + DISTANCE_BETWEEN_AXLES / 2.0, position.y + CAR_LENGTH / 2.0, position.z + CAR_HEIGHT))) {
+	Car(vec3& position)
+		: GameObject(position, new Hitbox(vec3(position.x - CAR_LENGTH / 2, position.y - CAR_HEIGHT / 2, position.z - CAR_WIDTH / 2),
+										vec3(position.x + CAR_LENGTH / 2, position.y + CAR_HEIGHT / 2, position.z + CAR_WIDTH / 2))){
 		model = ModelManager::instance()->getModel("car");
 		if (model == NULL)
 			this->isActive = false;

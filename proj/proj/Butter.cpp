@@ -18,7 +18,7 @@ void Butter::draw() {
 	shader->unUse();
 }
 
-void Butter::update(float timeStep) { //TODO
+void Butter::update(float timeStep) {
 	timeStep = timeStep / 1000;	// convert ms to seconds
 
 	float speedX = speed.x;
@@ -67,13 +67,15 @@ void Butter::update(float timeStep) { //TODO
 	position.x = posX + speedX * cosAngle * timeStep;
 	position.z = posZ + speedZ * -sinAngle * timeStep;
 
+	updateHitbox();
+}
 
-	// update hitbox
+void Butter::updateHitbox() {
 	getHitbox()->set(position.x - BUTTER_WIDTH / 2.0,
-					position.y - BUTTER_LENGTH / 2.0,
-					position.z - BUTTER_HEIGHT / 2,
-					position.x + BUTTER_WIDTH / 2.0,
-					position.y + BUTTER_LENGTH / 2.0,
-					position.z + BUTTER_HEIGHT / 2
+		position.y - BUTTER_HEIGHT / 2.0,
+		position.z - BUTTER_LENGTH / 2,
+		position.x + BUTTER_WIDTH / 2.0,
+		position.y + BUTTER_HEIGHT / 2.0,
+		position.z + BUTTER_LENGTH / 2
 	);
 }
