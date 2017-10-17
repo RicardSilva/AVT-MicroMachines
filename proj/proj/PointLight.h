@@ -11,9 +11,9 @@ struct PointLight : public Light {
 		this->position = position;
 		this->color = color;
 		this->intensity = intensity;
-		this->constantAttenuation = 0.0;
-		this->linearAttenuation = 0.005;
-		this->quadraticAttenuation = 0.0005;
+		this->constantAttenuation = 0.5;
+		this->linearAttenuation = 0.001;
+		this->quadraticAttenuation = 0.00001;
 	
 	}
 	virtual ~PointLight() {}

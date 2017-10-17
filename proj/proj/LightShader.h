@@ -29,7 +29,6 @@ private:
 	GLint projViewModelID;
 	GLint viewModelID;
 	GLint normalID;
-	GLint lightPosID;
 	
 	GLint matAmbientID;
 	GLint matDiffuseID;
@@ -61,22 +60,12 @@ public:
 		projViewModelID = getUniformLocation("m_pvm");
 		viewModelID = getUniformLocation("m_viewModel");
 		normalID = getUniformLocation("m_normal");
-		lightPosID = getUniformLocation("l_pos");
 
 		matAmbientID = getUniformLocation("mat.ambient");
 		matDiffuseID = getUniformLocation("mat.diffuse");
 		matSpecularID = getUniformLocation("mat.specular");
 		matShininessID = getUniformLocation("mat.shininess");
-
-		/*lightTypeID = getUniformLocation("light.type");
-		lightPositionID = getUniformLocation("light.position");
-		lightDirectionID = getUniformLocation("light.direction");
-		lightColorID = getUniformLocation("light.color");
-		lightIntensityID = getUniformLocation("light.intensity");
-		lightConstAttenuationID = getUniformLocation("light.constantAttenuation");
-		lightLinAttenuationID = getUniformLocation("light.linearAttenuation");
-		lightQuadAttenuationID = getUniformLocation("light.quadraticAttenuation");*/
-		
+				
 
 		std::string uniformName;
 		for (int i = 0; i < MAX_LIGHTS; i++) {

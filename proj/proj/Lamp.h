@@ -10,7 +10,7 @@ public:
 	Lamp(vec3& position)
 		: GameObject(position) {
 		model = ModelManager::instance()->getModel("lamp");
-		light = PointLight(vec4(position.x, position.y + 36, position.z, 1), vec3(1, 0.0, 0.0), 3);
+		light = PointLight(vec4(position.x, position.y + 25, position.z, 1), vec3(0.5, 0.5, 0.3), 1);
 
 		if (model == NULL)
 			this->isActive = false;

@@ -6,17 +6,17 @@ void Car::updateLights() {
 
 	//left
 	//update light position
-	posX = position.x + cos(degToRad(angle)) * 14.4 - sin(degToRad(angle)) * -5;
-	posZ = position.z - sin(degToRad(angle))* -5 + cos(degToRad(angle) * 14.4);
-	lights[0].position = vec4(posX, 10, posZ, 1);
+	posX = 10 * cos(degToRad(angle)) + -4.5 * sin(degToRad(angle)) + position.x;
+	posZ = -4.5 * cos(degToRad(angle)) - 10 * sin(degToRad(angle)) + position.z;
+	lights[0].position = vec4(posX, 1, posZ, 1);
 
 	//update light direction
 	lights[0].direction = vec4(cos(degToRad(angle)), 0, -sin(degToRad(angle)), 0);
 
 	//right
-	posX = position.x + cos(degToRad(angle)) * 14.4 - sin(degToRad(angle)) * 5;
-	posZ = position.z - sin(degToRad(angle))* 5 + cos(degToRad(angle) * 14.4);
-	lights[1].position = vec4(posX, 10, posZ, 1);
+	posX = 10 * cos(degToRad(angle)) + 4.5 * sin(degToRad(angle)) + position.x;
+	posZ = 4.5 * cos(degToRad(angle)) - 10 * sin(degToRad(angle)) + position.z;
+	lights[1].position = vec4(posX, 1, posZ, 1);
 	
 	lights[1].direction = vec4(cos(degToRad(angle)), 0, -sin(degToRad(angle)), 0);
 

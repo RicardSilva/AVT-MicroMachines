@@ -90,7 +90,7 @@ vec4 calcPointLight(Light light, vec4 position, vec3 normal, vec3 viewDir) {
 				
 	vec3 diffuse = light.color * diff * mat.diffuse * attenuation;
 	vec3 specular = light.color * spec * mat.specular * attenuation;
-	return vec4((diffuse + specular).xyz, 1.0);
+	return vec4((diffuse + specular ).xyz, 1.0);
 
 }
 
