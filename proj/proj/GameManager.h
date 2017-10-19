@@ -22,16 +22,12 @@
 #include "AVTmathLib.h"
 
 
-
-
 #define WIDTH 1200
 #define HEIGHT 900
 #define CAR_LIVES 5
 #define PI 3.141592657
 #define MES_WIDTH 700.0f
 #define MES_HEIGHT 500.0f
-
-
 
 
 class GameManager {
@@ -90,9 +86,15 @@ public:
 	void mouseMotion(int xx, int yy);
 	void mouseWheel(int wheel, int direction, int x, int y);
 
+	bool objectsCollide(GameObject* o1, GameObject* o2);
+	void processCarCollisions();
+	void processObsCollisions();
+	void processCarObstacleCollision(GameObject* obstacle);
+	void computePositionAfterCollision(GameObject* obj, GameObject* obstacle);
+	void resetCar();
+
 	void display();
 	void displayHUD();
-
 
 	void update(double timeStep);
 	void reshape(GLsizei w, GLsizei h);

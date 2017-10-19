@@ -61,7 +61,6 @@ void Butter::update(float timeStep) {
 	}
 
 	// update position
-
 	position.x = posX + speedX * cosAngle * timeStep;
 	position.z = posZ + speedZ * -sinAngle * timeStep;
 

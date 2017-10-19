@@ -18,6 +18,10 @@ struct PointLight : public Light {
 	}
 	virtual ~PointLight() {}
 
+	void updatePosition(vec3 pos) {
+		position.x = pos.x;
+		position.z = pos.z;
+	}
 
 	void draw();
 };

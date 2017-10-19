@@ -11,9 +11,7 @@
 
 class GameObject {
 
-	
 	ObjLoader* loader;
-	
 
 protected:
 	Shader* shader;
@@ -36,8 +34,7 @@ public:
 	GameObject(vec3& position) : position(position), speed(vec3(0, 0, 0)), angle(0) {
 		shader = ShaderManager::instance()->getShader("lightShader");
 	}
-	GameObject(vec3& position, vec3& speed, float angle, Hitbox *hitbox)
-		: position(position), speed(speed), angle(angle), hitbox(hitbox) {
+	GameObject(vec3& position, vec3& speed, float angle, Hitbox *hitbox) : position(position), speed(speed), angle(angle), hitbox(hitbox) {
 		shader = ShaderManager::instance()->getShader("lightShader");
 	}
 	GameObject(vec3& position, Hitbox *hitbox) : position(position), speed(vec3(0, 0, 0)), angle(0), hitbox(hitbox) {
@@ -47,7 +44,18 @@ public:
 
 	vec3 getPosition() { return position; }
 
+	void setPosition(vec3 p) { position = p; }
+
+	vec3 getSpeed() { return speed; }
+
+	void setSpeed(vec3 s) { speed = s; }
+
+	int getAngle() { return angle; }
+
+	void setAngle(int a) { angle = a; }
+
 	Hitbox *getHitbox() { return hitbox; }
+	virtual void updateHitbox() = 0;
 
 	virtual void draw();
 	virtual void update(float timeStep) = 0;

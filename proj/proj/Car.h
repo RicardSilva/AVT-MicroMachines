@@ -51,7 +51,6 @@ public:
 		
 	}
 	virtual ~Car() {}
-	int getAngle() { return angle; }
 
 	void drawLights();
 	virtual void draw();

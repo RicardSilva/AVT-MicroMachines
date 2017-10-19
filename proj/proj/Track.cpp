@@ -53,7 +53,7 @@ void Track::attemptToSpawnOrange() {
 	// randomly select position, angle and speed for the new orange 
 	randomNumber = rand() % trackPerimeter + 1;	// number in the range of 1 to track_perimeter
 
-													// COMPUTES RANDOM POSITION using perimeter
+	// COMPUTES RANDOM POSITION using perimeter
 	if (randomNumber < 1500) {
 		x = x + randomNumber;
 	}
