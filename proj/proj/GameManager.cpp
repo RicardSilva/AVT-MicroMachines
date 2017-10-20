@@ -53,7 +53,6 @@ void GameManager::init() {
 	initGameObjects();
 
 
-
 }
 
 void GameManager::initShaders() {
@@ -89,6 +88,7 @@ void GameManager::initCameras() {
 	topCamera->setEye(vec3(0,100,0));
 	topCamera->setTarget(vec3(0,0,0));
 	topCamera->setUp(vec3(0,0,-1));
+	
 
 	cameras[0] = topCamera;
 
@@ -115,6 +115,7 @@ void GameManager::initLights() {
 void GameManager::initGameObjects() {
 	track = new Track(vec3(0,-0.1,0));
 	car = new Car(track->getStartingPosition());
+	butter = new Butter(track->getStartingPosition());
 }
 
 
@@ -309,13 +310,46 @@ void GameManager::display() {
 	
 	
 
-
-	glutSwapBuffers();
 	displayHUD();
+	glutSwapBuffers();
+	
 }
 
 void GameManager::displayHUD() {
-	
+
+	glDisable(GL_DEPTH_TEST);
+	pushMatrix(PROJECTION);
+	loadIdentity(PROJECTION);
+	cameras[0]->computeProjection(WIDTH, HEIGHT);
+
+
+	pushMatrix(MODEL);
+	loadIdentity(MODEL);
+		pushMatrix(MODEL);
+		loadIdentity(MODEL);
+		//draw lives
+		translate(MODEL, vec3(1.0, 1.0, 1.0));
+		butter->draw();
+		popMatrix(MODEL);
+
+		if (pause) {
+			pushMatrix(MODEL);
+			loadIdentity(MODEL);
+
+			//draw pause
+			popMatrix(MODEL);
+		}
+		else if (gameOver) {
+			pushMatrix(MODEL);
+			loadIdentity(MODEL);
+
+			//draw gameover screen
+			popMatrix(MODEL);
+		}
+
+	popMatrix(PROJECTION);
+	popMatrix(MODEL);
+
 
 
 }

@@ -31,13 +31,13 @@
 
 
 class GameManager {
-	
+
 	int oldTime = 0;	// miliseconds
 
 	bool pause = false;
 	bool gameOver = false;
 	int carLives = CAR_LIVES;
-	
+	Butter* butter;
 	Shader* shader;
 
 	//External array storage defined in AVTmathLib.cpp
@@ -50,11 +50,12 @@ class GameManager {
 	int startX, startY, tracking = 0;
 	int deltaX = 0, deltaY = 0;
 	float cameraRotationAngle = 0;
-	
+
 	Car* car;
 	Track* track;
 	Camera* cameras[3];
 	Camera* activeCamera;
+	Camera* hudCamera;
 
 public:
 	GameManager();
