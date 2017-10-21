@@ -5,8 +5,8 @@
 
 
 class Border : public GameObject {
-	float _width;
-	float _length;
+	float width;
+	float length;
 
 public:
 
@@ -16,6 +16,8 @@ public:
 
 	void draw() {}
 	void update(float timeStep) {}
+
+	void Border::updateHitbox() {}
 
 };
 #endif

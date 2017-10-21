@@ -5,24 +5,24 @@
 
 
 class Hitbox {
-	vec3 _minCorner;
-	vec3 _maxCorner;
+	vec3 minCorner;
+	vec3 maxCorner;
 
 public:
-	Hitbox(vec3 minCorner, vec3 maxCorner) : _minCorner(minCorner), _maxCorner(maxCorner) {}
+	Hitbox(vec3 minCorner, vec3 maxCorner) : minCorner(minCorner), maxCorner(maxCorner) {}
 
 	~Hitbox() {}
-	const double getXmin() const { return _minCorner.x; }
+	const double getXmin() const { return minCorner.x; }
 
-	const double getXmax() const { return _maxCorner.x; }
+	const double getXmax() const { return maxCorner.x; }
 
-	const double getYmin() const { return _minCorner.y; }
+	const double getYmin() const { return minCorner.y; }
 
-	const double getYmax() const { return _maxCorner.y; }
+	const double getYmax() const { return maxCorner.y; }
 
-	const double getZmin() const { return _minCorner.z; }
+	const double getZmin() const { return minCorner.z; }
 
-	const double getZmax() const { return _maxCorner.z; }
+	const double getZmax() const { return maxCorner.z; }
 
 	const double getHalfX() const { return (getXmax() - getXmin()) / 2; }
 

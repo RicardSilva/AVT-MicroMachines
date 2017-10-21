@@ -22,8 +22,6 @@
 #include "AVTmathLib.h"
 
 
-
-
 #define WIDTH 1200
 #define HEIGHT 900
 #define CAR_LIVES 5
@@ -32,16 +30,14 @@
 #define MES_HEIGHT 500.0f
 
 
-
-
 class GameManager {
-	
+
 	int oldTime = 0;	// miliseconds
 
 	bool pause = false;
 	bool gameOver = false;
 	int carLives = CAR_LIVES;
-	
+	Butter* butter;
 	Shader* shader;
 
 
@@ -49,11 +45,12 @@ class GameManager {
 	int startX, startY, tracking = 0;
 	int deltaX = 0, deltaY = 0;
 	float cameraRotationAngle = 0;
-	
+
 	Car* car;
 	Track* track;
 	Camera* cameras[3];
 	Camera* activeCamera;
+	Camera* hudCamera;
 
 public:
 	GameManager();
@@ -85,9 +82,15 @@ public:
 	void mouseMotion(int xx, int yy);
 	void mouseWheel(int wheel, int direction, int x, int y);
 
+	bool objectsCollide(GameObject* o1, GameObject* o2);
+	void processCarCollisions();
+	void processObsCollisions();
+	void processCarObstacleCollision(GameObject* obstacle);
+	void computePositionAfterCollision(GameObject* obj, GameObject* obstacle);
+	void resetCar();
+
 	void display();
 	void displayHUD();
-
 
 	void update(double timeStep);
 	void reshape(GLsizei w, GLsizei h);

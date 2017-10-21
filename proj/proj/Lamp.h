@@ -10,6 +10,7 @@
 class Lamp : public GameObject {
 
 	PointLight light;
+	float inercia = 370;
 
 public:
 	Lamp(vec3& position)
@@ -40,5 +41,7 @@ public:
 	}
 
 	void updateHitbox();
+
+	void updateLight(vec3 pos);
 
 };

@@ -6,6 +6,7 @@
 #include "Butter.h"
 #include "MathHelper.h"
 #include "Lamp.h"
+#include "Border.h"
 #include "DirectionalLight.h"
 
 #include "TGA.h"
@@ -27,6 +28,7 @@ class Track : public GameObject {
 	std::vector<Orange*> oranges;
 	DirectionalLight dirLight;
 	std::vector<Lamp*> lamps;
+	std::vector<Border*> borders;
 
 	vec3 startingPosition;
 	int orangeCounter;
@@ -50,18 +52,44 @@ public:
 
 		loadFromFile(std::string("tracks/track.txt"));
 
-		Orange* o;
+	/*	Orange* o;
 		for (int i = 0; i < MAX_ORANGES; i++) {
 			o = new Orange();
 			o->isActive = false;
 			oranges.push_back(o);
-		}
+		}*/
+
+
+		borders.push_back(new Border(vec3(TRACK_WIDTH + 10, 0, 0), 20.0, TRACK_HEIGHT + 50));
+		borders.push_back(new Border(vec3(-TRACK_WIDTH - 10, 0, 0), 20.0, TRACK_HEIGHT + 50));
+		borders.push_back(new Border(vec3(0, 0, TRACK_HEIGHT + 10), TRACK_WIDTH + 50, 20.0));
+		borders.push_back(new Border(vec3(0, 0, -TRACK_HEIGHT - 10), TRACK_WIDTH + 50, 20.0));
 
 	}
 	virtual ~Track() {}
 
 	vec3 getStartingPosition() {
 		return startingPosition;
+	}
+
+	std::vector<Cheerio*> getCheerios() {
+		return cheerios;
+	}
+
+	std::vector<Butter*> getButters() {
+		return butters;
+	}
+
+	std::vector<Orange*> getOranges() {
+		return oranges;
+	}
+
+	std::vector<Lamp*> getLamps() {
+		return lamps;
+	}
+
+	std::vector<Border*> getBorders() {
+		return borders;
 	}
 
 	void attemptToSpawnOrange();
@@ -86,6 +114,8 @@ public:
 		for (auto lamp : lamps)
 			lamp->toogleLight();
 	}
+
+	void updateHitbox() {};
 
 private:
 	void loadFromFile(std::string& s);

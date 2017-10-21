@@ -53,7 +53,6 @@ void GameManager::init() {
 	initGameObjects();
 
 
-
 }
 
 void GameManager::initShaders() {
@@ -91,6 +90,7 @@ void GameManager::initCameras() {
 	topCamera->setEye(vec3(0,100,0));
 	topCamera->setTarget(vec3(0,0,0));
 	topCamera->setUp(vec3(0,0,-1));
+	
 
 	cameras[0] = topCamera;
 
@@ -117,6 +117,7 @@ void GameManager::initLights() {
 void GameManager::initGameObjects() {
 	track = new Track(vec3(0,-0.1,0));
 	car = new Car(track->getStartingPosition());
+	//butter = new Butter(track->getStartingPosition());
 }
 
 
@@ -272,6 +273,11 @@ void GameManager::mouseWheel(int wheel, int direction, int x, int y) {
 	//	//	glutPostRedisplay();
 }
 
+bool GameManager::objectsCollide(GameObject* obj1, GameObject* obj2) {
+	bool t = (obj1->getHitbox())->hasCollision((obj2->getHitbox()));
+	return t;
+}
+
 void GameManager::display() {	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -307,13 +313,45 @@ void GameManager::display() {
 	
 	shader->unUse();
 
-
+	//displayHUD();
 	glutSwapBuffers();
-	displayHUD();
-}
-
-void GameManager::displayHUD() {
 	
+}
+void GameManager::displayHUD() {
+
+	glDisable(GL_DEPTH_TEST);
+	pushMatrix(PROJECTION);
+	loadIdentity(PROJECTION);
+	cameras[0]->computeProjection(WIDTH, HEIGHT);
+
+
+	pushMatrix(MODEL);
+	loadIdentity(MODEL);
+		pushMatrix(MODEL);
+		loadIdentity(MODEL);
+		//draw lives
+		translate(MODEL, vec3(1.0, 1.0, 1.0));
+		//butter->draw();
+		popMatrix(MODEL);
+
+		if (pause) {
+			pushMatrix(MODEL);
+			loadIdentity(MODEL);
+
+			//draw pause
+			popMatrix(MODEL);
+		}
+		else if (gameOver) {
+			pushMatrix(MODEL);
+			loadIdentity(MODEL);
+
+			//draw gameover screen
+			popMatrix(MODEL);
+		}
+
+	popMatrix(PROJECTION);
+	popMatrix(MODEL);
+
 
 
 }
@@ -321,8 +359,129 @@ void GameManager::update(double timeStep) {
 
 	car->update(timeStep);
 	track->update(timeStep);
+
+	// collisions between car and obstacles/border
+	processCarCollisions();
+	
+	// collisions between obstacles and border
+	processObsCollisions();
+
 	cameras[2]->computeCarCameraPosition(car->getPosition(), car->getAngle());
 	
+}
+
+void GameManager::processCarCollisions() {
+	// cheerios
+	for (auto obst : track->getCheerios()) {
+		if (objectsCollide(car, obst))
+			processCarObstacleCollision(obst);
+	}
+
+	// butters
+	for (auto obst : track->getButters()) {
+		if (objectsCollide(car, obst))
+			processCarObstacleCollision(obst);
+	}
+
+	// oranges
+	for (auto orange : track->getOranges()) {
+		if (objectsCollide(car, orange))
+			resetCar();
+	}
+
+	// lamps
+	for (auto obst : track->getLamps()) {
+		if (objectsCollide(car, obst))
+			processCarObstacleCollision(obst);
+	}
+
+	// borders
+	for (auto obst : track->getBorders()) {
+		if (objectsCollide(car, obst))
+			resetCar();
+	}
+}
+void GameManager::processObsCollisions() {
+	// cheerios
+	for (auto obst : track->getCheerios()) {
+		for (auto border : track->getBorders()) {
+			if (objectsCollide(obst, border)) {
+				computePositionAfterCollision(obst, border);
+			}
+		}
+	}
+
+	// butters
+	for (auto obst : track->getButters()){
+		for (auto border : track->getBorders()) {
+			if (objectsCollide(obst, border)) {
+				computePositionAfterCollision(obst, border);
+			}
+		}
+	}
+
+	// oranges
+	//for (int i = 0; i < track->getOrangesCounter(); i++) {
+	//	Orange* orange = (track->getOranges()).at(i);
+	//	for (auto border : track->getBorders()) {
+	//		if (objectsCollide(orange, border)) {
+	//			track->deleteOrange(orange);
+	//		}
+	//	}
+	//}
+
+	// lamps
+	for (auto obst : track->getLamps()) {
+		for (auto border : track->getBorders()) {
+			if (objectsCollide(obst, border)) {
+				computePositionAfterCollision(obst, border);
+			}
+		}
+	}
+}
+
+
+void GameManager::processCarObstacleCollision(GameObject* obstacle) {
+	// transfer car speed and angle to object and stop car
+	obstacle->setAngle(car->getAngle());
+	obstacle->setSpeed(vec3(car->getSpeed().x, car->getSpeed().z, 0));
+	car->setSpeed(vec3(0, 0, 0));
+
+	computePositionAfterCollision(car, obstacle);
+}
+
+void GameManager::computePositionAfterCollision(GameObject* obj, GameObject* obstacle) {
+	vec3 obj_center = obj->getHitbox()->getCenter();
+	vec3 obst_center = obstacle->getHitbox()->getCenter();
+
+	vec3 distance = obst_center - obj_center;
+
+	float x = obj->getHitbox()->getHalfX() + obstacle->getHitbox()->getHalfX() - abs(distance.x);
+	float z = obj->getHitbox()->getHalfZ() + obstacle->getHitbox()->getHalfZ() - abs(distance.z);
+
+	if (x < z) {
+		if (distance.x < 0)
+			x = -x;
+		obj->setPosition(vec3(obj->getPosition().x - x, obj->getPosition().y, obj->getPosition().z));
+	}
+	else {
+		if (distance.z > 0)
+			z = -z;
+		obj->setPosition(vec3(obj->getPosition().x, obj->getPosition().y, obj->getPosition().z - z));
+	}
+
+	obj->updateHitbox();
+}
+
+void GameManager::resetCar() {
+	car->setAngle(0);
+	car->setSpeed(vec3(0, 0, 0));
+	car->setPosition(track->getStartingPosition());
+
+	if (--carLives == 0) {
+		gameOver = true;
+		pause = true;
+	}
 }
 
 void GameManager::restart() {

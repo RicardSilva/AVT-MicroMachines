@@ -7,7 +7,7 @@ void Orange::draw() {
 
 	
 	translate(MODEL, vec3(0,30,0) +  position); 
-	rotate(MODEL, -rotationAngle, rotationAxle);
+	rotate(MODEL, rotationAngle, rotationAxle);
 
 	shader->loadMatrices();
 

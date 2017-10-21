@@ -56,7 +56,7 @@ void Track::attemptToSpawnOrange() {
 	// randomly select position, angle and speed for the new orange 
 	randomNumber = rand() % trackPerimeter + 1;	// number in the range of 1 to track_perimeter
 
-													// COMPUTES RANDOM POSITION using perimeter
+	// COMPUTES RANDOM POSITION using perimeter
 	if (randomNumber < 1500) {
 		x = x + randomNumber;
 	}
@@ -73,17 +73,17 @@ void Track::attemptToSpawnOrange() {
 	}
 
 	// SELECT RANDOM ANGLE 
-	angle = asin(z / (sqrt(x * x + z * z)));	// normalize y coordinate
+	angle = -asin(z / (sqrt(x * x + z * z)));	// normalize y coordinate
 	angle = radToDeg(angle);	// convert from rads to degrees
 
 							// computes angle from spawn point to origin (0, 0)
-	if (x >= 0 && z >= 0) {	// first quadrant
+	if (x >= 0 && z < 0) {	// first quadrant
 		angle = 180 + angle;
 	}
-	else if (x < 0 && z >= 0) {	// second quadrant
+	else if (x < 0 && z < 0) {	// second quadrant
 		angle = 360 - angle;
 	}
-	else if (x < 0 && z < 0) {	// third quadrant
+	else if (x < 0 && z >= 0) {	// third quadrant
 		angle = -angle;
 	}
 	else {	// forth quadrant
@@ -101,7 +101,7 @@ void Track::attemptToSpawnOrange() {
 	cosAngle = cos(degToRad(axleAngle));	// convert from degrees to rads
 	sinAngle = sin(degToRad(axleAngle));
 
-	Orange* o = new Orange(vec3(x, 0, z), vec3(speed, 0, speed), angle, vec3(cosAngle, 0, sinAngle));
+	Orange* o = new Orange(vec3(x, 0, z), vec3(speed, 0, speed), angle, vec3(cosAngle, 0, -sinAngle));
 	o->isActive = true;
 	oranges.push_back(o);
 	orangeCounter++;
