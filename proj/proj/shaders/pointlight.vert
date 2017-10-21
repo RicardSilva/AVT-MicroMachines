@@ -5,8 +5,8 @@ uniform mat4 m_viewModel;
 uniform mat3 m_normal;
 
 in vec4 position;
-in vec2 texCoord; 
 in vec3 normal; 
+in vec2 texCoord; 
 
 out Data {
 	vec4 pos;
