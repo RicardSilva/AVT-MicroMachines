@@ -6,10 +6,13 @@
 
 enum lightType { directionalLight, pointLight, spotLight };
 
+
 struct Light {
 
+	static int lightCounter;
 	Shader* shader;
 
+	int id;
 	bool isActive = true;
 	lightType type;
 
@@ -26,7 +29,14 @@ struct Light {
 	float spotExponent;
 
 	Light() {
+
 		shader = ShaderManager::instance()->getShader("lightShader");
+		id = lightCounter++;
+	}
+	Light(int id) : id(id) {
+	}
+	virtual ~Light() {
+		lightCounter--;
 	}
 
 	virtual void draw() = 0;

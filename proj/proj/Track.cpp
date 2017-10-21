@@ -12,7 +12,10 @@ void Track::loadFromFile(std::string& file) {
 		
 		myfile >> a;
 		i = a - '0';
-		if (i == 1) {
+		if (i == 0) {
+			// do nothing
+		}
+		else if (i == 1) {
 			//new cheerio
 			cheerios.push_back(new Cheerio(vec3((x * 10 - 700), 0, -(z * 10 - 500))));
 		}
@@ -137,7 +140,6 @@ void Track::drawLights() {
 }
 void Track::draw() {
 	
-	shader->use();
 
 	pushMatrix(MODEL);
 	
@@ -146,13 +148,34 @@ void Track::draw() {
 
 	shader->loadMatrices();
 
+	//load textures
+	shader->enableTextures();
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, TextureArray[0]);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, TextureArray[1]);
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, TextureArray[2]);
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, TextureArray[3]);
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D, TextureArray[4]);
+
+	shader->loadWoodDiffuse(0);
+	shader->loadWoodSpecular(1);
+	shader->loadBambooDiffuse(2);
+	shader->loadBambooSpecular(3);
+	shader->loadMask(4);
+
 	for (auto mesh : model->meshes) {
 		shader->loadMaterial(mesh->MeshMaterial);
 		mesh->draw();
 	}
 
 	
-	
+	shader->disableTextures();
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	for (auto cheerio : cheerios)
 		if (cheerio->isActive)
@@ -165,10 +188,8 @@ void Track::draw() {
 			orange->draw();
 	}
 	for (auto lamp : lamps) {
-		if (lamp->isActive)
-			lamp->draw();
+		lamp->draw();
 	}
 
-	shader->unUse();
 	popMatrix(MODEL);
 }

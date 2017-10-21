@@ -14,7 +14,6 @@ void GameObject::draw(){
 		mesh->draw();
 	}
 
-
 	popMatrix(MODEL);
 	shader->unUse();
 }

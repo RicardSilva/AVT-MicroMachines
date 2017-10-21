@@ -8,6 +8,8 @@
 #include "Lamp.h"
 #include "DirectionalLight.h"
 
+#include "TGA.h"
+
 #define TRACK_WIDTH 1400
 #define TRACK_HEIGHT 1000
 #define HALF_TRACK_WIDTH 700
@@ -17,6 +19,8 @@
 #define ORANGE_BASE_SPEED 50
 
 class Track : public GameObject {
+
+	GLuint TextureArray[5];
 
 	std::vector<Cheerio*> cheerios;
 	std::vector<Butter*> butters;
@@ -29,12 +33,21 @@ class Track : public GameObject {
 
 public:
 	Track(vec3& position) 
-		: GameObject(position), orangeCounter(0) {
+		: GameObject(position), orangeCounter(0),
+		dirLight(DirectionalLight(vec4(1, -1, 1, 0), vec3(1, 1, 1), 0.5f)) {
 
 		model = ModelManager::instance()->getModel("track");
 
 		if (model == NULL)
 			this->isActive = false;
+
+		glGenTextures(5, TextureArray);
+		TGA_Texture(TextureArray, "textures/wood_diffuse.tga", 0);
+		TGA_Texture(TextureArray, "textures/wood_specular.tga", 1);
+		TGA_Texture(TextureArray, "textures/bamboo_diffuse.tga", 2);
+		TGA_Texture(TextureArray, "textures/bamboo_specular.tga", 3);
+		TGA_Texture(TextureArray, "textures/mask.tga", 4);
+
 		loadFromFile(std::string("tracks/track.txt"));
 
 		Orange* o;
@@ -44,7 +57,6 @@ public:
 			oranges.push_back(o);
 		}
 
-		dirLight = DirectionalLight(vec4(1, -1, 1, 0), vec3(1,1,1), 0.5f);
 	}
 	virtual ~Track() {}
 
@@ -62,12 +74,10 @@ public:
 	void toogleDirectionalLight() {
 		if (dirLight.isActive) {
 			dirLight.isActive = false;
-			shader->decActiveLights();
 			glClearColor(0.1, 0.1, 0.1, 1);
 		}
 		else {
 			dirLight.isActive = true;
-			shader->incActiveLights();
 			glClearColor(0.53, 0.81, 0.92, 1);
 		}
 

@@ -7,9 +7,6 @@
 #include "ObjLoader.h"
 #include <GL/glew.h>
 
-
-//struct DirectionalLight;
-//struct PointLight;
 struct Light;
 
 using namespace std;
@@ -51,14 +48,21 @@ public:
 	virtual void loadNormalMatrix(float* matrix) {}
 	virtual void loadLightPosition(vec3& vec) {}
 	virtual void loadDirectionalLight(Light& light) {}
+	virtual void subLoadDirectionalLight(Light& light) {}
 	virtual void loadPointLight(Light& light) {}
+	virtual void subLoadPointLight(Light& light) {}
 	virtual void loadSpotLight(Light& light) {}
+	virtual void subLoadSpotLight(Light& light) {}
 	virtual void loadMaterial(Material& material) {}
 	virtual void loadMatrices() {}
-
-	virtual void decActiveLights() {}
-	virtual void incActiveLights() {}
-
+	virtual void enableTextures() {}
+	virtual void disableTextures() {}
+	virtual void loadWoodDiffuse(GLint id) {}
+	virtual void loadWoodSpecular(GLint id) {}
+	virtual void loadBambooDiffuse(GLint id) {}
+	virtual void loadBambooSpecular(GLint id) {}
+	virtual void loadMask(GLint id) {}
+	
 	void loadInt(GLint location, GLint i);
 	void loadFloat(GLint location, GLfloat f);
 	void loadBool(GLint location, bool b);

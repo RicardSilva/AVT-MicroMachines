@@ -45,7 +45,7 @@ void GameManager::onIncreaseOrangeSpeedTimer(){
 void GameManager::init() {
 
 	srand(time(NULL));	// initialize seed of random
-
+	
 	initShaders();
 	initMeshes();
 	initCameras();
@@ -84,6 +84,8 @@ void GameManager::initMeshes() {
 }
 void GameManager::initCameras() {
 	// set the camera position based on its spherical coordinates
+
+	loadIdentity(VIEW);
 
 	Camera* topCamera = new OrthoCamera(-750, 750,-550,550, 0.1,150);
 	topCamera->setEye(vec3(0,100,0));
@@ -291,6 +293,7 @@ void GameManager::display() {
 	}
 	activeCamera->computeProjection(WIDTH, HEIGHT);
 
+	shader->use();
 	// Render objects
 	if(track->isActive)
 		track->drawLights();
@@ -302,7 +305,7 @@ void GameManager::display() {
 	if (car->isActive)
 		car->draw();
 	
-	
+	shader->unUse();
 
 
 	glutSwapBuffers();

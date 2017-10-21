@@ -2,8 +2,6 @@
 
 void DirectionalLight::draw() {
 
-	shader->use();
-	shader->loadDirectionalLight(*this);
-	shader->unUse();
+	shader->subLoadDirectionalLight(*this);
 
 }

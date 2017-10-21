@@ -29,19 +29,26 @@ struct Light {
 const int MaxLights = 9;
 uniform Light lights[MaxLights];
 
-uniform Light light;
+uniform bool useTextures;
 uniform Material mat;
+
+uniform sampler2D woodDiffuse;
+uniform sampler2D woodSpecular;
+uniform sampler2D bambooDiffuse;
+uniform sampler2D bambooSpecular;
+uniform sampler2D mask;
 
 in Data {
 	vec4 pos; 
 	vec3 normal;
 	vec3 eye;
+	vec2 texCoord;
 } DataIn;
 
 out vec4 colorOut;
 
 
-vec4 calcDirLight(Light light, vec3 normal, vec3 viewDir) {
+vec4 calcDirLight(Light light, vec3 normal, vec3 viewDir, vec3 materialDiffuse, vec3 materialSpecular) {
 
 	vec4 lightDir4 = normalize(-light.direction);
 	vec3 lightDir = vec3(lightDir4);
@@ -57,12 +64,12 @@ vec4 calcDirLight(Light light, vec3 normal, vec3 viewDir) {
 	else
 		spec = pow(spec, mat.shininess); // sharpen the highlight
 		
-	vec3 diffuse = light.color * diff * mat.diffuse;
-	vec3 specular = light.color * spec * mat.specular;
+	vec3 diffuse = light.color * diff * materialDiffuse;
+	vec3 specular = light.color * spec * materialSpecular;
 	return vec4((diffuse + specular).xyz, 1.0);
 }
 
-vec4 calcPointLight(Light light, vec4 position, vec3 normal, vec3 viewDir) {
+vec4 calcPointLight(Light light, vec4 position, vec3 normal, vec3 viewDir, vec3 materialDiffuse, vec3 materialSpecular) {
 
 	vec4 lightDirection4 = light.position - position;
 	vec3 lightDirection = vec3(lightDirection4);
@@ -88,13 +95,13 @@ vec4 calcPointLight(Light light, vec4 position, vec3 normal, vec3 viewDir) {
 	else
 		spec = pow(spec, mat.shininess);
 				
-	vec3 diffuse = light.color * diff * mat.diffuse * attenuation;
-	vec3 specular = light.color * spec * mat.specular * attenuation;
+	vec3 diffuse = light.color * diff * materialDiffuse * attenuation;
+	vec3 specular = light.color * spec * materialSpecular * attenuation;
 	return vec4((diffuse + specular ).xyz, 1.0);
 
 }
 
-vec4 calcSpotLight(Light light, vec4 position, vec3 normal, vec3 viewDir) {
+vec4 calcSpotLight(Light light, vec4 position, vec3 normal, vec3 viewDir, vec3 materialDiffuse, vec3 materialSpecular) {
 	
 	vec4 lightDirection4 = light.position - position;
 	vec3 lightDirection = vec3(lightDirection4);
@@ -122,8 +129,8 @@ vec4 calcSpotLight(Light light, vec4 position, vec3 normal, vec3 viewDir) {
 	else
 		spec = pow(spec, mat.shininess);
 		
-	vec3 diffuse = light.color * diff * mat.diffuse * attenuation;
-	vec3 specular = light.color * spec * mat.specular * attenuation;
+	vec3 diffuse = light.color * diff * materialDiffuse * attenuation;
+	vec3 specular = light.color * spec * materialSpecular * attenuation;
 	
 	return vec4((diffuse + specular).xyz, 1.0);
 
@@ -132,23 +139,47 @@ vec4 calcSpotLight(Light light, vec4 position, vec3 normal, vec3 viewDir) {
 void main() {
 
 	colorOut = vec4(0);
-	colorOut += vec4(mat.ambient.xyz, 1);
+	
+	
+	vec3 materialDiffuse;
+	vec3 materialSpecular;
+	vec3 normal;
+	if(useTextures) {
+		vec3 woodDiff = vec3(texture(woodDiffuse, DataIn.texCoord * 15));
+		vec3 bambooDiff = vec3(texture(bambooDiffuse, DataIn.texCoord * 10));
+		float mixCoefficient = (texture(mask, DataIn.texCoord)).r;
+		materialDiffuse = mix(woodDiff, bambooDiff, mixCoefficient);
+		colorOut += vec4(materialDiffuse * 0.1, 1);	
+		
+		
+		vec3 woodSpec = vec3(texture(woodSpecular, DataIn.texCoord * 15));
+		vec3 bambooSpec = vec3(texture(bambooSpecular, DataIn.texCoord * 10));
+		materialSpecular = mix(woodSpec, bambooSpec, mixCoefficient) ;
+		
+		
+	}
+	else {
+		colorOut += vec4(mat.ambient.xyz, 1);	
+		materialDiffuse = mat.diffuse.xyz;
+		materialSpecular = mat.specular.xyz;
+	}
+	
+	normal = normalize(DataIn.normal);
+	
 	for (int i = 0; i < MaxLights; i++) {
 		Light light = lights[i];
 		if(light.isActive) {
-			if(light.type == 0)
-				//colorOut += vec4(0);
-				colorOut += calcDirLight(light, DataIn.normal, DataIn.eye) * light.intensity;
-			else if (light.type == 1)
-				colorOut += calcPointLight(light, DataIn.pos, DataIn.normal, DataIn.eye) * light.intensity;
-				//colorOut += vec4(0);
+			
+			if (light.type == 1)
+				colorOut += calcPointLight(light, DataIn.pos, normal, DataIn.eye, materialDiffuse, materialSpecular) * light.intensity;
 			else if (light.type == 2)
-				colorOut += calcSpotLight(light, DataIn.pos, DataIn.normal, DataIn.eye) * light.intensity;
+				colorOut += calcSpotLight(light, DataIn.pos, normal, DataIn.eye, materialDiffuse, materialSpecular) * light.intensity;
+			else if(light.type == 0)	
+				colorOut += calcDirLight(light, normal, DataIn.eye, materialDiffuse, materialSpecular) * light.intensity;
+			
 		}
 	}
 	
 	
-	//colorOut = vec4(lights[7].color.xyz, 1.0f);
-	//colorOut = vec4(DataIn.pos.x / 2000 + 1, DataIn.pos.y / 2000 + 1, DataIn.pos.z / 2000 + 1, 1);
 	
 }

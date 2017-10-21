@@ -31,22 +31,21 @@ private:
 	float backwardsAcceleration = 200;
 	float inercia = 175;
 
-	SpotLight lights[2];
+	SpotLight leftLight;
+	SpotLight rightLight;
 	
 	
 
 public:
 	Car(vec3& position)
 		: GameObject(position, new Hitbox(vec3(position.x - CAR_LENGTH / 2, position.y - CAR_HEIGHT / 2, position.z - CAR_WIDTH / 2),
-										vec3(position.x + CAR_LENGTH / 2, position.y + CAR_HEIGHT / 2, position.z + CAR_WIDTH / 2))){
+										vec3(position.x + CAR_LENGTH / 2, position.y + CAR_HEIGHT / 2, position.z + CAR_WIDTH / 2))),
+		leftLight(SpotLight(vec4(position + vec3(14.4, 20, -4.60), 1), vec4(1, 0, 0, 0), vec3(1, 1, 1), 1)),
+		rightLight(SpotLight(vec4(position + vec3(14.4, 20, 4.60), 1), vec4(1, 0, 0, 0), vec3(1, 1, 1), 1)) {
+		
 		model = ModelManager::instance()->getModel("car");
 		if (model == NULL)
 			this->isActive = false;
-
-		lights[0] = SpotLight(vec4(position + vec3(14.4, 20, -4.60), 1), vec4(1,0,0,0), vec3(1,1,1), 1);
-		lights[1] = SpotLight(vec4(position + vec3(14.4, 20, 4.60), 1), vec4(1, 0, 0, 0), vec3(1, 1, 1), 1);
-		//lights[0] = PointLight(vec4(position + vec3(14.4, 4.75, -4.60), 1), vec3(0, 0.0, 1.0), 3);
-		//lights[0] = PointLight(vec4(position + vec3(14.4, 4.75, 4.60), 1), vec3(0, 0.0, 1.0), 3);
 
 		
 	}
@@ -60,17 +59,13 @@ public:
 
 
 	void toogleSpotLights() {
-		if (lights[0].isActive || lights[1].isActive) {
-			lights[0].isActive = false;
-			lights[1].isActive = false;
-			shader->decActiveLights();
-			shader->decActiveLights();
+		if (leftLight.isActive || rightLight.isActive) {
+			leftLight.isActive = false;
+			rightLight.isActive = false;
 		}
 		else {
-			lights[0].isActive = true;
-			lights[1].isActive = true;
-			shader->incActiveLights();
-			shader->incActiveLights();
+			leftLight.isActive = true;
+			rightLight.isActive = true;
 		}
 
 	}

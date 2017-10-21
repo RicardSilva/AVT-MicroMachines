@@ -44,11 +44,6 @@ class GameManager {
 	
 	Shader* shader;
 
-	//External array storage defined in AVTmathLib.cpp
-	GLint pvm_uniformId;
-	GLint vm_uniformId;
-	GLint normal_uniformId;
-	GLint lPos_uniformId;
 
 	// Mouse Tracking Variables
 	int startX, startY, tracking = 0;

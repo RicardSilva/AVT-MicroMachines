@@ -8,17 +8,17 @@ void Car::updateLights() {
 	//update light position
 	posX = 10 * cos(degToRad(angle)) + -4.5 * sin(degToRad(angle)) + position.x;
 	posZ = -4.5 * cos(degToRad(angle)) - 10 * sin(degToRad(angle)) + position.z;
-	lights[0].position = vec4(posX, 1, posZ, 1);
+	leftLight.position = vec4(posX, 1, posZ, 1);
 
 	//update light direction
-	lights[0].direction = vec4(cos(degToRad(angle)), 0, -sin(degToRad(angle)), 0);
+	leftLight.direction = vec4(cos(degToRad(angle)), -0.1, -sin(degToRad(angle)), 0);
 
 	//right
 	posX = 10 * cos(degToRad(angle)) + 4.5 * sin(degToRad(angle)) + position.x;
 	posZ = 4.5 * cos(degToRad(angle)) - 10 * sin(degToRad(angle)) + position.z;
-	lights[1].position = vec4(posX, 1, posZ, 1);
+	rightLight.position = vec4(posX, 1, posZ, 1);
 	
-	lights[1].direction = vec4(cos(degToRad(angle)), 0, -sin(degToRad(angle)), 0);
+	rightLight.direction = vec4(cos(degToRad(angle)), -0.1, -sin(degToRad(angle)), 0);
 
 	
 
@@ -132,12 +132,10 @@ void Car::update(float timeStep) {
 }
 
 void Car::drawLights() {
-	lights[0].draw();
-	lights[1].draw();
+	leftLight.draw();
+	rightLight.draw();
 }
 void Car::draw() {
-	shader->use();
-
 	pushMatrix(MODEL);
 
 	translate(MODEL, position);
@@ -151,7 +149,6 @@ void Car::draw() {
 	
 	popMatrix(MODEL);
 
-	shader->unUse();
 }
 
 void Car::updateHitbox() { //TODO
