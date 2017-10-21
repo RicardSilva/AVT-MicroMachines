@@ -52,18 +52,10 @@ public:
 
 		loadFromFile(std::string("tracks/track.txt"));
 
-	/*	Orange* o;
-		for (int i = 0; i < MAX_ORANGES; i++) {
-			o = new Orange();
-			o->isActive = false;
-			oranges.push_back(o);
-		}*/
-
-
-		borders.push_back(new Border(vec3(TRACK_WIDTH + 10, 0, 0), 20.0, TRACK_HEIGHT + 50));
-		borders.push_back(new Border(vec3(-TRACK_WIDTH - 10, 0, 0), 20.0, TRACK_HEIGHT + 50));
-		borders.push_back(new Border(vec3(0, 0, TRACK_HEIGHT + 10), TRACK_WIDTH + 50, 20.0));
-		borders.push_back(new Border(vec3(0, 0, -TRACK_HEIGHT - 10), TRACK_WIDTH + 50, 20.0));
+		borders.push_back(new Border(vec3(HALF_TRACK_WIDTH + 50, 0, 0), 20.0, HALF_TRACK_HEIGHT + 50));
+		borders.push_back(new Border(vec3(-HALF_TRACK_WIDTH - 50, 0, 0), 20.0, HALF_TRACK_HEIGHT + 50));
+		borders.push_back(new Border(vec3(0, 0, HALF_TRACK_HEIGHT + 50), HALF_TRACK_WIDTH + 50, 20.0));
+		borders.push_back(new Border(vec3(0, 0, -HALF_TRACK_HEIGHT - 50), HALF_TRACK_WIDTH + 50, 20.0));
 
 	}
 	virtual ~Track() {}

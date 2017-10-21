@@ -122,12 +122,14 @@ void Track::update(float timeStep) {
 		if (butter->isActive)
 			butter->update(timeStep);
 	}
-	for (auto orange : oranges) {
+	for (std::vector<int>::size_type i = 0; i < oranges.size(); i++) {
+		Orange* orange = oranges[i];
 		if (orange->isActive) {
 			orange->update(timeStep);
 			if (orange->outOfBounds()) {
-				orange->isActive = false;
-				orangeCounter--;
+				oranges.erase(oranges.begin() + i);
+
+				delete(orange);
 			}
 		}
 	}

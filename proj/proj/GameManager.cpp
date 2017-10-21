@@ -467,7 +467,7 @@ void GameManager::computePositionAfterCollision(GameObject* obj, GameObject* obs
 	else {
 		if (distance.z > 0)
 			z = -z;
-		obj->setPosition(vec3(obj->getPosition().x, obj->getPosition().y, obj->getPosition().z - z));
+		obj->setPosition(vec3(obj->getPosition().x, obj->getPosition().y, obj->getPosition().z + z));
 	}
 
 	obj->updateHitbox();
