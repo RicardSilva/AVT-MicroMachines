@@ -16,6 +16,7 @@
 #define HALF_TRACK_WIDTH 700
 #define HALF_TRACK_HEIGHT 500
 #define MAX_ORANGES 3
+#define TRACK_FILE "tracks/track.txt"
 
 #define ORANGE_BASE_SPEED 50
 
@@ -50,12 +51,12 @@ public:
 		TGA_Texture(TextureArray, "textures/bamboo_specular.tga", 3);
 		TGA_Texture(TextureArray, "textures/mask.tga", 4);
 
-		loadFromFile(std::string("tracks/track.txt"));
+		loadFromFile(std::string(TRACK_FILE));
 
-		borders.push_back(new Border(vec3(HALF_TRACK_WIDTH + 50, 0, 0), 20.0, HALF_TRACK_HEIGHT + 50));
-		borders.push_back(new Border(vec3(-HALF_TRACK_WIDTH - 50, 0, 0), 20.0, HALF_TRACK_HEIGHT + 50));
-		borders.push_back(new Border(vec3(0, 0, HALF_TRACK_HEIGHT + 50), HALF_TRACK_WIDTH + 50, 20.0));
-		borders.push_back(new Border(vec3(0, 0, -HALF_TRACK_HEIGHT - 50), HALF_TRACK_WIDTH + 50, 20.0));
+		borders.push_back(new Border(vec3(HALF_TRACK_WIDTH + 50, 0, 0), 20.0, TRACK_HEIGHT + 50));
+		borders.push_back(new Border(vec3(-HALF_TRACK_WIDTH - 50, 0, 0), 20.0, TRACK_HEIGHT + 50));
+		borders.push_back(new Border(vec3(0, 0, HALF_TRACK_HEIGHT + 50), TRACK_WIDTH + 50, 20.0));
+		borders.push_back(new Border(vec3(0, 0, -HALF_TRACK_HEIGHT - 50), TRACK_WIDTH + 50, 20.0));
 
 	}
 	virtual ~Track() {}
@@ -108,7 +109,7 @@ public:
 	}
 
 	void updateHitbox() {};
-
+	void restart();
 private:
 	void loadFromFile(std::string& s);
 

@@ -17,6 +17,7 @@ void Orange::draw() {
 	}
 
 	popMatrix(MODEL);
+	hitbox->draw();
 }
 
 bool Orange::outOfBounds() {
@@ -56,6 +57,6 @@ void Orange::update(float timeStep) {
 }
 
 void Orange::updateHitbox() {
-	getHitbox()->set(position.x - ORANGE_RADIUS, position.y - ORANGE_RADIUS, position.z - ORANGE_RADIUS,
-		position.x + ORANGE_RADIUS, position.y + ORANGE_RADIUS, position.z + ORANGE_RADIUS);
+	getHitbox()->set(position.x - ORANGE_RADIUS, position.y - ORANGE_RADIUS + 30, position.z - ORANGE_RADIUS,
+		position.x + ORANGE_RADIUS, position.y + ORANGE_RADIUS + 30, position.z + ORANGE_RADIUS);
 }

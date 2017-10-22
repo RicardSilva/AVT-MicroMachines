@@ -14,6 +14,8 @@ void Butter::draw() {
 
 
 	popMatrix(MODEL);
+
+	hitbox->draw();
 }
 
 void Butter::update(float timeStep) {

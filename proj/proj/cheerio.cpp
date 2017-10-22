@@ -15,6 +15,8 @@ void Cheerio::draw() {
 
 
 	popMatrix(MODEL);
+
+	hitbox->draw();
 }
 
 void Cheerio::update(float timeStep) {

@@ -2,14 +2,26 @@
 #define __HITBOX_H__
 
 #include "AVTmathLib.h"
+#include "Shader.h"
+#include "Mesh.h"
+#include "ShaderManager.h"
+#include "ModelManager.h"
 
+#define DEBUG_ACTIVE true
 
 class Hitbox {
+
+	Shader* shader;
+	ObjModel* model;
+
 	vec3 minCorner;
 	vec3 maxCorner;
 
 public:
-	Hitbox(vec3 minCorner, vec3 maxCorner) : minCorner(minCorner), maxCorner(maxCorner) {}
+	Hitbox(vec3 minCorner, vec3 maxCorner) : minCorner(minCorner), maxCorner(maxCorner) {
+		shader = ShaderManager::instance()->getShader("lightShader");
+		model = ModelManager::instance()->getModel("cube");
+	}
 
 	~Hitbox() {}
 	const double getXmin() const { return minCorner.x; }
@@ -35,6 +47,8 @@ public:
 	void set(float xmin, float ymin, float zmin, float xmax, float ymax, float zmax);
 
 	vec3 &getCenter() const;
+
+	void draw();
 
 };
 

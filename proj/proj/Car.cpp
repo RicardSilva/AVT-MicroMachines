@@ -149,14 +149,20 @@ void Car::draw() {
 	
 	popMatrix(MODEL);
 
+	hitbox->draw();
 }
 
-void Car::updateHitbox() { //TODO
-	getHitbox()->set(position.x - (CAR_LENGTH * fabs(sin(getAngle() * PI / 180)) + CAR_WIDTH * fabs(cos(getAngle() * PI / 180))) / 2,
-						position.y,
-						position.z - (CAR_LENGTH * fabs(cos(getAngle() * PI / 180)) + CAR_WIDTH * fabs(sin(getAngle() * PI / 180))) / 2,
-						position.x + (CAR_LENGTH * fabs(sin(getAngle() * PI / 180)) + CAR_WIDTH * fabs(cos(getAngle() * PI / 180))) / 2,
-						position.y,
-						position.z + (CAR_LENGTH * fabs(cos(getAngle() * PI / 180)) + CAR_WIDTH * fabs(sin(getAngle() * PI / 180))) / 2);
+void Car::updateHitbox() {
+	getHitbox()->set(position.x - (CAR_LENGTH * fabs(cos(getAngle() * PI / 180)) + CAR_WIDTH * fabs(sin(getAngle() * PI / 180))) / 2,
+						position.y - CAR_HEIGHT / 2,
+						position.z - (CAR_LENGTH * fabs(sin(getAngle() * PI / 180)) + CAR_WIDTH * fabs(cos(getAngle() * PI / 180))) / 2,
+						position.x + (CAR_LENGTH * fabs(cos(getAngle() * PI / 180)) + CAR_WIDTH * fabs(sin(getAngle() * PI / 180))) / 2,
+						position.y + CAR_HEIGHT / 2,
+						position.z + (CAR_LENGTH * fabs(sin(getAngle() * PI / 180)) + CAR_WIDTH * fabs(cos(getAngle() * PI / 180))) / 2);
 
+}
+void Car::restart(vec3& pos) {
+	position = pos;
+	angle = 0;
+	speed = vec3(0, 0, 0);
 }

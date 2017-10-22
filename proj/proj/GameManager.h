@@ -34,17 +34,20 @@ class GameManager {
 
 	int oldTime = 0;	// miliseconds
 
+	//GAME LOGIC
 	bool pause = false;
 	bool gameOver = false;
 	int carLives = CAR_LIVES;
-	Butter* butter;
-	Shader* shader;
+
 
 
 	// Mouse Tracking Variables
 	int startX, startY, tracking = 0;
 	int deltaX = 0, deltaY = 0;
 	float cameraRotationAngle = 0;
+
+	Butter* butter;
+	Shader* shader;
 
 	Car* car;
 	Track* track;
@@ -88,6 +91,7 @@ public:
 	void processCarObstacleCollision(GameObject* obstacle);
 	void computePositionAfterCollision(GameObject* obj, GameObject* obstacle);
 	void resetCar();
+	void restart();
 
 	void display();
 	void displayHUD();
@@ -95,6 +99,5 @@ public:
 	void update(double timeStep);
 	void reshape(GLsizei w, GLsizei h);
 	void reshapeAVT(GLsizei w, GLsizei h);
-	void restart();
 
 };

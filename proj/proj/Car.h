@@ -70,5 +70,5 @@ public:
 	}
 
 	void updateHitbox();
-
+	void restart(vec3& pos);
 };

@@ -1,4 +1,6 @@
 #include "GameManager.h"
+
+
 bool isOpenGLError() {
 	bool isError = false;
 	GLenum errCode;
@@ -35,7 +37,8 @@ void GameManager::onRefreshTimer(int value) {
 	glutPostRedisplay();
 }
 void GameManager::onSpawnOrangeTimer() {
-	track->attemptToSpawnOrange();
+	if (pause == false)
+		track->attemptToSpawnOrange();
 }
 void GameManager::onIncreaseOrangeSpeedTimer(){
 	track->increaseOrangeSpeed();
@@ -70,6 +73,7 @@ void GameManager::initMeshes() {
 	modelsToLoad.push_back(std::make_pair("butter", "objs/butter.obj"));
 	modelsToLoad.push_back(std::make_pair("orange", "objs/orange.obj"));
 	modelsToLoad.push_back(std::make_pair("lamp", "objs/lamp.obj"));
+	modelsToLoad.push_back(std::make_pair("cube", "objs/cube.obj"));
 
 	for (auto m : modelsToLoad) {
 		if (loader->LoadFile(m.second)) {
@@ -164,7 +168,10 @@ void GameManager::keydown(int key) {
 		break;
 	case 'p':
 		pause = !pause;
-
+		break;
+	case 'r':
+		restart();
+		break;
 	}
 
 }
@@ -280,7 +287,7 @@ bool GameManager::objectsCollide(GameObject* obj1, GameObject* obj2) {
 
 void GameManager::display() {	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	loadIdentity(MODEL);	
 	activeCamera->computeView();
 	//car camera rotation
@@ -444,7 +451,7 @@ void GameManager::processObsCollisions() {
 void GameManager::processCarObstacleCollision(GameObject* obstacle) {
 	// transfer car speed and angle to object and stop car
 	obstacle->setAngle(car->getAngle());
-	obstacle->setSpeed(vec3(car->getSpeed().x, car->getSpeed().z, 0));
+	obstacle->setSpeed(vec3(car->getSpeed().x, 0, car->getSpeed().z));
 	car->setSpeed(vec3(0, 0, 0));
 
 	computePositionAfterCollision(car, obstacle);
@@ -462,12 +469,14 @@ void GameManager::computePositionAfterCollision(GameObject* obj, GameObject* obs
 	if (x < z) {
 		if (distance.x < 0)
 			x = -x;
+		//vec3(-x, 0, 0)
 		obj->setPosition(vec3(obj->getPosition().x - x, obj->getPosition().y, obj->getPosition().z));
 	}
 	else {
-		if (distance.z > 0)
+		if (distance.z < 0)
 			z = -z;
-		obj->setPosition(vec3(obj->getPosition().x, obj->getPosition().y, obj->getPosition().z + z));
+		//vec3(0, 0, -z)
+		obj->setPosition(vec3(obj->getPosition().x, obj->getPosition().y, obj->getPosition().z - z));
 	}
 
 	obj->updateHitbox();
@@ -483,9 +492,12 @@ void GameManager::resetCar() {
 		pause = true;
 	}
 }
-
 void GameManager::restart() {
-	
+	track->restart();
+	car->restart(track->getStartingPosition());
+	carLives = CAR_LIVES;
+	pause = false;
+	gameOver = false;
 }
 
 void GameManager::reshape(GLsizei w, GLsizei h) {
