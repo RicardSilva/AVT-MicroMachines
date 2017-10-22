@@ -121,7 +121,7 @@ void GameManager::initLights() {
 void GameManager::initGameObjects() {
 	track = new Track(vec3(0,-0.1,0));
 	car = new Car(track->getStartingPosition());
-	//butter = new Butter(track->getStartingPosition());
+	carLive = new Car(vec3(0, 0,0));
 }
 
 
@@ -317,10 +317,10 @@ void GameManager::display() {
 		track->draw();
 	if (car->isActive)
 		car->draw();
-	
+	displayHUD();
 	shader->unUse();
 
-	//displayHUD();
+	
 	glutSwapBuffers();
 	
 }
@@ -329,16 +329,24 @@ void GameManager::displayHUD() {
 	glDisable(GL_DEPTH_TEST);
 	pushMatrix(PROJECTION);
 	loadIdentity(PROJECTION);
+	pushMatrix(VIEW);
+	loadIdentity(VIEW);
 	cameras[0]->computeProjection(WIDTH, HEIGHT);
+	cameras[0]->computeView();
 
 
 	pushMatrix(MODEL);
 	loadIdentity(MODEL);
 		pushMatrix(MODEL);
 		loadIdentity(MODEL);
-		//draw lives
-		translate(MODEL, vec3(1.0, 1.0, 1.0));
-		//butter->draw();
+		translate(MODEL, vec3(400, 0, 450));
+		for (int i = 0; i < carLives; i++) {
+			translate(MODEL,vec3(50,0,0));
+			carLive->draw();
+			//drawLife
+		}
+		
+		
 		popMatrix(MODEL);
 
 		if (pause) {
@@ -356,6 +364,7 @@ void GameManager::displayHUD() {
 			popMatrix(MODEL);
 		}
 
+	popMatrix(VIEW);
 	popMatrix(PROJECTION);
 	popMatrix(MODEL);
 

@@ -48,7 +48,7 @@ class GameManager {
 
 	Butter* butter;
 	Shader* shader;
-
+	Car* carLive;
 	Car* car;
 	Track* track;
 	Camera* cameras[3];
