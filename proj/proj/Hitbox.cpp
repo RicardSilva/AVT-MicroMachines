@@ -11,7 +11,8 @@ void Hitbox::set(float xmin, float ymin, float zmin, float xmax, float ymax, flo
 }
 
 vec3& Hitbox::getCenter() const {
-	return vec3(getXmin() + (getXmax() - getXmin()) / 2, getYmin() + (getYmax() - getYmin()) / 2, getZmin() + (getZmax() - getZmin()) / 2);
+	vec3 center = vec3(getXmin() + (getXmax() - getXmin()) / 2, getYmin() + (getYmax() - getYmin()) / 2, getZmin() + (getZmax() - getZmin()) / 2);
+	return center;
 }
 
 void Hitbox::draw() {

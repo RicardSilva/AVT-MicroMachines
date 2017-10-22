@@ -36,11 +36,11 @@ public:
 
 	const double getZmax() const { return maxCorner.z; }
 
-	const double getHalfX() const { return (getXmax() - getXmin()) / 2; }
+	const double getHalfX() const { return (getXmax() - getXmin()) / 2.0; }
 
-	const double getHalfY() const { return (getYmax() - getYmin()) / 2; }
+	const double getHalfY() const { return (getYmax() - getYmin()) / 2.0; }
 
-	const double getHalfZ() const { return (getZmax() - getZmin()) / 2; }
+	const double getHalfZ() const { return (getZmax() - getZmin()) / 2.0; }
 
 	bool hasCollision(Hitbox *h);
 
