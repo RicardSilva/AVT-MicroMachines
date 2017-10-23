@@ -13,13 +13,16 @@
 #include "PerspectiveCamera.h"
 
 #include "Car.h"
+#include "MiniCar.h"
 #include "Track.h"
 
 #include "ShaderManager.h"
 #include "ModelManager.h"
 #include "ObjLoader.h"
 #include "LightShader.h"
+#include "TextureShader.h"
 #include "AVTmathLib.h"
+#include "TextureHolder.h"
 
 
 #define WIDTH 1200
@@ -48,12 +51,14 @@ class GameManager {
 
 	Butter* butter;
 	Shader* shader;
-	Car* carLive;
+	Shader* textureShader;
+	MiniCar* carLive;
 	Car* car;
 	Track* track;
 	Camera* cameras[3];
 	Camera* activeCamera;
-	Camera* hudCamera;
+	TextureHolder* pauseTexture;
+	TextureHolder* gameOverTexture;
 
 public:
 	GameManager();

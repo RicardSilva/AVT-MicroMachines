@@ -23,8 +23,15 @@ void Orange::draw() {
 bool Orange::outOfBounds() {
 	return (abs(position.x) > edgeX | (abs(position.z) > edgeZ));
 }
-void Orange::increaseMaxSpeed() {
-	maxSpeed += 100;
+void Orange::increaseSpeed() {
+	speed.x += 20;
+	speed.z += 20;
+
+	if (speed.x > 400)
+		speed.x = 400;
+	if (speed.z > 400)
+		speed.z = 400;
+	
 }
 
 void Orange::update(float timeStep) {
@@ -36,21 +43,13 @@ void Orange::update(float timeStep) {
 	float posX = position.x;
 	float posZ = position.z;
 
-	float speedX = speed.x * acceleration * timeStep;
-	float speedZ = speed.z * acceleration * timeStep;
-
-	if (speedX > maxSpeed) speedX = maxSpeed;
-	speed.x = speedX;
-
-	if (speedZ > maxSpeed) speedZ = maxSpeed;
-	speed.z = speedZ;
 
 	// update position
-	position.x = posX + speedX * cosAngle * timeStep;
-	position.z = posZ + speedZ * -sinAngle * timeStep;
+	position.x = posX + speed.x * cosAngle * timeStep;
+	position.z = posZ + speed.z * -sinAngle * timeStep;
 
 	// update rotation angle
-	rotationAngle = rotationAngle + speedX * 0.04;
+	rotationAngle = rotationAngle + speed.x * 0.04;
 	rotationAngle = rotationAngle % 360;
 
 	updateHitbox();

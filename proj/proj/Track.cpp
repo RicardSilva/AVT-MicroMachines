@@ -92,7 +92,7 @@ void Track::attemptToSpawnOrange() {
 
 	angle = angle + rand() % 80 - 40;	// randomize angle
 
-	speed = rand() % 20 + ORANGE_BASE_SPEED;	
+	speed = rand() % 20 + orangeStartingSpeed;	
 
 												// compute rotation axle angle
 	axleAngle = angle + 90;	// axle is perpendicular to direction of movement
@@ -107,9 +107,10 @@ void Track::attemptToSpawnOrange() {
 	orangeCounter++;
 }
 void Track::increaseOrangeSpeed() {
+	orangeStartingSpeed += 125;
 	for (auto orange : oranges)
 	{
-		orange->increaseMaxSpeed();
+		orange->increaseSpeed();
 	}
 }
 
@@ -128,8 +129,8 @@ void Track::update(float timeStep) {
 			orange->update(timeStep);
 			if (orange->outOfBounds()) {
 				oranges.erase(oranges.begin() + i);
-
 				delete(orange);
+				orangeCounter--;
 			}
 		}
 	}
@@ -208,6 +209,7 @@ void Track::restart() {
 	cheerios.clear();
 	butters.clear();
 	oranges.clear();
+	orangeCounter = 0;
 	while (x < 140 && z > 0) {
 
 		myfile >> a;

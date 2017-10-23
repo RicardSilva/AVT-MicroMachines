@@ -48,7 +48,7 @@ void spawnOrangeTimer(int value) {
 
 void increaseOrangeSpeedTimer(int value) {
 	gm->onIncreaseOrangeSpeedTimer();
-	glutTimerFunc(60000, spawnOrangeTimer, 0);
+	glutTimerFunc(10000, increaseOrangeSpeedTimer, 0);
 }
 
 void reshape(int w, int h) {
@@ -103,9 +103,9 @@ int main(int argc, char **argv) {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_MULTISAMPLE);
 
-	//glutInitContextVersion(3, 3);
-	//glutInitContextProfile(GLUT_CORE_PROFILE);
-	//glutInitContextFlags(GLUT_FORWARD_COMPATIBLE | GLUT_DEBUG);
+	glutInitContextVersion(3, 3);
+	glutInitContextProfile(GLUT_CORE_PROFILE);
+	glutInitContextFlags(GLUT_FORWARD_COMPATIBLE | GLUT_DEBUG);
 
 	glutInitWindowPosition(100, 100);
 	glutInitWindowSize(WinX, WinY);
@@ -128,6 +128,7 @@ int main(int argc, char **argv) {
 	glutTimerFunc(0, FPScounter, 0);
 	glutTimerFunc(0, refreshTimer, 0);
 	glutTimerFunc(rand() % ORANGE_DELAY + ORANGE_INIT, spawnOrangeTimer, 0);
+	glutTimerFunc(10000, increaseOrangeSpeedTimer, 0);
 
 
 	//	return from main loop

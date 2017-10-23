@@ -33,6 +33,7 @@ class Track : public GameObject {
 
 	vec3 startingPosition;
 	int orangeCounter;
+	float orangeStartingSpeed = 125;
 
 public:
 	Track(vec3& position) 

@@ -61,6 +61,9 @@ void GameManager::init() {
 void GameManager::initShaders() {
 	shader = new LightShader("shaders/pointlight.vert", "shaders/pointlight.frag");
 	ShaderManager::instance()->addShader("lightShader", shader);
+
+	textureShader = new TextureShader("shaders/texture.vert", "shaders/texture.frag");
+	ShaderManager::instance()->addShader("textureShader", textureShader);
 }
 void GameManager::initMeshes() {
 	ObjLoader* loader = new ObjLoader();
@@ -68,12 +71,14 @@ void GameManager::initMeshes() {
 		
 	std::vector<pair<string, string>> modelsToLoad;
 	modelsToLoad.push_back(std::make_pair("car", "objs/car.obj"));
+	modelsToLoad.push_back(std::make_pair("car_mini", "objs/car_mini.obj"));
 	modelsToLoad.push_back(std::make_pair("track", "objs/table.obj"));
 	modelsToLoad.push_back(std::make_pair("cheerio", "objs/donut.obj"));
 	modelsToLoad.push_back(std::make_pair("butter", "objs/butter.obj"));
 	modelsToLoad.push_back(std::make_pair("orange", "objs/orange.obj"));
 	modelsToLoad.push_back(std::make_pair("lamp", "objs/lamp.obj"));
 	modelsToLoad.push_back(std::make_pair("cube", "objs/cube.obj"));
+	modelsToLoad.push_back(std::make_pair("plane", "objs/plane.obj"));
 
 	for (auto m : modelsToLoad) {
 		if (loader->LoadFile(m.second)) {
@@ -121,7 +126,10 @@ void GameManager::initLights() {
 void GameManager::initGameObjects() {
 	track = new Track(vec3(0,-0.1,0));
 	car = new Car(track->getStartingPosition());
-	carLive = new Car(vec3(0, 0,0));
+	carLive = new MiniCar(vec3(0, 0,0));
+
+	pauseTexture = new TextureHolder("textures/pause_texture.tga", 7);
+	gameOverTexture = new TextureHolder("textures/gameOver_texture.tga", 8);
 }
 
 
@@ -287,7 +295,6 @@ bool GameManager::objectsCollide(GameObject* obj1, GameObject* obj2) {
 
 void GameManager::display() {	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	loadIdentity(MODEL);	
 	activeCamera->computeView();
 	//car camera rotation
@@ -317,16 +324,17 @@ void GameManager::display() {
 		track->draw();
 	if (car->isActive)
 		car->draw();
-	displayHUD();
+
 	shader->unUse();
 
-	
+	displayHUD();
+		
 	glutSwapBuffers();
 	
 }
 void GameManager::displayHUD() {
 
-	//glDisable(GL_DEPTH_TEST);
+	
 	pushMatrix(PROJECTION);
 	loadIdentity(PROJECTION);
 	pushMatrix(VIEW);
@@ -334,41 +342,43 @@ void GameManager::displayHUD() {
 	cameras[0]->computeProjection(WIDTH, HEIGHT);
 	cameras[0]->computeView();
 
+	shader->use();
 
 	pushMatrix(MODEL);
 	loadIdentity(MODEL);
 	pushMatrix(MODEL);
 	loadIdentity(MODEL);
-	translate(MODEL, vec3(400, 0, 450));
+
+	
+	translate(MODEL, vec3(400, 50, 450));
+	
 	for (int i = 0; i < carLives; i++) {
 		translate(MODEL, vec3(50, 0, 0));
+		pushMatrix(MODEL);
+		rotate(MODEL, 90, vec3(0, 1, 0));
+		scale(MODEL, vec3(2, 2, 2));
 		carLive->draw();
-		//drawLife
+
+		popMatrix(MODEL);
 	}
 
 
 	popMatrix(MODEL);
-
+	shader->unUse();
+	textureShader->use();
+	glDisable(GL_DEPTH_TEST);
 	if (pause) {
-		pushMatrix(MODEL);
-		loadIdentity(MODEL);
-
-		//draw pause
-		popMatrix(MODEL);
+		pauseTexture->draw();
 	}
-	else if (gameOver) {
-		pushMatrix(MODEL);
-		loadIdentity(MODEL);
-
-		//draw gameover screen
-		popMatrix(MODEL);
+	if (gameOver) {
+		gameOverTexture->draw();
 	}
-
+	textureShader->unUse();
 	popMatrix(VIEW);
 	popMatrix(PROJECTION);
 	popMatrix(MODEL);
 
-	//glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
 
 }
 void GameManager::update(double timeStep) {

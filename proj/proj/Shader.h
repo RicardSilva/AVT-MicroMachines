@@ -57,6 +57,7 @@ public:
 	virtual void loadMatrices() {}
 	virtual void enableTextures() {}
 	virtual void disableTextures() {}
+	virtual void loadTexture(GLint id) {}
 	virtual void loadWoodDiffuse(GLint id) {}
 	virtual void loadWoodSpecular(GLint id) {}
 	virtual void loadBambooDiffuse(GLint id) {}
