@@ -13,12 +13,16 @@ class Hitbox {
 
 	Shader* shader;
 	ObjModel* model;
-
+public:
 	vec3 minCorner;
 	vec3 maxCorner;
+	vec3 center;
 
-public:
-	Hitbox(vec3 minCorner, vec3 maxCorner) : minCorner(minCorner), maxCorner(maxCorner) {
+
+	Hitbox(vec3 minCorner, vec3 maxCorner) : minCorner(minCorner), maxCorner(maxCorner), 
+		center(vec3(minCorner.x + (maxCorner.x - minCorner.x) / 2.0f,
+			minCorner.y + (maxCorner.y - minCorner.y) / 2.0f,
+			minCorner.z + (maxCorner.z - minCorner.z) / 2.0f)) {
 		shader = ShaderManager::instance()->getShader("lightShader");
 		model = ModelManager::instance()->getModel("cube");
 	}
@@ -45,9 +49,6 @@ public:
 	bool hasCollision(Hitbox *h);
 
 	void set(float xmin, float ymin, float zmin, float xmax, float ymax, float zmax);
-
-	vec3 &getCenter() const;
-
 	void draw();
 
 };

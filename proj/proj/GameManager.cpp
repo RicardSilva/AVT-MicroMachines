@@ -326,7 +326,7 @@ void GameManager::display() {
 }
 void GameManager::displayHUD() {
 
-	glDisable(GL_DEPTH_TEST);
+	//glDisable(GL_DEPTH_TEST);
 	pushMatrix(PROJECTION);
 	loadIdentity(PROJECTION);
 	pushMatrix(VIEW);
@@ -337,38 +337,38 @@ void GameManager::displayHUD() {
 
 	pushMatrix(MODEL);
 	loadIdentity(MODEL);
+	pushMatrix(MODEL);
+	loadIdentity(MODEL);
+	translate(MODEL, vec3(400, 0, 450));
+	for (int i = 0; i < carLives; i++) {
+		translate(MODEL, vec3(50, 0, 0));
+		carLive->draw();
+		//drawLife
+	}
+
+
+	popMatrix(MODEL);
+
+	if (pause) {
 		pushMatrix(MODEL);
 		loadIdentity(MODEL);
-		translate(MODEL, vec3(400, 0, 450));
-		for (int i = 0; i < carLives; i++) {
-			translate(MODEL,vec3(50,0,0));
-			carLive->draw();
-			//drawLife
-		}
-		
-		
+
+		//draw pause
 		popMatrix(MODEL);
+	}
+	else if (gameOver) {
+		pushMatrix(MODEL);
+		loadIdentity(MODEL);
 
-		if (pause) {
-			pushMatrix(MODEL);
-			loadIdentity(MODEL);
-
-			//draw pause
-			popMatrix(MODEL);
-		}
-		else if (gameOver) {
-			pushMatrix(MODEL);
-			loadIdentity(MODEL);
-
-			//draw gameover screen
-			popMatrix(MODEL);
-		}
+		//draw gameover screen
+		popMatrix(MODEL);
+	}
 
 	popMatrix(VIEW);
 	popMatrix(PROJECTION);
 	popMatrix(MODEL);
 
-
+	//glEnable(GL_DEPTH_TEST);
 
 }
 void GameManager::update(double timeStep) {
@@ -467,25 +467,25 @@ void GameManager::processCarObstacleCollision(GameObject* obstacle) {
 }
 
 void GameManager::computePositionAfterCollision(GameObject* obj, GameObject* obstacle) {
-	vec3 obj_center = obj->getHitbox()->getCenter();
-	vec3 obst_center = obstacle->getHitbox()->getCenter();
+	vec3 obj_center = obj->getHitbox()->center;
+	vec3 obst_center = obstacle->getHitbox()->center;
 
 	vec3 distance = obst_center - obj_center;
 
-	float x = obj->getHitbox()->getHalfX() + obstacle->getHitbox()->getHalfX() - abs(distance.x);
-	float z = obj->getHitbox()->getHalfZ() + obstacle->getHitbox()->getHalfZ() - abs(distance.z);
+	float x = obj->getHitbox()->getHalfX() + obstacle->getHitbox()->getHalfX() - fabs(distance.x);
+	float z = obj->getHitbox()->getHalfZ() + obstacle->getHitbox()->getHalfZ() - fabs(distance.z);
 
 	if (x < z) {
 		if (distance.x < 0)
 			x = -x;
 		//vec3(-x, 0, 0)
-		obj->setPosition(vec3(obj->getPosition().x - x, obj->getPosition().y, obj->getPosition().z));
+		obj->setPosition(vec3(obj->position.x - x, obj->position.y, obj->position.z));
 	}
 	else {
-		if (distance.z < 0)
+		if (distance.z > 0)
 			z = -z;
 		//vec3(0, 0, -z)
-		obj->setPosition(vec3(obj->getPosition().x, obj->getPosition().y, obj->getPosition().z - z));
+		obj->setPosition(vec3(obj->position.x, obj->position.y, obj->position.z + z));
 	}
 
 	obj->updateHitbox();

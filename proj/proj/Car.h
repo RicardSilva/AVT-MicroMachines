@@ -25,7 +25,7 @@ private:
 	// Car physics
 	float angleInc = 3;
 	float maxSpeed = 325;
-	float maxBackwardsSpeed = -100;
+	float maxBackwardsSpeed = -175;
 
 	float acceleration = 150;
 	float backwardsAcceleration = 200;

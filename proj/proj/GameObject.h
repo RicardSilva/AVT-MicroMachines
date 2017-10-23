@@ -19,12 +19,13 @@ protected:
 
 	Hitbox *hitbox;
 
-	vec3 position;
+	
 	vec3 speed;
 	int angle;
 
 public:
 	bool isActive = true;
+	vec3 position;
 
 	GameObject() {}
 	GameObject(vec3& position, vec3& speed, float angle)

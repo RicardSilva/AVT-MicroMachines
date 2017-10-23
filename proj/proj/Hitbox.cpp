@@ -8,12 +8,10 @@ bool Hitbox::hasCollision(Hitbox *h) {
 void Hitbox::set(float xmin, float ymin, float zmin, float xmax, float ymax, float zmax) {
 	minCorner = vec3(xmin, ymin, zmin);
 	maxCorner = vec3(xmax, ymax, zmax);
+	center = vec3(xmin + (xmax - xmin) / 2.0f, ymin + (ymax - ymin) / 2.0f, zmin + (zmax - zmin) / 2.0f);
+
 }
 
-vec3& Hitbox::getCenter() const {
-	vec3 center = vec3(getXmin() + (getXmax() - getXmin()) / 2, getYmin() + (getYmax() - getYmin()) / 2, getZmin() + (getZmax() - getZmin()) / 2);
-	return center;
-}
 
 void Hitbox::draw() {
 
