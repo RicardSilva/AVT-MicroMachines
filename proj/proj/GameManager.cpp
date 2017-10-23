@@ -367,7 +367,7 @@ void GameManager::displayHUD() {
 	shader->unUse();
 	textureShader->use();
 	glDisable(GL_DEPTH_TEST);
-	if (pause) {
+	if (pause && !gameOver) {
 		pauseTexture->draw();
 	}
 	if (gameOver) {

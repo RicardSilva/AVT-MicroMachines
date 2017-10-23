@@ -153,7 +153,7 @@ void main() {
 		
 		
 		vec3 woodSpec = vec3(texture(woodSpecular, DataIn.texCoord * 15));
-		vec3 bambooSpec = vec3(texture(bambooSpecular, DataIn.texCoord * 10));
+		vec3 bambooSpec = vec3(texture(bambooSpecular, DataIn.texCoord * 10)) * 0.9;
 		materialSpecular = mix(woodSpec, bambooSpec, mixCoefficient) ;
 		
 		

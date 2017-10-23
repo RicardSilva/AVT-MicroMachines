@@ -13,7 +13,7 @@ void main() {
 
 	vec4 color = texture(textureMap, DataIn.texC);
 	
-	colorOut = vec4(color.xyz, 0.1);
+	colorOut = vec4(color.xyz, 0.7);
 	
 	
 }
