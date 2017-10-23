@@ -26,6 +26,7 @@
     <ClInclude Include="Car.h" />
     <ClInclude Include="Cheerio.h" />
     <ClInclude Include="DirectionalLight.h" />
+    <ClInclude Include="FinishLine.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Hitbox.h" />

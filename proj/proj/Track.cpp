@@ -193,6 +193,10 @@ void Track::draw() {
 	for (auto lamp : lamps) {
 		lamp->draw();
 	}
+	for (auto border : borders) {
+		border->draw();
+	}
+	finishLine->draw();
 
 	popMatrix(MODEL);
 }

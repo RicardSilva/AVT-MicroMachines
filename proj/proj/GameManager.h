@@ -31,7 +31,7 @@
 #define PI 3.141592657
 #define MES_WIDTH 700.0f
 #define MES_HEIGHT 500.0f
-
+#define CAPTION "MicroMachines"
 
 class GameManager {
 
@@ -41,13 +41,19 @@ class GameManager {
 	bool pause = false;
 	bool gameOver = false;
 	int carLives = CAR_LIVES;
-
+	int currentLapTime = 0;
+	int bestLapTime = INT_MAX;
+	bool startClock = false;
 
 
 	// Mouse Tracking Variables
 	int startX, startY, tracking = 0;
 	int deltaX = 0, deltaY = 0;
 	float cameraRotationAngle = 0;
+
+	// Frame counting and FPS computation
+	unsigned int FrameCount = 0;
+	char s[32];
 
 	Butter* butter;
 	Shader* shader;
@@ -67,6 +73,7 @@ public:
 
 	bool getPause() { return pause; }
 
+	void onFPSCounter(int windowHandle);
 	void onRefreshTimer(int value);
 	void onSpawnOrangeTimer();
 	void onIncreaseOrangeSpeedTimer();

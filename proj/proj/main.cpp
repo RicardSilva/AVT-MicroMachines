@@ -21,17 +21,11 @@ GameManager* gm;
 
 // Frame counting and FPS computation
 unsigned int FrameCount = 0;
-long myTime, timebase = 0, frame = 0;
 char s[32];
 
 void FPScounter(int value)
 {
-	std::ostringstream oss;
-	oss << CAPTION << ": " << FrameCount << " FPS @ (" << WinX << "x" << WinY << ")";
-	std::string s = oss.str();
-	glutSetWindow(WindowHandle);
-	glutSetWindowTitle(s.c_str());
-	FrameCount = 0;
+	gm->onFPSCounter(WindowHandle);
 	glutTimerFunc(1000, FPScounter, 0);
 }
 

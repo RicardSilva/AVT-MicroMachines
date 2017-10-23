@@ -23,13 +23,29 @@ void checkOpenGLError(std::string error)
 GameManager::GameManager() { }
 
 GameManager::~GameManager() { }
-
+void GameManager::onFPSCounter(int windowHandle) {
+	int best_min = (bestLapTime / 1000) / 60;
+	int best_sec = (bestLapTime / 1000) % 60;
+	int best_mili = bestLapTime % 1000;
+	int curr_min = (currentLapTime / 1000) / 60;
+	int curr_sec = (currentLapTime / 1000) % 60;
+	int curr_mili = currentLapTime % 1000;
+	std::ostringstream oss;
+	oss << CAPTION << ": " << FrameCount << " FPS" << " ### Best lap: " << best_min << ":" << best_sec << ":" << best_mili << " ###"
+		<<  " ### Current lap: " << curr_min << ":" << curr_sec << ":" << curr_mili << " ###";
+	std::string s = oss.str();
+	glutSetWindow(windowHandle);
+	glutSetWindowTitle(s.c_str());
+	FrameCount = 0;
+}
 void GameManager::onRefreshTimer(int value) {
 	if (!pause && !gameOver) {
 		int time = glutGet(GLUT_ELAPSED_TIME);
 		int timeStep = time - oldTime;
 		oldTime = time;
 		update(timeStep);
+		if(startClock == true)
+			currentLapTime += timeStep;
 	}
 	else {
 		oldTime = glutGet(GLUT_ELAPSED_TIME);
@@ -294,6 +310,7 @@ bool GameManager::objectsCollide(GameObject* obj1, GameObject* obj2) {
 }
 
 void GameManager::display() {	
+	FrameCount++;
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	loadIdentity(MODEL);	
 	activeCamera->computeView();
@@ -333,8 +350,6 @@ void GameManager::display() {
 	
 }
 void GameManager::displayHUD() {
-
-	
 	pushMatrix(PROJECTION);
 	loadIdentity(PROJECTION);
 	pushMatrix(VIEW);
@@ -379,6 +394,9 @@ void GameManager::displayHUD() {
 	popMatrix(MODEL);
 
 	glEnable(GL_DEPTH_TEST);
+	
+	//lap time
+	
 
 }
 void GameManager::update(double timeStep) {
@@ -426,6 +444,18 @@ void GameManager::processCarCollisions() {
 		if (objectsCollide(car, obst))
 			resetCar();
 	}
+
+	if (objectsCollide(car, track->getFinishLine())) {
+		if (currentLapTime == 0) {
+			startClock = true;
+		}
+		else {
+			if (currentLapTime < bestLapTime && currentLapTime > 5000)
+				bestLapTime = currentLapTime;
+			currentLapTime = 0;
+		}
+	}
+
 }
 void GameManager::processObsCollisions() {
 	// cheerios
@@ -517,6 +547,8 @@ void GameManager::restart() {
 	carLives = CAR_LIVES;
 	pause = false;
 	gameOver = false;
+	currentLapTime = 0;
+	startClock = false;
 }
 
 void GameManager::reshape(GLsizei w, GLsizei h) {

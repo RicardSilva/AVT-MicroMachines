@@ -8,6 +8,7 @@
 #include "Lamp.h"
 #include "Border.h"
 #include "DirectionalLight.h"
+#include "FinishLine.h"
 
 #include "TGA.h"
 
@@ -30,7 +31,7 @@ class Track : public GameObject {
 	DirectionalLight dirLight;
 	std::vector<Lamp*> lamps;
 	std::vector<Border*> borders;
-
+	FinishLine* finishLine;
 	vec3 startingPosition;
 	int orangeCounter;
 	float orangeStartingSpeed = 125;
@@ -59,6 +60,7 @@ public:
 		borders.push_back(new Border(vec3(0, 0, HALF_TRACK_HEIGHT + 50), TRACK_WIDTH + 50, 20.0));
 		borders.push_back(new Border(vec3(0, 0, -HALF_TRACK_HEIGHT - 50), TRACK_WIDTH + 50, 20.0));
 
+		finishLine = new FinishLine(startingPosition + vec3(45, 0,15), 20.0, 50.0);
 	}
 	virtual ~Track() {}
 
@@ -84,6 +86,10 @@ public:
 
 	std::vector<Border*> getBorders() {
 		return borders;
+	}
+
+	FinishLine* getFinishLine() {
+		return finishLine;
 	}
 
 	void attemptToSpawnOrange();

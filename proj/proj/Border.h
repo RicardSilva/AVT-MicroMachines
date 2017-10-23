@@ -14,7 +14,9 @@ public:
 
 	~Border() {}
 
-	void draw() {}
+	void draw() {
+		hitbox->draw();
+	}
 	void update(float timeStep) {}
 
 	void Border::updateHitbox() {}

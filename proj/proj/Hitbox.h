@@ -7,7 +7,7 @@
 #include "ShaderManager.h"
 #include "ModelManager.h"
 
-#define DEBUG_ACTIVE false
+#define DEBUG_ACTIVE true
 
 class Hitbox {
 
