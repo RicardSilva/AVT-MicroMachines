@@ -1,5 +1,15 @@
 #version 330
 
+
+in Data {
+	vec4 pos; 
+	vec3 normal;
+	vec3 eye;
+	vec2 texCoord;
+} DataIn;
+
+out vec4 colorOut;
+
 struct Material {
 	vec3 diffuse;
 	vec3 ambient;
@@ -38,14 +48,6 @@ uniform sampler2D bambooDiffuse;
 uniform sampler2D bambooSpecular;
 uniform sampler2D mask;
 
-in Data {
-	vec4 pos; 
-	vec3 normal;
-	vec3 eye;
-	vec2 texCoord;
-} DataIn;
-
-out vec4 colorOut;
 
 
 vec4 calcDirLight(Light light, vec3 normal, vec3 viewDir, vec3 materialDiffuse, vec3 materialSpecular) {

@@ -214,6 +214,7 @@ void Track::restart() {
 	butters.clear();
 	oranges.clear();
 	orangeCounter = 0;
+	orangeStartingSpeed = 125;
 	while (x < 140 && z > 0) {
 
 		myfile >> a;
