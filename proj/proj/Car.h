@@ -53,6 +53,7 @@ public:
 
 	void drawLights();
 	virtual void draw();
+	void drawMirror();
 	void updateLights();
 	void update(float timeStep);
 

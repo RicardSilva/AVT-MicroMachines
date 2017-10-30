@@ -60,7 +60,7 @@ class GameManager {
 	MiniCar* carLive;
 	Car* car;
 	Track* track;
-	Camera* cameras[4];
+	Camera* cameras[5];
 	Camera* activeCamera;
 	TextureHolder* pauseTexture;
 	TextureHolder* gameOverTexture;
@@ -115,6 +115,7 @@ public:
 
 	void display();
 	void displayHUD();
+	void displayMirrorReflection();
 
 	void update(double timeStep);
 	void reshape(GLsizei w, GLsizei h);

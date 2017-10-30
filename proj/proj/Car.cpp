@@ -137,7 +137,6 @@ void Car::drawLights() {
 }
 void Car::draw() {
 	glCullFace(GL_FRONT);
-	//glDisable(GL_CULL_FACE);
 	pushMatrix(MODEL);
 
 	translate(MODEL, position);
@@ -167,11 +166,21 @@ void Car::draw() {
 
 	popMatrix(MODEL);
 
-
-
 	hitbox->draw();
+}
+void Car::drawMirror() {
+	pushMatrix(MODEL);
 
+	translate(MODEL, position);
+	rotate(MODEL, angle, vec3(0, 1, 0));
+	shader->loadMatrices();
 
+	Mesh* mesh = model->meshes[0];
+	shader->loadMaterial(mesh->MeshMaterial);
+	mesh->draw();
+	
+
+	popMatrix(MODEL);
 }
 
 void Car::updateHitbox() {

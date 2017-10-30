@@ -137,6 +137,13 @@ void GameManager::initCameras() {
 
 	cameras[3] = cockpitCamera;
 
+	Camera* backCamera = new PerspectiveCamera(90, (float)WIDTH / HEIGHT, 0.1f, 1000.0f);
+	backCamera->setEye(vec3(0, 50, -80));
+	backCamera->setTarget(vec3(0, 0, 0));
+	backCamera->setUp(vec3(0, 1, 0));
+
+	cameras[4] = backCamera;
+
 	activeCamera = cameras[0];
 
 	
@@ -177,6 +184,9 @@ void GameManager::keydown(int key) {
 		break;
 	case '4':
 		activeCamera = cameras[3];
+		break;
+	case '5':
+		activeCamera = cameras[4];
 		break;
 	case '8':
 		track->toogleDirectionalLight();
@@ -348,8 +358,13 @@ void GameManager::display() {
 
 	if (track->isActive)
 		track->draw();
-	if (car->isActive)
+	if (car->isActive) {
 		car->draw();
+		//car->drawMirror();
+	}
+
+	if(activeCamera == cameras[3])
+		displayMirrorReflection();
 
 	shader->unUse();
 
@@ -408,6 +423,41 @@ void GameManager::displayHUD() {
 	
 
 }
+void GameManager::displayMirrorReflection() {
+	glEnable(GL_STENCIL_TEST);
+	glDisable(GL_DEPTH_TEST);
+	// Draw mirror
+
+	glClear(GL_STENCIL_BUFFER_BIT); // Clear stencil buffer (0 by default)
+	glStencilFunc(GL_ALWAYS, 1, 0xFF); // Set any stencil to 1
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	glStencilMask(0xFF); // Write to stencil buffer
+	glDepthMask(GL_FALSE); // Don't write to depth buffer
+
+	car->drawMirror();
+
+	// Draw back camera
+	glStencilFunc(GL_EQUAL, 1, 0xFF); // Pass test if stencil value is 1
+	glStencilMask(0x00); // Don't write anything to stencil buffer
+	glDepthMask(GL_TRUE); // Write to depth buffer
+
+	cameras[4]->computeView();
+	cameras[4]->computeProjection(WIDTH, HEIGHT);
+	// Render objects
+	if (track->isActive)
+		track->drawLights();
+	if (car->isActive)
+		car->drawLights();
+
+	if (track->isActive)
+		track->draw();
+	if (car->isActive)
+		car->draw();
+
+
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_STENCIL_TEST);
+}
 void GameManager::update(double timeStep) {
 
 	car->update(timeStep);
@@ -421,6 +471,7 @@ void GameManager::update(double timeStep) {
 
 	cameras[2]->computeCarCameraPosition(car->getPosition(), car->getAngle());
 	cameras[3]->computeCockpitCameraPosition(car->getPosition(), car->getAngle());
+	cameras[4]->computeBackCameraPosition(car->getPosition(), car->getAngle());
 }
 
 void GameManager::processCarCollisions() {

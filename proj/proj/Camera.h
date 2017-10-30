@@ -35,6 +35,8 @@ public:
 	virtual void computeProjection(int w, int h) = 0;
 	void computeCarCameraPosition(const vec3& pos, int angle);
 	void computeCockpitCameraPosition(const vec3& pos, int angle);
+	void computeBackCameraPosition(const vec3& pos, int angle);
+	
 
 	
 };
