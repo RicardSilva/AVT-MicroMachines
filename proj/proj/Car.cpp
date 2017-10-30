@@ -136,6 +136,8 @@ void Car::drawLights() {
 	rightLight.draw();
 }
 void Car::draw() {
+	glCullFace(GL_FRONT);
+	//glDisable(GL_CULL_FACE);
 	pushMatrix(MODEL);
 
 	translate(MODEL, position);
@@ -149,16 +151,38 @@ void Car::draw() {
 	
 	popMatrix(MODEL);
 
+
+	glCullFace(GL_BACK);
+
+	pushMatrix(MODEL);
+
+	translate(MODEL, position);
+	rotate(MODEL, angle, vec3(0, 1, 0));
+	shader->loadMatrices();
+
+	for (auto mesh : model->meshes) {
+		shader->loadMaterial(mesh->MeshMaterial);
+		mesh->draw();
+	}
+
+	popMatrix(MODEL);
+
+
+
 	hitbox->draw();
+
+
 }
 
 void Car::updateHitbox() {
-	getHitbox()->set(position.x - (CAR_LENGTH * fabs(cos(getAngle() * PI / 180)) + CAR_WIDTH * fabs(sin(getAngle() * PI / 180))) / 2,
+	float sinAngle = fabs(sin(getAngle() * PI / 180));
+	float cosAngle = fabs(cos(getAngle() * PI / 180));
+	getHitbox()->set(position.x - (CAR_LENGTH * cosAngle + CAR_WIDTH * sinAngle) / 2,
 						position.y - CAR_HEIGHT / 2,
-						position.z - (CAR_LENGTH * fabs(sin(getAngle() * PI / 180)) + CAR_WIDTH * fabs(cos(getAngle() * PI / 180))) / 2,
-						position.x + (CAR_LENGTH * fabs(cos(getAngle() * PI / 180)) + CAR_WIDTH * fabs(sin(getAngle() * PI / 180))) / 2,
+						position.z - (CAR_LENGTH * sinAngle + CAR_WIDTH * cosAngle) / 2,
+						position.x + (CAR_LENGTH * cosAngle + CAR_WIDTH * sinAngle) / 2,
 						position.y + CAR_HEIGHT / 2,
-						position.z + (CAR_LENGTH * fabs(sin(getAngle() * PI / 180)) + CAR_WIDTH * fabs(cos(getAngle() * PI / 180))) / 2);
+						position.z + (CAR_LENGTH * sinAngle + CAR_WIDTH * cosAngle) / 2);
 
 }
 void Car::restart(vec3& pos) {

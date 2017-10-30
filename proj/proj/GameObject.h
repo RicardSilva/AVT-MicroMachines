@@ -41,7 +41,9 @@ public:
 	GameObject(vec3& position, Hitbox *hitbox) : position(position), speed(vec3(0, 0, 0)), angle(0), hitbox(hitbox) {
 		shader = ShaderManager::instance()->getShader("lightShader");
 	}
-	virtual ~GameObject() {}
+	virtual ~GameObject() {
+		delete(hitbox);
+	}
 
 	vec3 getPosition() { return position; }
 

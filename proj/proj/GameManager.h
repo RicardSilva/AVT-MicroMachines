@@ -55,21 +55,29 @@ class GameManager {
 	unsigned int FrameCount = 0;
 	char s[32];
 
-	Butter* butter;
 	Shader* shader;
 	Shader* textureShader;
 	MiniCar* carLive;
 	Car* car;
 	Track* track;
-	Camera* cameras[3];
+	Camera* cameras[4];
 	Camera* activeCamera;
 	TextureHolder* pauseTexture;
 	TextureHolder* gameOverTexture;
 
 public:
-	GameManager();
+	GameManager() {}
 
-	~GameManager();
+	~GameManager() {
+		delete(track);
+		delete(car);
+		delete(cameras[0]);
+		delete(cameras[1]);
+		delete(cameras[2]);
+		delete(cameras[3]);
+		delete(pauseTexture);
+		delete(gameOverTexture);
+	}
 
 	bool getPause() { return pause; }
 

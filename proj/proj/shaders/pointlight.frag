@@ -16,6 +16,7 @@ struct Material {
 	vec3 specular;
 	vec3 emissive;
 	float shininess;
+	float transparency;
 	int texCount;
 };
 
@@ -145,6 +146,7 @@ void main() {
 	
 	vec3 materialDiffuse;
 	vec3 materialSpecular;
+	float materialTransparency;
 	vec3 normal;
 	if(useTextures) {
 		vec3 woodDiff = vec3(texture(woodDiffuse, DataIn.texCoord * 15));
@@ -157,6 +159,7 @@ void main() {
 		vec3 woodSpec = vec3(texture(woodSpecular, DataIn.texCoord * 15));
 		vec3 bambooSpec = vec3(texture(bambooSpecular, DataIn.texCoord * 10)) * 0.9;
 		materialSpecular = mix(woodSpec, bambooSpec, mixCoefficient) ;
+		materialTransparency = 1.0f;
 		
 		
 	}
@@ -164,6 +167,7 @@ void main() {
 		colorOut += vec4(mat.ambient.xyz, 1);	
 		materialDiffuse = mat.diffuse.xyz;
 		materialSpecular = mat.specular.xyz;
+		materialTransparency = mat.transparency;
 	}
 	
 	normal = normalize(DataIn.normal);
@@ -181,7 +185,8 @@ void main() {
 			
 		}
 	}
-	//colorOut = vec4(normal.x + 1.0 / 2.0, normal.y + 1.0 / 2.0, normal.z + 1.0 / 2.0, 1.0);
+	
+	colorOut.w = materialTransparency;
 	
 	
 	

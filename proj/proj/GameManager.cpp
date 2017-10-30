@@ -20,9 +20,6 @@ void checkOpenGLError(std::string error)
 		exit(EXIT_FAILURE);
 	}
 }
-GameManager::GameManager() { }
-
-GameManager::~GameManager() { }
 void GameManager::onFPSCounter(int windowHandle) {
 	int best_min = (bestLapTime / 1000) / 60;
 	int best_sec = (bestLapTime / 1000) % 60;
@@ -104,7 +101,7 @@ void GameManager::initMeshes() {
 		else
 			std::cerr << m.second << ": invalid .obj file" << std::endl;
 	}
-	
+	//delete(loader);
 }
 void GameManager::initCameras() {
 	// set the camera position based on its spherical coordinates
@@ -133,7 +130,16 @@ void GameManager::initCameras() {
 
 	cameras[2] = carCamera;
 
+	Camera* cockpitCamera = new PerspectiveCamera(90, (float)WIDTH / HEIGHT, 0.1f, 1000.0f);
+	cockpitCamera->setEye(vec3(0, 50, -80));
+	cockpitCamera->setTarget(vec3(0, 0, 0));
+	cockpitCamera->setUp(vec3(0, 1, 0));
+
+	cameras[3] = cockpitCamera;
+
 	activeCamera = cameras[0];
+
+	
 
 }
 void GameManager::initLights() {
@@ -168,6 +174,9 @@ void GameManager::keydown(int key) {
 		break;
 	case '3':
 		activeCamera = cameras[2];
+		break;
+	case '4':
+		activeCamera = cameras[3];
 		break;
 	case '8':
 		track->toogleDirectionalLight();
@@ -411,7 +420,7 @@ void GameManager::update(double timeStep) {
 	processObsCollisions();
 
 	cameras[2]->computeCarCameraPosition(car->getPosition(), car->getAngle());
-	
+	cameras[3]->computeCockpitCameraPosition(car->getPosition(), car->getAngle());
 }
 
 void GameManager::processCarCollisions() {

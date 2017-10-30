@@ -33,6 +33,7 @@ private:
 	GLint matDiffuseID;
 	GLint matSpecularID;
 	GLint matShininessID;
+	GLint matTransparencyID;
 
 	GLint useTexturesID;
 	GLint woodDiffuseID;
@@ -68,6 +69,7 @@ public:
 		matDiffuseID = getUniformLocation("mat.diffuse");
 		matSpecularID = getUniformLocation("mat.specular");
 		matShininessID = getUniformLocation("mat.shininess");
+		matTransparencyID = getUniformLocation("mat.transparency");
 		
 		useTexturesID = getUniformLocation("useTextures");
 		woodDiffuseID = getUniformLocation("woodDiffuse");
@@ -100,7 +102,8 @@ public:
 		Shader::loadVec3(matAmbientID, material.Ka);
 		Shader::loadVec3(matDiffuseID, material.Kd);
 		Shader::loadVec3(matSpecularID, material.Ks);
-		Shader::loadFloat(matShininessID, material.Ns);		
+		Shader::loadFloat(matShininessID, material.Ns);
+		Shader::loadFloat(matTransparencyID, material.d);
 	}
 	void loadDirectionalLight(Light& light) {
 		vec4 lightDir = multMatrixPoint(VIEW, light.direction);
