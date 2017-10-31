@@ -81,6 +81,7 @@ struct Mesh
 	std::vector <Vertex> Positions;
 	std::vector <Normal> Normals;
 	std::vector <Texcoord> Texcoords;
+	std::vector<unsigned int> Indices;
 
 	Material MeshMaterial;
 

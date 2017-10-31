@@ -42,6 +42,7 @@
     <ClInclude Include="OrthoCamera.h" />
     <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="PointLight.h" />
+    <ClInclude Include="remove-me.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderManager.h" />

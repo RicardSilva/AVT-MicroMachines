@@ -424,8 +424,8 @@ void GameManager::displayHUD() {
 
 }
 void GameManager::displayMirrorReflection() {
+	glClear(GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_STENCIL_TEST);
-	glDisable(GL_DEPTH_TEST);
 	// Draw mirror
 
 	glClear(GL_STENCIL_BUFFER_BIT); // Clear stencil buffer (0 by default)
@@ -455,7 +455,6 @@ void GameManager::displayMirrorReflection() {
 		car->draw();
 
 
-	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_STENCIL_TEST);
 }
 void GameManager::update(double timeStep) {
