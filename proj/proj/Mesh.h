@@ -9,7 +9,7 @@
 #define VERTICES 0
 #define NORMALS 1
 #define TEXCOORDS 2
-
+#define TOLERANCE 1.0e-6
 
 struct Vertex {
 	GLfloat x, y, z, w;
@@ -19,6 +19,16 @@ struct Vertex {
 		y = v.y;
 		z = v.z;
 		w = 1;
+	}
+
+	friend bool operator==(const Vertex& v1, const Vertex& v2) {
+		return (fabs(v1.x - v2.x) < TOLERANCE
+			&&  fabs(v1.y - v2.y) < TOLERANCE
+			&&  fabs(v1.z - v2.z) < TOLERANCE
+			&&  fabs(v1.w - v2.w) < TOLERANCE);
+	}
+	friend bool operator!=(const Vertex& v1, const Vertex& v2) {
+		return !(v1 == v2);
 	}
 };
 
@@ -87,15 +97,17 @@ struct Mesh
 
 
 	GLuint VaoId;
-	GLuint VboVertices, VboTexcoords, VboNormals;
+	GLuint VboVertices, VboTexcoords, VboNormals, VboIndices;
 	Mesh() {}
 	Mesh(std::vector<Vertex>& positions,
 		std::vector <Normal>& normals,
-		std::vector <Texcoord>& texcoords)
+		std::vector <Texcoord>& texcoords,
+		std::vector<unsigned int>& indices)
 	{
 		Positions = positions;
 		Normals = normals;
 		Texcoords = texcoords;
+		Indices = indices;
 		CreateBufferObjects();
 	}
 	~Mesh() {
@@ -107,6 +119,7 @@ public:
 	void draw() {
 		glBindVertexArray(VaoId);
 		glDrawArrays(GL_TRIANGLES, 0, (GLsizei)Positions.size());
+		//glDrawElements(GL_TRIANGLES, Indices.size(), GL_UNSIGNED_INT, &Indices[0]);
 		glBindVertexArray(0);
 	}
 private:
@@ -135,6 +148,9 @@ private:
 		glEnableVertexAttribArray(TEXCOORDS);
 		glVertexAttribPointer(TEXCOORDS, 2, GL_FLOAT, GL_FALSE, sizeof(Texcoord), 0);
 
+		glGenBuffers(1, &VboIndices);
+		glBindBuffer(GL_ARRAY_BUFFER, VboIndices);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(unsigned int) * Indices.size(), &Indices[0], GL_STATIC_DRAW);
 
 		glBindVertexArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -152,6 +168,7 @@ private:
 		glDeleteBuffers(1, &VboVertices);
 		glDeleteBuffers(1, &VboTexcoords);
 		glDeleteBuffers(1, &VboNormals);
+		glDeleteBuffers(1, &VboIndices);
 		glDeleteVertexArrays(1, &VaoId);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);

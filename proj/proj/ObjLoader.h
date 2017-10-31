@@ -169,6 +169,8 @@ namespace {
 			std::vector <Texcoord> MeshTexcoords;
 			std::vector <Normal> MeshNormals;
 
+			std::vector<unsigned int> Indices;
+
 			std::vector<std::string> MeshMatNames;
 
 			bool listening = false;
@@ -202,7 +204,7 @@ namespace {
 						if (!MeshPositions.empty())
 						{
 							// Create Mesh
-							tempMesh = new Mesh(MeshPositions, MeshNormals, MeshTexcoords);
+							tempMesh = new Mesh(MeshPositions, MeshNormals, MeshTexcoords, Indices);
 							tempMesh->MeshName = meshname;
 
 							// Insert Mesh
@@ -212,6 +214,8 @@ namespace {
 							MeshPositions.clear();
 							MeshNormals.clear();
 							MeshTexcoords.clear();
+
+							Indices.clear();
 							meshname.clear();
 
 							meshname = algorithm::tail(curline);
@@ -286,6 +290,16 @@ namespace {
 						MeshNormals.push_back(vNormals[i]);
 					}
 
+					std::vector<unsigned int> iIndices;
+					VertexTriangluation(iIndices, vVerts);
+					// Add Indices
+					for (int i = 0; i < int(iIndices.size()); i++)
+					{
+						unsigned int indnum = (unsigned int)((MeshPositions.size()) - vVerts.size()) + iIndices[i];
+						Indices.push_back(indnum);
+
+					}
+
 				}
 				// Get Mesh Material Name
 				if (algorithm::firstToken(curline) == "usemtl")
@@ -296,7 +310,7 @@ namespace {
 					if (!MeshPositions.empty())
 					{
 						// Create Mesh
-						tempMesh = new Mesh(MeshPositions, MeshNormals, MeshTexcoords);
+						tempMesh = new Mesh(MeshPositions, MeshNormals, MeshTexcoords, Indices);
 						tempMesh->MeshName = meshname;
 						int i = 2;
 						while (1) {
@@ -315,6 +329,7 @@ namespace {
 						MeshPositions.clear();
 						MeshNormals.clear();
 						MeshTexcoords.clear();
+						Indices.clear();
 					}
 
 				}
@@ -350,7 +365,7 @@ namespace {
 			if (!MeshPositions.empty())
 			{
 				// Create Mesh
-				tempMesh = new Mesh(MeshPositions, MeshNormals, MeshTexcoords);
+				tempMesh = new Mesh(MeshPositions, MeshNormals, MeshTexcoords, Indices);
 				tempMesh->MeshName = meshname;
 
 				// Insert Mesh
@@ -389,6 +404,7 @@ namespace {
 				MeshPositions.clear();
 				MeshTexcoords.clear();
 				MeshNormals.clear();
+				Indices.clear();
 				LoadedMaterials.clear();
 				return true;
 			}
@@ -522,6 +538,178 @@ namespace {
 			}
 		}
 
+
+		void VertexTriangluation(std::vector<unsigned int>& oIndices,
+			const std::vector<Vertex>& iVerts)
+		{
+			// If there are 2 or less verts,
+			// no triangle can be created,
+			// so exit
+			if (iVerts.size() < 3)
+			{
+				return;
+			}
+			// If it is a triangle no need to calculate it
+			if (iVerts.size() == 3)
+			{
+				oIndices.push_back(0);
+				oIndices.push_back(1);
+				oIndices.push_back(2);
+				return;
+			}
+
+			// Create a list of vertices
+			std::vector<Vertex> tVerts = iVerts;
+
+			while (true)
+			{
+				// For every vertex
+				for (int i = 0; i < int(tVerts.size()); i++)
+				{
+					// pPrev = the previous vertex in the list
+					Vertex pPrev;
+					if (i == 0)
+					{
+						pPrev = tVerts[tVerts.size() - 1];
+					}
+					else
+					{
+						pPrev = tVerts[i - 1];
+					}
+
+					// pCur = the current vertex;
+					Vertex pCur = tVerts[i];
+
+					// pNext = the next vertex in the list
+					Vertex pNext;
+					if (i == tVerts.size() - 1)
+					{
+						pNext = tVerts[0];
+					}
+					else
+					{
+						pNext = tVerts[i + 1];
+					}
+
+					// Check to see if there are only 3 verts left
+					// if so this is the last triangle
+					if (tVerts.size() == 3)
+					{
+						// Create a triangle from pCur, pPrev, pNext
+						for (int j = 0; j < int(tVerts.size()); j++)
+						{
+							if (iVerts[j] == pCur)
+								oIndices.push_back(j);
+							if (iVerts[j] == pPrev)
+								oIndices.push_back(j);
+							if (iVerts[j] == pNext)
+								oIndices.push_back(j);
+						}
+
+						tVerts.clear();
+						break;
+					}
+					if (tVerts.size() == 4)
+					{
+						// Create a triangle from pCur, pPrev, pNext
+						for (int j = 0; j < int(iVerts.size()); j++)
+						{
+							if (iVerts[j] == pCur)
+								oIndices.push_back(j);
+							if (iVerts[j] == pPrev)
+								oIndices.push_back(j);
+							if (iVerts[j] == pNext)
+								oIndices.push_back(j);
+						}
+
+						Vertex tempVec;
+						for (int j = 0; j < int(tVerts.size()); j++)
+						{
+							if (tVerts[j] != pCur
+								&& tVerts[j] != pPrev
+								&& tVerts[j] != pNext)
+							{
+								tempVec = tVerts[j];
+								break;
+							}
+						}
+
+						// Create a triangle from pCur, pPrev, pNext
+						for (int j = 0; j < int(iVerts.size()); j++)
+						{
+							if (iVerts[j] == pPrev)
+								oIndices.push_back(j);
+							if (iVerts[j] == pNext)
+								oIndices.push_back(j);
+							if (iVerts[j] == tempVec)
+								oIndices.push_back(j);
+						}
+
+						tVerts.clear();
+						break;
+					}
+
+					// If Vertex is not an interior vertex
+					float angle = angleBetween(vec3(pPrev.x, pPrev.y, pPrev.z) - vec3(pCur.x, pCur.y, pCur.z), 
+						vec3(pNext.x, pNext.y, pNext.z) - vec3(pCur.x, pCur.y, pCur.z)) * (180 / 3.14159265359);
+
+					if (angle <= 0 && angle >= 180)
+						continue;
+
+					// If any vertices are within this triangle
+					bool inTri = false;
+					for (int j = 0; j < int(iVerts.size()); j++)
+					{
+						if (algorithm::inTriangle(vec3(iVerts[j].x, iVerts[j].y, iVerts[j].z), 
+							vec3(pPrev.x, pPrev.y, pPrev.z),
+							vec3(pCur.x, pCur.y, pCur.z),
+							vec3(pNext.x, pNext.y, pNext.z))
+							&& iVerts[j] != pPrev
+							&& iVerts[j] != pCur
+							&& iVerts[j] != pNext)
+						{
+							inTri = true;
+							break;
+						}
+					}
+					if (inTri)
+						continue;
+
+					// Create a triangle from pCur, pPrev, pNext
+					for (int j = 0; j < int(iVerts.size()); j++)
+					{
+						if (iVerts[j] == pCur)
+							oIndices.push_back(j);
+						if (iVerts[j] == pPrev)
+							oIndices.push_back(j);
+						if (iVerts[j] == pNext)
+							oIndices.push_back(j);
+					}
+
+					// Delete pCur from the list
+					for (int j = 0; j < int(tVerts.size()); j++)
+					{
+						if (tVerts[j] == pCur)
+						{
+							tVerts.erase(tVerts.begin() + j);
+							break;
+						}
+					}
+
+					// reset i to the start
+					// -1 since loop will add 1 to it
+					i = -1;
+				}
+
+				// if no triangles were created
+				if (oIndices.size() == 0)
+					break;
+
+				// if no more vertices
+				if (tVerts.size() == 0)
+					break;
+			}
+		}
 
 		// Load Materials from .mtl file
 		bool LoadMaterials(std::string path)
