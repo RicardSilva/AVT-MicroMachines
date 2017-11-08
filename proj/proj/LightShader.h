@@ -36,11 +36,13 @@ private:
 	GLint matTransparencyID;
 
 	GLint useTexturesID;
+	GLint textureModeID;
 	GLint woodDiffuseID;
 	GLint woodSpecularID;
 	GLint bambooDiffuseID;
 	GLint bambooSpecularID;
 	GLint maskID;
+	GLint treeID;
 
 	GLint lightUniforms[MAX_LIGHTS][ATTRIBS_PER_LIGHT];
 	GLchar* lightAttribNames[ATTRIBS_PER_LIGHT] = { "isActive", "type", "position", "direction",
@@ -72,11 +74,13 @@ public:
 		matTransparencyID = getUniformLocation("mat.transparency");
 		
 		useTexturesID = getUniformLocation("useTextures");
+		textureModeID = getUniformLocation("textureMode");
 		woodDiffuseID = getUniformLocation("woodDiffuse");
 		woodSpecularID = getUniformLocation("woodSpecular");
 		bambooDiffuseID = getUniformLocation("bambooDiffuse");
 		bambooSpecularID = getUniformLocation("bambooSpecular");
 		maskID = getUniformLocation("mask");
+		treeID = getUniformLocation("billboardTexture");
 
 		std::string uniformName;
 		for (int i = 0; i < MAX_LIGHTS; i++) {
@@ -178,6 +182,9 @@ public:
 	void disableTextures() {
 		Shader::loadBool(useTexturesID, false);
 	}
+	void loadTextureMode(GLint mode) {
+		Shader::loadInt(textureModeID, mode);
+	}
 	void loadWoodDiffuse(GLint id) {
 		Shader::loadInt(woodDiffuseID, id);
 	}
@@ -192,6 +199,9 @@ public:
 	}
 	void loadMask(GLint id) {
 		Shader::loadInt(maskID, id);
+	}
+	void loadTree(GLint id) {
+		Shader::loadInt(treeID, id);
 	}
 
 	void loadMatrices() {

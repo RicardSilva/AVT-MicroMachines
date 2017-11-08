@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AVTmathLib.h" />
+    <ClInclude Include="Billboard.h" />
     <ClInclude Include="Border.h" />
     <ClInclude Include="Butter.h" />
     <ClInclude Include="Camera.h" />
@@ -60,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AVTmathLib.cpp" />
+    <ClCompile Include="Billboard.cpp" />
     <ClCompile Include="Border.cpp" />
     <ClCompile Include="Butter.cpp" />
     <ClCompile Include="Camera.cpp" />

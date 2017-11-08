@@ -1,6 +1,5 @@
 #include "GameManager.h"
 
-
 bool isOpenGLError() {
 	bool isError = false;
 	GLenum errCode;
@@ -93,6 +92,7 @@ void GameManager::initMeshes() {
 	modelsToLoad.push_back(std::make_pair("cube", "objs/cube.obj"));
 	modelsToLoad.push_back(std::make_pair("plane", "objs/plane.obj"));
 	modelsToLoad.push_back(std::make_pair("particle", "objs/particle.obj"));
+	modelsToLoad.push_back(std::make_pair("billboard", "objs/billboard.obj"));
 
 	for (auto m : modelsToLoad) {
 		if (loader->LoadFile(m.second)) {
@@ -163,7 +163,6 @@ void GameManager::initGameObjects() {
 
 	rain = new ParticleSystem();
 }
-
 
 void GameManager::idle() {
 	// do nothing
@@ -369,7 +368,7 @@ void GameManager::display() {
 		car->drawLights();
 
 	if (track->isActive)
-		track->draw();
+		track->draw(activeCamera->getEye());
 	if (car->isActive) {
 		car->draw();
 	}
@@ -463,13 +462,14 @@ void GameManager::displayMirrorReflection() {
 		car->drawLights();
 
 	if (track->isActive)
-		track->draw();
+		track->draw(activeCamera->getEye());
 	if (car->isActive)
 		car->draw();
 
 
 	glDisable(GL_STENCIL_TEST);
 }
+
 void GameManager::update(double timeStep) {
 
 	car->update(timeStep);

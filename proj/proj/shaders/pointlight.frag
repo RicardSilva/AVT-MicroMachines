@@ -41,6 +41,7 @@ const int MaxLights = 9;
 uniform Light lights[MaxLights];
 
 uniform bool useTextures;
+uniform int textureMode;
 uniform Material mat;
 
 uniform sampler2D woodDiffuse;
@@ -48,6 +49,7 @@ uniform sampler2D woodSpecular;
 uniform sampler2D bambooDiffuse;
 uniform sampler2D bambooSpecular;
 uniform sampler2D mask;
+uniform sampler2D billboardTexture;
 
 
 
@@ -140,29 +142,37 @@ vec4 calcSpotLight(Light light, vec4 position, vec3 normal, vec3 viewDir, vec3 m
 }
 
 void main() {
-
 	colorOut = vec4(0);
-	
 	
 	vec3 materialDiffuse;
 	vec3 materialSpecular;
 	float materialTransparency;
 	vec3 normal;
+	
 	if(useTextures) {
-		vec3 woodDiff = vec3(texture(woodDiffuse, DataIn.texCoord * 15));
-		vec3 bambooDiff = vec3(texture(bambooDiffuse, DataIn.texCoord * 10));
-		float mixCoefficient = (texture(mask, DataIn.texCoord)).r;
-		materialDiffuse = mix(woodDiff, bambooDiff, mixCoefficient);
-		colorOut += vec4(materialDiffuse * 0.1, 1);	
 		
-		
-		vec3 woodSpec = vec3(texture(woodSpecular, DataIn.texCoord * 15));
-		vec3 bambooSpec = vec3(texture(bambooSpecular, DataIn.texCoord * 10)) * 0.9;
-		materialSpecular = mix(woodSpec, bambooSpec, mixCoefficient) ;
-		materialTransparency = 1.0f;
-		
-		
-	}
+		if(textureMode == 0) {
+			
+			vec3 woodDiff = vec3(texture(woodDiffuse, DataIn.texCoord * 15));
+			vec3 bambooDiff = vec3(texture(bambooDiffuse, DataIn.texCoord * 10));
+			float mixCoefficient = (texture(mask, DataIn.texCoord)).r;
+			materialDiffuse = mix(woodDiff, bambooDiff, mixCoefficient);
+			colorOut += vec4(materialDiffuse * 0.1, 1);	
+			
+			
+			vec3 woodSpec = vec3(texture(woodSpecular, DataIn.texCoord * 15));
+			vec3 bambooSpec = vec3(texture(bambooSpecular, DataIn.texCoord * 10)) * 0.9;
+			materialSpecular = mix(woodSpec, bambooSpec, mixCoefficient) ;
+			materialTransparency = 1.0f;
+		}
+		else if (textureMode == 1) {
+			vec4 color = texture(billboardTexture, DataIn.texCoord);
+			materialDiffuse = vec3(color);
+			colorOut += vec4(materialDiffuse * 0.1, 1);
+			materialSpecular = vec3(0.4f, 0.6f, 0.4f);
+			materialTransparency = color.w;
+		}
+	}	
 	else {
 		colorOut += vec4(mat.ambient.xyz, 1);	
 		materialDiffuse = mat.diffuse.xyz;

@@ -58,13 +58,14 @@ public:
 	virtual void loadMatrices() {}
 	virtual void enableTextures() {}
 	virtual void disableTextures() {}
-	virtual void loadTextureMode(GLint mode) {}	
+	virtual void loadTextureMode(GLint mode) {}
 	virtual void loadTexture(GLint id) {}
 	virtual void loadWoodDiffuse(GLint id) {}
 	virtual void loadWoodSpecular(GLint id) {}
 	virtual void loadBambooDiffuse(GLint id) {}
 	virtual void loadBambooSpecular(GLint id) {}
 	virtual void loadMask(GLint id) {}
+	virtual void loadTree(GLint id) {}
 	
 	void loadInt(GLint location, GLint i);
 	void loadFloat(GLint location, GLfloat f);

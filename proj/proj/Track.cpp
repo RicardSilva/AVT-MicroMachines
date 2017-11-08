@@ -141,7 +141,7 @@ void Track::drawLights() {
 	for (auto lamp : lamps)
 		lamp->drawLights();
 }
-void Track::draw() {
+void Track::draw(vec3 cam) {
 	
 
 	pushMatrix(MODEL);
@@ -152,6 +152,7 @@ void Track::draw() {
 
 	//load textures
 	shader->enableTextures();
+	shader->loadTextureMode(0);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, TextureArray[0]);
@@ -197,6 +198,9 @@ void Track::draw() {
 		border->draw();
 	}
 	finishLine->draw();
+	for (auto billboard : billboards) {
+		billboard->draw(cam);
+	}
 
 	popMatrix(MODEL);
 }

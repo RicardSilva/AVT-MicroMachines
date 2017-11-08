@@ -9,6 +9,7 @@
 #include "Border.h"
 #include "DirectionalLight.h"
 #include "FinishLine.h"
+#include "Billboard.h"
 
 #include "TGA.h"
 
@@ -32,6 +33,7 @@ class Track : public GameObject {
 	std::vector<Lamp*> lamps;
 	std::vector<Border*> borders;
 	FinishLine* finishLine;
+	std::vector<Billboard*> billboards;
 	vec3 startingPosition;
 	int orangeCounter;
 	float orangeStartingSpeed = 125;
@@ -54,6 +56,8 @@ public:
 		TGA_Texture(TextureArray, "textures/mask.tga", 4);
 
 		loadFromFile(std::string(TRACK_FILE));
+
+		billboards.push_back(new Billboard(startingPosition + vec3(1, 0, 1)));
 
 		borders.push_back(new Border(vec3(HALF_TRACK_WIDTH + 50, 0, 0), 20.0, TRACK_HEIGHT + 50));
 		borders.push_back(new Border(vec3(-HALF_TRACK_WIDTH - 50, 0, 0), 20.0, TRACK_HEIGHT + 50));
@@ -98,7 +102,7 @@ public:
 	
 	void update(float timeStep);
 	void drawLights();
-	void draw() override;
+	void draw(vec3 cam);
 
 	void toogleDirectionalLight() {
 		if (dirLight.isActive) {
