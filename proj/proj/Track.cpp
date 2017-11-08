@@ -146,7 +146,6 @@ void Track::draw() {
 
 	pushMatrix(MODEL);
 	
-	loadIdentity(MODEL);
 	translate(MODEL, position);
 
 	shader->loadMatrices();
@@ -180,6 +179,7 @@ void Track::draw() {
 	shader->disableTextures();
 	glBindTexture(GL_TEXTURE_2D, 0);
 
+	shader->loadMaterial(cheerios[0]->model->meshes[0]->MeshMaterial);
 	for (auto cheerio : cheerios)
 		if (cheerio->isActive)
 		cheerio->draw();

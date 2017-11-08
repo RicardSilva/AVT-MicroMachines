@@ -48,6 +48,7 @@ public:
 
 		glBindTexture(GL_TEXTURE_2D, TextureArray[0]);
 
+		shader->loadTextureMode(0);
 		shader->loadTexture(textureID);
 
 		for (auto mesh : model->meshes) {

@@ -40,9 +40,9 @@
     <ClInclude Include="ObjLoader.h" />
     <ClInclude Include="Orange.h" />
     <ClInclude Include="OrthoCamera.h" />
+    <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="PointLight.h" />
-    <ClInclude Include="remove-me.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderManager.h" />
@@ -76,6 +76,7 @@
     <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="Orange.cpp" />
     <ClCompile Include="OrthoCamera.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Shader.cpp" />

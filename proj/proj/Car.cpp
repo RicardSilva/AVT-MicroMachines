@@ -136,29 +136,27 @@ void Car::drawLights() {
 	rightLight.draw();
 }
 void Car::draw() {
-	glCullFace(GL_FRONT);
+	
 	pushMatrix(MODEL);
 
 	translate(MODEL, position);
 	rotate(MODEL, angle, vec3(0, 1, 0));
 	shader->loadMatrices();
+	glCullFace(GL_FRONT);
 
-	for (auto mesh : model->meshes) {
-		shader->loadMaterial(mesh->MeshMaterial);
-		mesh->draw();
-	}
-	
-	popMatrix(MODEL);
-
+	shader->loadMaterial(model->meshes[2]->MeshMaterial);
+	model->meshes[2]->draw();
+	//windows
+	shader->loadMaterial(model->meshes[3]->MeshMaterial);
+	model->meshes[3]->draw();
+	shader->loadMaterial(model->meshes[4]->MeshMaterial);
+	model->meshes[4]->draw();
+	shader->loadMaterial(model->meshes[5]->MeshMaterial);
+	model->meshes[5]->draw();
+	shader->loadMaterial(model->meshes[8]->MeshMaterial);
+	model->meshes[8]->draw();
 
 	glCullFace(GL_BACK);
-
-	pushMatrix(MODEL);
-
-	translate(MODEL, position);
-	rotate(MODEL, angle, vec3(0, 1, 0));
-	shader->loadMatrices();
-
 	for (auto mesh : model->meshes) {
 		shader->loadMaterial(mesh->MeshMaterial);
 		mesh->draw();

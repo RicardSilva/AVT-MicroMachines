@@ -23,6 +23,7 @@
 #include "TextureShader.h"
 #include "AVTmathLib.h"
 #include "TextureHolder.h"
+#include "ParticleSystem.h"
 
 
 #define WIDTH 1200
@@ -44,7 +45,9 @@ class GameManager {
 	int currentLapTime = 0;
 	int bestLapTime = INT_MAX;
 	bool startClock = false;
-
+	bool raining = false;
+	bool foggy = false;
+	bool lensFlaring = false;
 
 	// Mouse Tracking Variables
 	int startX, startY, tracking = 0;
@@ -60,6 +63,7 @@ class GameManager {
 	MiniCar* carLive;
 	Car* car;
 	Track* track;
+	ParticleSystem* rain;
 	Camera* cameras[5];
 	Camera* activeCamera;
 	TextureHolder* pauseTexture;
@@ -77,6 +81,7 @@ public:
 		delete(cameras[3]);
 		delete(pauseTexture);
 		delete(gameOverTexture);
+		delete(rain);
 	}
 
 	bool getPause() { return pause; }

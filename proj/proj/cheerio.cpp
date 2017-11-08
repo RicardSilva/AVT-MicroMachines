@@ -3,15 +3,12 @@
 void Cheerio::draw() {
 
 	pushMatrix(MODEL);
-	loadIdentity(MODEL);
-
 	translate(MODEL, position);
 	shader->loadMatrices();
 
-	for (auto mesh : model->meshes) {
-		shader->loadMaterial(mesh->MeshMaterial);
-		mesh->draw();
-	}
+	Mesh* mesh = model->meshes[0];
+	mesh->draw();
+	
 
 
 	popMatrix(MODEL);

@@ -25,7 +25,8 @@ private:
 	GLint projViewModelID;
 	GLint viewModelID;
 	GLint textureID;
-
+	GLint modeID;
+	GLint matDiffuseID;
 public:
 	TextureShader(const std::string& vertexShader, const std::string& fragmentShader) : Shader(vertexShader, fragmentShader) {
 		bindAttributes();
@@ -44,6 +45,8 @@ public:
 		viewModelID = getUniformLocation("m_viewModel");
 
 		textureID = getUniformLocation("textureMap");
+		modeID = getUniformLocation("mode");
+		matDiffuseID = getUniformLocation("matDiffuse");
 	}
 
 	void loadProjViewModelMatrix(float* matrix) {
@@ -56,7 +59,12 @@ public:
 	void loadTexture(GLint id) {
 		Shader::loadInt(textureID, id);
 	}
-
+	void loadTextureMode(GLint mode) {
+		Shader::loadInt(modeID, mode);
+	}
+	void loadMatDiffuse(vec4& color) {
+		Shader::loadVec4(matDiffuseID, color);
+	}
 	void loadMatrices() {
 		computeDerivedMatrix(PROJ_VIEW_MODEL);
 		loadViewModelMatrix(mCompMatrix[VIEW_MODEL]);

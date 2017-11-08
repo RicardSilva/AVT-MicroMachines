@@ -16,7 +16,7 @@ struct SpotLight : public Light {
 		this->quadraticAttenuation = 0.0001;
 		this->spotCosCutoff = 0.9;
 		this->spotExponent = 4;
-
+		this->isActive = false;
 		shader->use();
 		shader->loadSpotLight(*this);
 		shader->unUse();

@@ -92,6 +92,7 @@ void GameManager::initMeshes() {
 	modelsToLoad.push_back(std::make_pair("lamp", "objs/lamp.obj"));
 	modelsToLoad.push_back(std::make_pair("cube", "objs/cube.obj"));
 	modelsToLoad.push_back(std::make_pair("plane", "objs/plane.obj"));
+	modelsToLoad.push_back(std::make_pair("particle", "objs/particle.obj"));
 
 	for (auto m : modelsToLoad) {
 		if (loader->LoadFile(m.second)) {
@@ -159,6 +160,8 @@ void GameManager::initGameObjects() {
 
 	pauseTexture = new TextureHolder("textures/pause_texture.tga", 7);
 	gameOverTexture = new TextureHolder("textures/gameOver_texture.tga", 8);
+
+	rain = new ParticleSystem();
 }
 
 
@@ -252,6 +255,15 @@ void GameManager::specialKeydown(int key) {
 		break;
 	case GLUT_KEY_DOWN:
 		car->goBack = true;
+		break;
+	case GLUT_KEY_F1:
+		raining = !raining;
+		break;
+	case GLUT_KEY_F2:
+		foggy = !foggy;
+		break;
+	case GLUT_KEY_F3:
+		lensFlaring = !lensFlaring;
 		break;
 	}
 }
@@ -360,13 +372,14 @@ void GameManager::display() {
 		track->draw();
 	if (car->isActive) {
 		car->draw();
-		//car->drawMirror();
 	}
 
 	if(activeCamera == cameras[3])
 		displayMirrorReflection();
 
 	shader->unUse();
+	if(raining)
+		rain->draw();
 
 	displayHUD();
 		
@@ -461,7 +474,7 @@ void GameManager::update(double timeStep) {
 
 	car->update(timeStep);
 	track->update(timeStep);
-
+	rain->update(timeStep);
 	// collisions between car and obstacles/border
 	processCarCollisions();
 	
@@ -555,7 +568,6 @@ void GameManager::processObsCollisions() {
 	}
 }
 
-
 void GameManager::processCarObstacleCollision(GameObject* obstacle) {
 	// transfer car speed and angle to object and stop car
 	obstacle->setAngle(car->getAngle());
@@ -564,7 +576,6 @@ void GameManager::processCarObstacleCollision(GameObject* obstacle) {
 
 	computePositionAfterCollision(car, obstacle);
 }
-
 void GameManager::computePositionAfterCollision(GameObject* obj, GameObject* obstacle) {
 	vec3 obj_center = obj->getHitbox()->center;
 	vec3 obst_center = obstacle->getHitbox()->center;

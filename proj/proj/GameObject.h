@@ -15,7 +15,7 @@ class GameObject {
 
 protected:
 	Shader* shader;
-	ObjModel* model;
+	
 
 	Hitbox *hitbox;
 
@@ -26,6 +26,7 @@ protected:
 public:
 	bool isActive = true;
 	vec3 position;
+	ObjModel* model;
 
 	GameObject() {}
 	GameObject(vec3& position, vec3& speed, float angle)
