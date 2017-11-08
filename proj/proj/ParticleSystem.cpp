@@ -13,14 +13,12 @@ void ParticleSystem::update(double timeStep) {
 		particles[i].vx += (timeStep*particles[i].ax);
 		particles[i].vy += (timeStep*particles[i].ay);
 		particles[i].vz += (timeStep*particles[i].az);
-		if (particles[i].y <= 0)
+		if (particles[i].y <= -1)
 			particles[i].reset();
 	}
 }
 
 void ParticleSystem::draw() {
-	vec4 particle_color = vec4();
-	// draw fireworks particles
 
 	glActiveTexture(GL_TEXTURE9);
 	glBindTexture(GL_TEXTURE_2D, TextureArray[0]);
@@ -30,16 +28,10 @@ void ParticleSystem::draw() {
 	shader->use();
 	shader->loadTextureMode(1);
 	shader->loadTexture(9);
+	shader->loadMatDiffuse(particles[0].color);
 
 	for (int i = 0; i < MAX_PARTICLES; i++)
-	{
-
-		particle_color.x = particles[i].r;
-		particle_color.y = particles[i].g;
-		particle_color.z = particles[i].b;
-		particle_color.w = particles[i].life;
-
-		shader->loadMatDiffuse(particle_color);
+	{	
 
 		pushMatrix(MODEL);
 		translate(MODEL, particles[i].x, particles[i].y, particles[i].z);
