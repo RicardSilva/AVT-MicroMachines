@@ -32,6 +32,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Hitbox.h" />
     <ClInclude Include="Lamp.h" />
+    <ClInclude Include="LensFlare.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightShader.h" />
     <ClInclude Include="MathHelper.h" />

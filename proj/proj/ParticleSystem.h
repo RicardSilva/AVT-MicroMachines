@@ -5,13 +5,14 @@
 #include "TGA.h"
 #include "ModelManager.h"
 #include "ShaderManager.h"
+#include "vec4.h"
 
 #define MAX_PARTICLES 1000
 
 struct Particle {
 	float	life;		// vida
 	float	fade;		// fade
-	float	r, g, b;    // color
+	vec4    color;
 	GLfloat x, y, z;    // posiçcao
 	GLfloat vx, vy, vz; // velocidade 
 	GLfloat ax, ay, az; // aceleraçcao
@@ -31,9 +32,7 @@ struct Particle {
 		ay = -10.0f; /* simular a aceleraÁ„o da gravidade */
 		az = 0.0f;
 
-		r = 0.7;
-		g = 0.9;
-		b = 1.0;
+		color = vec4(0.7, 0.9, 1.0, 1.0);
 	}
 
 	void reset() {
