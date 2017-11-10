@@ -33,7 +33,7 @@ class Track : public GameObject {
 	std::vector<Lamp*> lamps;
 	std::vector<Border*> borders;
 	FinishLine* finishLine;
-	std::vector<Billboard*> billboards;
+	Billboard* billboard;
 	vec3 startingPosition;
 	int orangeCounter;
 	float orangeStartingSpeed = 125;
@@ -57,7 +57,7 @@ public:
 
 		loadFromFile(std::string(TRACK_FILE));
 
-		billboards.push_back(new Billboard(startingPosition + vec3(1, 0, 1)));
+		billboard = new Billboard(vec3(0, -10, 0));
 
 		borders.push_back(new Border(vec3(HALF_TRACK_WIDTH + 50, 0, 0), 20.0, TRACK_HEIGHT + 50));
 		borders.push_back(new Border(vec3(-HALF_TRACK_WIDTH - 50, 0, 0), 20.0, TRACK_HEIGHT + 50));

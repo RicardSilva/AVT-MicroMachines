@@ -17,7 +17,7 @@ public:
 			this->isActive = false;
 
 		glGenTextures(1, TextureArray);
-		TGA_Texture(TextureArray, "textures/tree.tga", 0);
+		TGA_Texture(TextureArray, "textures/christmastree.tga", 0);
 	}
 
 	virtual ~Billboard() {}

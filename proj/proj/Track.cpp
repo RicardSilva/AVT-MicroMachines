@@ -198,9 +198,7 @@ void Track::draw(vec3 cam) {
 		border->draw();
 	}
 	finishLine->draw();
-	for (auto billboard : billboards) {
-		billboard->draw(cam);
-	}
+	billboard->draw(cam);
 
 	popMatrix(MODEL);
 }

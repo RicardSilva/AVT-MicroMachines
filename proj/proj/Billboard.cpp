@@ -10,6 +10,8 @@ void Billboard::draw(vec3 cam) {
 	pushMatrix(MODEL);
 	translate(MODEL, position);
 
+	scale(MODEL, vec3(3.5, 3.5, 3.5));
+
 	l3dBillboardCylindricalBegin(camPos, pos);
 
 	shader->loadMatrices();
