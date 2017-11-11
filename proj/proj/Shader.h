@@ -58,6 +58,8 @@ public:
 	virtual void loadMatrices() {}
 	virtual void enableTextures() {}
 	virtual void disableTextures() {}
+	virtual void loadFoggy(bool val) {}
+	virtual void loadSkyColour(vec3& colour) {}
 	virtual void loadTextureMode(GLint mode) {}
 	virtual void loadTexture(GLint id) {}
 	virtual void loadWoodDiffuse(GLint id) {}

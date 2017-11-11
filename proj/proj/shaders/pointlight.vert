@@ -16,6 +16,10 @@ out Data {
 	vec2 texCoord;
 } DataOut;
 
+out float visibility;
+
+const float density = 0.005;
+const float gradient = 1.3;
 void main () {
 	
 	vec4 pos = m_viewModel * position;
@@ -23,6 +27,8 @@ void main () {
 	DataOut.normal = normalize(m_normal * normal);
 	DataOut.eye = normalize(vec3(-pos));
 	DataOut.texCoord = texCoord;
-
+	float distance = length(pos.xyz);
+	visibility = exp(-pow((distance*density), gradient));
+	visibility = clamp(visibility, 0.0 ,1.0);
 	gl_Position = m_pvm * position;	
 }

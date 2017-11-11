@@ -43,7 +43,8 @@ private:
 	GLint bambooSpecularID;
 	GLint maskID;
 	GLint treeID;
-
+	GLint skyColourID;
+	GLint foggyID;
 	GLint lightUniforms[MAX_LIGHTS][ATTRIBS_PER_LIGHT];
 	GLchar* lightAttribNames[ATTRIBS_PER_LIGHT] = { "isActive", "type", "position", "direction",
 		"color", "intensity", "constantAttenuation", "linearAttenuation", "quadraticAttenuation", "spotCosCutoff", "spotExponent" };
@@ -81,7 +82,8 @@ public:
 		bambooSpecularID = getUniformLocation("bambooSpecular");
 		maskID = getUniformLocation("mask");
 		treeID = getUniformLocation("billboardTexture");
-
+		skyColourID = getUniformLocation("skyColour");
+		foggyID = getUniformLocation("foggy");
 		std::string uniformName;
 		for (int i = 0; i < MAX_LIGHTS; i++) {
 			for (int j = 0; j < ATTRIBS_PER_LIGHT; j++) {
@@ -93,6 +95,12 @@ public:
 		}
 	}
 		
+	void loadSkyColour(float r, float g, float b) {
+		Shader::loadVec3(skyColourID,vec3(r,g,b));
+	}
+	void loadFoggy(bool value) {
+		Shader::loadBool(foggyID, value);
+	}
 	void loadProjViewModelMatrix(float* matrix) {
 		Shader::loadMat4(projViewModelID, matrix);
 	}

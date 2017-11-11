@@ -161,7 +161,7 @@ void GameManager::initGameObjects() {
 
 	pauseTexture = new TextureHolder("textures/pause_texture.tga", 7);
 	gameOverTexture = new TextureHolder("textures/gameOver_texture.tga", 8);
-
+	fog = new Fog();
 	rain = new ParticleSystem();
 	flare = new LensFlare();
 	sun = new Sun(vec3(800, 50, 0));
@@ -220,6 +220,9 @@ void GameManager::keydown(int key) {
 		break;
 	case 'r':
 		restart();
+		break;
+	case 'o':
+		fog->on();
 		break;
 	}
 
@@ -383,7 +386,6 @@ void GameManager::display() {
 		displayMirrorReflection();
 
 	shader->unUse();
-	
 	if(raining)
 		rain->draw();
 	displayFlare();

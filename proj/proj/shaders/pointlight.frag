@@ -7,7 +7,7 @@ in Data {
 	vec3 eye;
 	vec2 texCoord;
 } DataIn;
-
+in float visibility;
 out vec4 colorOut;
 
 struct Material {
@@ -50,7 +50,8 @@ uniform sampler2D bambooDiffuse;
 uniform sampler2D bambooSpecular;
 uniform sampler2D mask;
 uniform sampler2D billboardTexture;
-
+uniform vec3 skyColour;
+uniform bool foggy;
 
 
 vec4 calcDirLight(Light light, vec3 normal, vec3 viewDir, vec3 materialDiffuse, vec3 materialSpecular) {
@@ -197,6 +198,9 @@ void main() {
 	}
 	
 	colorOut.w = materialTransparency;
+	if(!foggy){
+		colorOut = mix(vec4(0.5,0.5,0.5,1.0), colorOut , visibility  );
+	}
 	if (colorOut.w == 0)
 		discard;
 	

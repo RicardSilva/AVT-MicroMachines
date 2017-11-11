@@ -15,7 +15,7 @@
 #include "Car.h"
 #include "MiniCar.h"
 #include "Track.h"
-
+#include "Fog.h"
 #include "ShaderManager.h"
 #include "ModelManager.h"
 #include "ObjLoader.h"
@@ -73,6 +73,7 @@ class GameManager {
 	Camera* activeCamera;
 	TextureHolder* pauseTexture;
 	TextureHolder* gameOverTexture;
+	Fog* fog;
 
 public:
 	GameManager() {}
