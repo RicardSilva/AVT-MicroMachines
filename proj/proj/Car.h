@@ -38,17 +38,12 @@ private:
 
 public:
 	Car(vec3& position)
-		: GameObject(position, new Hitbox(vec3(position.x - CAR_LENGTH / 2, position.y - CAR_HEIGHT / 2, position.z - CAR_WIDTH / 2),
+		: GameObject(position, "car", new Hitbox(vec3(position.x - CAR_LENGTH / 2, position.y - CAR_HEIGHT / 2, position.z - CAR_WIDTH / 2),
 										vec3(position.x + CAR_LENGTH / 2, position.y + CAR_HEIGHT / 2, position.z + CAR_WIDTH / 2))),
 		leftLight(SpotLight(vec4(position + vec3(14.4, 20, -4.60), 1), vec4(1, 0, 0, 0), vec3(1, 1, 1), 1)),
-		rightLight(SpotLight(vec4(position + vec3(14.4, 20, 4.60), 1), vec4(1, 0, 0, 0), vec3(1, 1, 1), 1)) {
-		
-		model = ModelManager::instance()->getModel("car");
-		if (model == NULL)
-			this->isActive = false;
+		rightLight(SpotLight(vec4(position + vec3(14.4, 20, 4.60), 1), vec4(1, 0, 0, 0), vec3(1, 1, 1), 1))
+	{ }
 
-		
-	}
 	virtual ~Car() {}
 
 	void drawLights();

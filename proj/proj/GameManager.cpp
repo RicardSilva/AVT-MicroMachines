@@ -148,8 +148,6 @@ void GameManager::initCameras() {
 
 	activeCamera = cameras[0];
 
-	
-
 }
 void GameManager::initLights() {
 	
@@ -164,7 +162,7 @@ void GameManager::initGameObjects() {
 
 	rain = new ParticleSystem();
 	flare = new LensFlare();
-	sun = new Sun(vec3(800, 50, 0), "textures/lensFlare/flare5.tga", "textureShader", "flare");
+	sun = new Sun(vec3(800, 50, 0), "textures/lensFlare/flare5.tga", "textureShader");
 }
 
 void GameManager::idle() {
@@ -384,7 +382,7 @@ void GameManager::display() {
 	
 	if(raining)
 		rain->draw();
-	if (lensFlaring && activeCamera == cameras[2])
+	if (lensFlaring && activeCamera == cameras[2] && day)
 		displayFlare();
 	displayHUD();
 		

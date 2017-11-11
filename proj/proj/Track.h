@@ -57,7 +57,7 @@ public:
 
 		loadFromFile(std::string(TRACK_FILE));
 
-		billboard = new Billboard(vec3(0, -10, 0), "textures/christmastree.tga", "lightShader", "billboard");
+		billboard = new Billboard(vec3(0, -10, 0), "textures/christmastree.tga");
 
 		borders.push_back(new Border(vec3(HALF_TRACK_WIDTH + 50, 0, 0), 20.0, TRACK_HEIGHT + 50));
 		borders.push_back(new Border(vec3(-HALF_TRACK_WIDTH - 50, 0, 0), 20.0, TRACK_HEIGHT + 50));
