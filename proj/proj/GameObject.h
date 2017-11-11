@@ -10,16 +10,11 @@
 #define PI 3.14
 
 class GameObject {
-
 	ObjLoader* loader;
 
 protected:
 	Shader* shader;
-	
-
 	Hitbox *hitbox;
-
-	
 	vec3 speed;
 	int angle;
 
@@ -41,6 +36,9 @@ public:
 	}
 	GameObject(vec3& position, Hitbox *hitbox) : position(position), speed(vec3(0, 0, 0)), angle(0), hitbox(hitbox) {
 		shader = ShaderManager::instance()->getShader("lightShader");
+	}
+	GameObject(vec3& position, char* shaderName) : position(position), speed(vec3(0, 0, 0)), angle(0) {
+		shader = ShaderManager::instance()->getShader(shaderName);
 	}
 	virtual ~GameObject() {
 		delete(hitbox);

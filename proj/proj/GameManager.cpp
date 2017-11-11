@@ -164,7 +164,7 @@ void GameManager::initGameObjects() {
 
 	rain = new ParticleSystem();
 	flare = new LensFlare();
-	sun = new Sun(vec3(800, 50, 0));
+	sun = new Sun(vec3(800, 50, 0), "textures/lensFlare/flare5.tga", "textureShader", "flare");
 }
 
 void GameManager::idle() {
@@ -367,11 +367,9 @@ void GameManager::display() {
 	if (car->isActive)
 		car->drawLights();
 
-	if (day) {
+	if (day)
 		sun->draw(activeCamera->getEye());
-		//if (lensFlaring)
-			
-	}
+
 	shader->use();
 	if (track->isActive)
 		track->draw(activeCamera->getEye());
@@ -386,7 +384,8 @@ void GameManager::display() {
 	
 	if(raining)
 		rain->draw();
-	displayFlare();
+	if (lensFlaring && activeCamera == cameras[2])
+		displayFlare();
 	displayHUD();
 		
 	glutSwapBuffers();
@@ -406,7 +405,6 @@ void GameManager::displayHUD() {
 	loadIdentity(MODEL);
 	pushMatrix(MODEL);
 	loadIdentity(MODEL);
-
 	
 	translate(MODEL, vec3(400, 50, 450));
 	
@@ -419,7 +417,6 @@ void GameManager::displayHUD() {
 
 		popMatrix(MODEL);
 	}
-
 
 	popMatrix(MODEL);
 	shader->unUse();
@@ -439,8 +436,6 @@ void GameManager::displayHUD() {
 	glEnable(GL_DEPTH_TEST);
 	
 	//lap time
-	
-
 }
 void GameManager::displayMirrorReflection() {
 	glClear(GL_DEPTH_BUFFER_BIT);
@@ -477,10 +472,7 @@ void GameManager::displayMirrorReflection() {
 	glDisable(GL_STENCIL_TEST);
 }
 void GameManager::displayFlare() {
-
-	
 	flare->draw(sun->position);
-	
 }
 
 void GameManager::update(double timeStep) {

@@ -8,16 +8,17 @@
 #include "TGA.h"
 
 class Billboard : public GameObject {
+protected:
 	GLuint TextureArray[1];
 
 public:
-	Billboard(vec3& position) : GameObject(position) {
-		model = ModelManager::instance()->getModel("billboard");
+	Billboard(vec3& position, char* texName, char* shaderName, char* modelName) : GameObject(position, shaderName) {
+		model = ModelManager::instance()->getModel(modelName);
 		if (model == NULL)
 			this->isActive = false;
 
 		glGenTextures(1, TextureArray);
-		TGA_Texture(TextureArray, "textures/christmastree.tga", 0);
+		TGA_Texture(TextureArray, texName, 0);
 	}
 
 	virtual ~Billboard() {}
