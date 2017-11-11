@@ -2,6 +2,7 @@
 
 uniform mat4 m_pvm;
 uniform mat4 m_viewModel;
+uniform int textureMode;
 
 layout (location = 0)in vec4 position;
 layout (location = 1)in vec3 normal; 
@@ -9,12 +10,15 @@ layout (location = 2)in vec2 texCoord;
 
 out Data {
 	vec2 texC;
+	//int mode;
 } DataOut;
 
 void main () {
 
-	//vec4 pos = m_viewModel * position;
 	DataOut.texC = texCoord;
-
-	gl_Position = m_pvm * position;	
+	//DataOut.mode = 1 * textureMode;
+	if(textureMode == 2)
+		gl_Position = m_viewModel *  position;
+	else
+		gl_Position = m_pvm * position;	
 }

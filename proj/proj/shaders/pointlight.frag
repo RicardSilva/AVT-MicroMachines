@@ -197,7 +197,7 @@ void main() {
 	}
 	
 	colorOut.w = materialTransparency;
-	
-	
+	if (colorOut.w == 0)
+		discard;
 	
 }

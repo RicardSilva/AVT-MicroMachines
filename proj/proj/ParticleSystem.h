@@ -21,7 +21,7 @@ struct Particle {
 		float randomNumber = rand() % 1500 + 1;
 		float randomNumber2 = rand() % 25 + 1;
 		float randomNumber3 = rand() % 1100 + 1;
-		float randomNumber4 = rand() % 70 + 50;
+		float randomNumber4 = rand() % 90 + 70;
 		x = -700.0f + randomNumber;
 		y = 50 + randomNumber2;
 		z = -500.0f + randomNumber3;
@@ -39,7 +39,7 @@ struct Particle {
 		float randomNumber = rand() % 1500 + 1;
 		float randomNumber2 = rand() % 25 + 1;
 		float randomNumber3 = rand() % 1100 + 1;
-		float randomNumber4 = rand() % 70 + 50;
+		float randomNumber4 = rand() % 90 + 70;
 		x = -700.0f + randomNumber;
 		y = 50 + randomNumber2;
 		z = -500.0f + randomNumber3;
@@ -63,7 +63,7 @@ public:
 		shader = ShaderManager::instance()->getShader("textureShader");
 		model = ModelManager::instance()->getModel("particle");
 		glGenTextures(1, TextureArray);
-		TGA_Texture(TextureArray, "textures/particle.tga", 0);
+		TGA_Texture(TextureArray, "textures/particle2.tga", 0);
 
 		for (int i = 0; i < MAX_PARTICLES; i++) {
 			particles[i] = Particle();

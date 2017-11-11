@@ -49,6 +49,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="SpotLight.h" />
+    <ClInclude Include="Sun.h" />
     <ClInclude Include="TextureHolder.h" />
     <ClInclude Include="TextureShader.h" />
     <ClInclude Include="TGA.h" />
@@ -73,6 +74,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Hitbox.cpp" />
     <ClCompile Include="Lamp.cpp" />
+    <ClCompile Include="LensFlare.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathHelper.cpp" />

@@ -24,6 +24,8 @@
 #include "AVTmathLib.h"
 #include "TextureHolder.h"
 #include "ParticleSystem.h"
+#include "LensFlare.h"
+#include "Sun.h"
 
 
 #define WIDTH 1200
@@ -48,6 +50,7 @@ class GameManager {
 	bool raining = false;
 	bool foggy = false;
 	bool lensFlaring = false;
+	bool day = true;
 
 	// Mouse Tracking Variables
 	int startX, startY, tracking = 0;
@@ -64,6 +67,8 @@ class GameManager {
 	Car* car;
 	Track* track;
 	ParticleSystem* rain;
+	LensFlare* flare;
+	Sun* sun;
 	Camera* cameras[5];
 	Camera* activeCamera;
 	TextureHolder* pauseTexture;
@@ -81,7 +86,9 @@ public:
 		delete(cameras[3]);
 		delete(pauseTexture);
 		delete(gameOverTexture);
-		delete(rain);
+		delete(rain); 
+		delete(flare);
+		delete(sun);
 	}
 
 	bool getPause() { return pause; }
@@ -121,6 +128,7 @@ public:
 	void display();
 	void displayHUD();
 	void displayMirrorReflection();
+	void displayFlare();
 
 	void update(double timeStep);
 	void reshape(GLsizei w, GLsizei h);

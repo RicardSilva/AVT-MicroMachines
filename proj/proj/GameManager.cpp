@@ -93,6 +93,7 @@ void GameManager::initMeshes() {
 	modelsToLoad.push_back(std::make_pair("plane", "objs/plane.obj"));
 	modelsToLoad.push_back(std::make_pair("particle", "objs/particle.obj"));
 	modelsToLoad.push_back(std::make_pair("billboard", "objs/billboard.obj"));
+	modelsToLoad.push_back(std::make_pair("flare", "objs/flare.obj"));
 
 	for (auto m : modelsToLoad) {
 		if (loader->LoadFile(m.second)) {
@@ -118,7 +119,7 @@ void GameManager::initCameras() {
 	cameras[0] = topCamera;
 
 	Camera* topPerspCamera = new PerspectiveCamera(70, (float)WIDTH / HEIGHT, 0.1f, 1500.0f);
-	topPerspCamera->setEye(vec3(0, 600, 900));
+	topPerspCamera->setEye(vec3(0, 500, 900));
 	topPerspCamera->setTarget(vec3(0, 0, 150));
 	topPerspCamera->setUp(vec3(0, 0, -1));
 
@@ -162,6 +163,8 @@ void GameManager::initGameObjects() {
 	gameOverTexture = new TextureHolder("textures/gameOver_texture.tga", 8);
 
 	rain = new ParticleSystem();
+	flare = new LensFlare();
+	sun = new Sun(vec3(800, 50, 0));
 }
 
 void GameManager::idle() {
@@ -192,6 +195,7 @@ void GameManager::keydown(int key) {
 		break;
 	case '8':
 		track->toogleDirectionalLight();
+		day = !day;
 		break;
 	case '9':
 		track->tooglePointLights();
@@ -220,7 +224,6 @@ void GameManager::keydown(int key) {
 	}
 
 }
-
 void GameManager::keyup(int key) {
 	// key = pressed key
 	key = tolower(key);
@@ -240,7 +243,6 @@ void GameManager::keyup(int key) {
 	}
 
 }
-
 void GameManager::specialKeydown(int key) {
 	switch (key) {
 	case GLUT_KEY_RIGHT:
@@ -266,7 +268,6 @@ void GameManager::specialKeydown(int key) {
 		break;
 	}
 }
-
 void GameManager::specialKeyup(int key) {
 	switch (key) {
 	case GLUT_KEY_RIGHT:
@@ -283,7 +284,6 @@ void GameManager::specialKeyup(int key) {
 		break;
 	}
 }
-
 void GameManager::mouseButtons(int button, int state, int xx, int yy)
 {
 	// start tracking the mouse
@@ -367,6 +367,12 @@ void GameManager::display() {
 	if (car->isActive)
 		car->drawLights();
 
+	if (day) {
+		sun->draw(activeCamera->getEye());
+		//if (lensFlaring)
+			
+	}
+	shader->use();
 	if (track->isActive)
 		track->draw(activeCamera->getEye());
 	if (car->isActive) {
@@ -377,9 +383,10 @@ void GameManager::display() {
 		displayMirrorReflection();
 
 	shader->unUse();
+	
 	if(raining)
 		rain->draw();
-
+	displayFlare();
 	displayHUD();
 		
 	glutSwapBuffers();
@@ -468,6 +475,12 @@ void GameManager::displayMirrorReflection() {
 
 
 	glDisable(GL_STENCIL_TEST);
+}
+void GameManager::displayFlare() {
+
+	
+	flare->draw(sun->position);
+	
 }
 
 void GameManager::update(double timeStep) {

@@ -44,8 +44,8 @@ public:
 		projViewModelID = getUniformLocation("m_pvm");
 		viewModelID = getUniformLocation("m_viewModel");
 
+		modeID = getUniformLocation("textureMode");
 		textureID = getUniformLocation("textureMap");
-		modeID = getUniformLocation("mode");
 		matDiffuseID = getUniformLocation("matDiffuse");
 	}
 

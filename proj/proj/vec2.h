@@ -33,5 +33,8 @@ struct vec2 {
 		return vec2(v.x*scalar, v.y*scalar);
 	}
 
+	float magnitude() const {
+		return sqrt(x*x + y*y);
+	}
 	
 };

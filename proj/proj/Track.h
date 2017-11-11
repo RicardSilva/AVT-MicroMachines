@@ -41,7 +41,7 @@ class Track : public GameObject {
 public:
 	Track(vec3& position) 
 		: GameObject(position), orangeCounter(0),
-		dirLight(DirectionalLight(vec4(1, -1, 1, 0), vec3(1, 1, 1), 0.5f)) {
+		dirLight(DirectionalLight(vec4(-1, -1, 0, 0), vec3(1, 1, 1), 0.5f)) {
 
 		model = ModelManager::instance()->getModel("track");
 
