@@ -23,9 +23,8 @@ void Billboard::draw(vec3 cam) {
 	glBindTexture(GL_TEXTURE_2D, TextureArray[0]);
 
 	shader->loadTree(10);
-
+	shader->loadMatDiffuse(vec4(0, 0.2, 0, 1));
 	for (auto mesh : model->meshes) {
-		shader->loadMaterial(mesh->MeshMaterial);
 		mesh->draw();
 	}
 
