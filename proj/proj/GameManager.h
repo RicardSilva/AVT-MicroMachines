@@ -49,7 +49,7 @@ class GameManager {
 	bool startClock = false;
 	bool raining = false;
 	bool foggy = false;
-	bool lensFlaring = false;
+	bool lensFlaring = true;
 	bool day = true;
 
 	// Mouse Tracking Variables

@@ -7,17 +7,19 @@
 #include "ShaderManager.h"
 #include "TGA.h"
 
-class Billboard : public GameObject {
+class Billboard : public GameObject { //TODO ADD HITBOX
+protected:
 	GLuint TextureArray[1];
 
 public:
-	Billboard(vec3& position) : GameObject(position) {
-		model = ModelManager::instance()->getModel("billboard");
-		if (model == NULL)
-			this->isActive = false;
-
+	Billboard(vec3& position, char* texName) : GameObject(position, "billboard", "lightShader")
+	{
 		glGenTextures(1, TextureArray);
-		TGA_Texture(TextureArray, "textures/christmastree.tga", 0);
+		TGA_Texture(TextureArray, texName, 0);
+	}
+	Billboard(vec3& position, char* texName, char* shaderName, char* modelName) : GameObject(position, modelName, shaderName) {
+		glGenTextures(1, TextureArray);
+		TGA_Texture(TextureArray, texName, 0);
 	}
 
 	virtual ~Billboard() {}

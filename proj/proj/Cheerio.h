@@ -11,14 +11,9 @@ class Cheerio : public GameObject {
 
 public:
 	Cheerio(vec3& position)
-		: GameObject(position, new Hitbox(vec3(position.x - CHEERIO_WIDTH / 2.0, position.y - CHEERIO_HEIGHT / 2.0, position.z - CHEERIO_LENGTH / 2.0),
+		: GameObject(position, "cheerio", new Hitbox(vec3(position.x - CHEERIO_WIDTH / 2.0, position.y - CHEERIO_HEIGHT / 2.0, position.z - CHEERIO_LENGTH / 2.0),
 										vec3(position.x + CHEERIO_WIDTH / 2.0, position.y + CHEERIO_HEIGHT / 2.0, position.z + CHEERIO_LENGTH / 2.0)))
-	{
-		model = ModelManager::instance()->getModel("cheerio");
-
-		if (model == NULL)
-			this->isActive = false;
-	}
+	{ }
 	virtual ~Cheerio() {}
 
 	void draw();

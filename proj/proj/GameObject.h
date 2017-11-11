@@ -10,16 +10,11 @@
 #define PI 3.14
 
 class GameObject {
-
 	ObjLoader* loader;
 
 protected:
 	Shader* shader;
-	
-
 	Hitbox *hitbox;
-
-	
 	vec3 speed;
 	int angle;
 
@@ -29,19 +24,36 @@ public:
 	ObjModel* model;
 
 	GameObject() {}
-	GameObject(vec3& position, vec3& speed, float angle)
-		: position(position), speed(speed), angle(angle) {
-		shader = ShaderManager::instance()->getShader("lightShader");
-	}
+
 	GameObject(vec3& position) : position(position), speed(vec3(0, 0, 0)), angle(0) {
 		shader = ShaderManager::instance()->getShader("lightShader");
 	}
-	GameObject(vec3& position, vec3& speed, float angle, Hitbox *hitbox) : position(position), speed(speed), angle(angle), hitbox(hitbox) {
-		shader = ShaderManager::instance()->getShader("lightShader");
-	}
+
 	GameObject(vec3& position, Hitbox *hitbox) : position(position), speed(vec3(0, 0, 0)), angle(0), hitbox(hitbox) {
 		shader = ShaderManager::instance()->getShader("lightShader");
 	}
+
+	GameObject(vec3& position, char* modelName, Hitbox *hitbox) : position(position), speed(vec3(0, 0, 0)), angle(0), hitbox(hitbox) {
+		shader = ShaderManager::instance()->getShader("lightShader");
+		model = ModelManager::instance()->getModel(modelName);
+		if (model == NULL)
+			this->isActive = false;
+	}
+
+	GameObject(vec3& position, vec3& speed, float angle, char* modelName, Hitbox *hitbox) : position(position), speed(speed), angle(angle), hitbox(hitbox) {
+		shader = ShaderManager::instance()->getShader("lightShader");
+		model = ModelManager::instance()->getModel(modelName);
+		if (model == NULL)
+			this->isActive = false;
+	}
+
+	GameObject(vec3& position, char* modelName, char* shaderName) : position(position), speed(vec3(0, 0, 0)), angle(0) {
+		shader = ShaderManager::instance()->getShader(shaderName);
+		model = ModelManager::instance()->getModel(modelName);
+		if (model == NULL)
+			this->isActive = false;
+	}
+
 	virtual ~GameObject() {
 		delete(hitbox);
 	}

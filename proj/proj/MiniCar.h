@@ -13,16 +13,11 @@ class MiniCar : public GameObject {
 
 
 public:
-	MiniCar(vec3& position)
-		: GameObject(position, new Hitbox(vec3(position.x - CAR_LENGTH / 2, position.y - CAR_HEIGHT / 2, position.z - CAR_WIDTH / 2),
-			vec3(position.x + CAR_LENGTH / 2, position.y + CAR_HEIGHT / 2, position.z + CAR_WIDTH / 2))) {
+	MiniCar(vec3& position) //TODO CHANGE HITBOX
+		: GameObject(position, "car_mini", new Hitbox(vec3(position.x - CAR_LENGTH / 2, position.y - CAR_HEIGHT / 2, position.z - CAR_WIDTH / 2),
+			vec3(position.x + CAR_LENGTH / 2, position.y + CAR_HEIGHT / 2, position.z + CAR_WIDTH / 2)))
+	{ }
 
-		model = ModelManager::instance()->getModel("car_mini");
-		if (model == NULL)
-			this->isActive = false;
-
-
-	}
 	virtual ~MiniCar() {}
 
 	void draw() {
