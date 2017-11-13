@@ -139,14 +139,14 @@ void GameManager::initCameras() {
 
 	cameras[3] = cockpitCamera;
 
-	Camera* backCamera = new PerspectiveCamera(90, (float)WIDTH / HEIGHT, 0.1f, 1000.0f);
+	Camera* backCamera = new PerspectiveCamera(130, (float)WIDTH / HEIGHT, 0.1f, 1000.0f);
 	backCamera->setEye(vec3(0, 50, -80));
 	backCamera->setTarget(vec3(0, 0, 0));
 	backCamera->setUp(vec3(0, 1, 0));
 
 	cameras[4] = backCamera;
 
-	activeCamera = cameras[0];
+	activeCamera = cameras[2];
 
 }
 void GameManager::initLights() {

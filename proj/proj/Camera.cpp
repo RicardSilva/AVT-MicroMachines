@@ -46,7 +46,7 @@ void Camera::computeBackCameraPosition(const vec3& pos, int angle) {
 	eye = vec3(x, y, z);
 
 	x = x - (50 * cos(angle * 3.14 / 180));
-	y = y - 5;
+	y = y - 9;
 	z = z - (50 * -sin(angle * 3.14 / 180));
 
 	target = vec3(x, y, z);

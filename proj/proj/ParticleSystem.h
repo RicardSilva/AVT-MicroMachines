@@ -21,7 +21,7 @@ struct Particle {
 		float randomNumber = rand() % 1500 + 1;
 		float randomNumber2 = rand() % 25 + 1;
 		float randomNumber3 = rand() % 1100 + 1;
-		float randomNumber4 = rand() % 90 + 70;
+		float randomNumber4 = rand() % 70 + 50;
 		x = -700.0f + randomNumber;
 		y = 50 + randomNumber2;
 		z = -500.0f + randomNumber3;
@@ -39,7 +39,7 @@ struct Particle {
 		float randomNumber = rand() % 1500 + 1;
 		float randomNumber2 = rand() % 25 + 1;
 		float randomNumber3 = rand() % 1100 + 1;
-		float randomNumber4 = rand() % 90 + 70;
+		float randomNumber4 = rand() % 70 + 50;
 		x = -700.0f + randomNumber;
 		y = 50 + randomNumber2;
 		z = -500.0f + randomNumber3;
