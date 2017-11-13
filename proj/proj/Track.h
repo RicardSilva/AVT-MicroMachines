@@ -107,11 +107,9 @@ public:
 	void toogleDirectionalLight() {
 		if (dirLight.isActive) {
 			dirLight.isActive = false;
-			glClearColor(0.1, 0.1, 0.1, 1);
 		}
 		else {
 			dirLight.isActive = true;
-			glClearColor(0.53, 0.81, 0.92, 1);
 		}
 
 	}

@@ -32,7 +32,7 @@ struct Particle {
 		ay = -10.0f; /* simular a aceleração da gravidade */
 		az = 0.0f;
 
-		color = vec4(0.7, 0.9, 1.0, 1.0);
+		color = vec4(0.5, 0.7, 0.8, 1.0);
 	}
 
 	void reset() {

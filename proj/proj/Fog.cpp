@@ -1,7 +1,9 @@
 #include "Fog.h"
 void Fog::on() {
-	this->shader->loadFoggy(true);
+	shader->use();
+	shader->loadFoggy(true);
 }
 void Fog::off() {
-	this->shader->loadFoggy(false);
+	shader->use();
+	shader->loadFoggy(false);
 }

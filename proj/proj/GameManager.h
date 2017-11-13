@@ -49,7 +49,7 @@ class GameManager {
 	bool startClock = false;
 	bool raining = false;
 	bool foggy = false;
-	bool lensFlaring = true;
+	bool lensFlaring = false;
 	bool day = true;
 
 	// Mouse Tracking Variables
@@ -133,6 +133,24 @@ public:
 
 	void update(double timeStep);
 	void reshape(GLsizei w, GLsizei h);
-	void reshapeAVT(GLsizei w, GLsizei h);
+
+	void setNightColor() {
+		glClearColor(0.2, 0.2, 0.2, 1);
+	}
+	void setNightFoggyColor() {
+		glClearColor(0.35, 0.35, 0.35, 1);
+	}
+	void setDayClearColor() {
+		glClearColor(0.53, 0.81, 0.92, 1);
+	}
+	void setDayRainingColor() {
+		glClearColor(0.35, 0.60, 0.70, 1);
+	}
+	void setDayFoggyColor(){
+		glClearColor(0.5, 0.5, 0.5, 1);
+	}
+	void setDayRainingFoggyColor() {
+		glClearColor(0.50, 0.50, 0.55, 1);
+	}
 
 };

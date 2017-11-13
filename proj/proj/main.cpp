@@ -141,8 +141,7 @@ int main(int argc, char **argv) {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_MULTISAMPLE);
-	//glClearColor(0.53, 0.81, 0.92, 1);
-	glClearColor(0.5, 0.5, 0.5, 1);
+	glClearColor(0.53, 0.81, 0.92, 1);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	gm = new GameManager();

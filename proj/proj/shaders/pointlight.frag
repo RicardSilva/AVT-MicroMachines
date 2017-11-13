@@ -7,7 +7,7 @@ in Data {
 	vec3 eye;
 	vec2 texCoord;
 } DataIn;
-in float visibility;
+
 out vec4 colorOut;
 
 struct Material {
@@ -37,6 +37,9 @@ struct Light {
 }; 
 
 // the set of lights to apply, per invocation of this shader
+
+const float density = 0.005;
+const float gradient = 1.3;
 const int MaxLights = 9;
 uniform Light lights[MaxLights];
 
@@ -50,7 +53,6 @@ uniform sampler2D bambooDiffuse;
 uniform sampler2D bambooSpecular;
 uniform sampler2D mask;
 uniform sampler2D billboardTexture;
-uniform vec3 skyColour;
 uniform bool foggy;
 
 
@@ -198,10 +200,18 @@ void main() {
 	}
 	
 	colorOut.w = materialTransparency;
-	if(!foggy){
-		colorOut = mix(vec4(0.5,0.5,0.5,1.0), colorOut , visibility  );
-	}
 	if (colorOut.w == 0)
 		discard;
+		
+	if(foggy){
+		float distance = length(DataIn.pos);
+
+		float fogAmount = exp(-pow((distance*density), gradient));
+		//float fogAmount = exp(-distance * 0.005);
+		fogAmount = clamp(fogAmount, 0.0 ,1.0);
+		
+		colorOut = mix(vec4(0.5,0.5,0.5,1.0), colorOut , fogAmount);
+	}
+	
 	
 }

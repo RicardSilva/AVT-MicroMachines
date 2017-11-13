@@ -194,6 +194,24 @@ void GameManager::keydown(int key) {
 	case '8':
 		track->toogleDirectionalLight();
 		day = !day;
+		if (day) {
+			if (raining && foggy)
+				setDayRainingFoggyColor();
+			else if (raining)
+				setDayRainingColor();
+			else if (foggy)
+				setDayFoggyColor();
+			else {
+				setDayClearColor();
+			}
+		}
+
+		else
+			if (foggy)
+				setNightFoggyColor();
+			else
+				setNightColor();
+
 		break;
 	case '9':
 		track->tooglePointLights();
@@ -218,9 +236,6 @@ void GameManager::keydown(int key) {
 		break;
 	case 'r':
 		restart();
-		break;
-	case 'o':
-		fog->on();
 		break;
 	}
 
@@ -260,9 +275,47 @@ void GameManager::specialKeydown(int key) {
 		break;
 	case GLUT_KEY_F1:
 		raining = !raining;
+		if (day) {
+			if (raining) {
+				if (foggy)
+					setDayRainingFoggyColor();
+				else
+					setDayRainingColor();
+
+			}
+			else {
+				if (foggy)
+					setDayFoggyColor();
+				else
+					setDayClearColor();
+			}
+		}
 		break;
 	case GLUT_KEY_F2:
 		foggy = !foggy;
+		if (foggy) {
+			fog->on();
+			if (day) {
+				if (raining)
+					setDayRainingFoggyColor();
+				else
+					setDayFoggyColor();
+			}
+			else
+				setNightFoggyColor();
+		}
+		else {
+			fog->off();
+			if (day) {
+				if (raining)
+					setDayRainingColor();
+				else
+					setDayClearColor();
+			}
+			else
+				setNightColor();
+		}
+
 		break;
 	case GLUT_KEY_F3:
 		lensFlaring = !lensFlaring;
@@ -400,7 +453,8 @@ void GameManager::displayHUD() {
 	cameras[0]->computeView();
 
 	shader->use();
-
+	if (foggy)
+		fog->off();
 	pushMatrix(MODEL);
 	loadIdentity(MODEL);
 	pushMatrix(MODEL);
@@ -419,6 +473,8 @@ void GameManager::displayHUD() {
 	}
 
 	popMatrix(MODEL);
+	if (foggy)
+		fog->on();
 	shader->unUse();
 	textureShader->use();
 	glDisable(GL_DEPTH_TEST);
@@ -636,16 +692,4 @@ void GameManager::reshape(GLsizei w, GLsizei h) {
 		glViewport((w - h*ratio) / 2.0f, 0, h*ratio, h);
 	else
 		glViewport(0, (h - w / ratio) / 2, w, w / ratio);
-}
-void GameManager::reshapeAVT(GLsizei w, GLsizei h) {
-	float ratio;
-	// Prevent a divide by zero, when window is too short
-	if (h == 0)
-		h = 1;
-	// set the viewport to be the entire window
-	glViewport(0, 0, w, h);
-	// set the projection matrix
-	ratio = (1.0f * w) / h;
-	loadIdentity(PROJECTION);
-	perspective(53.13f, ratio, 0.1f, 1000.0f);
 }
