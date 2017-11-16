@@ -14,10 +14,14 @@ public:
 		GameObject(position, new Hitbox(vec3(position.x - width, 0, position.z - length),
 			vec3(position.x + width, 20, position.z + length)))
 	{ }
+	Border(vec3 position, float width, float length, char* modelName) : width(width), length(length),
+		GameObject(position, modelName, new Hitbox(vec3(position.x - width, 0, position.z - length),
+			vec3(position.x + width, 20, position.z + length)))
+	{ }
 
 	~Border() {}
 
-	void draw();
+	virtual void draw();
 
 	void update(float timeStep) {}
 

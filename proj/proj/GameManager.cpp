@@ -94,6 +94,7 @@ void GameManager::initMeshes() {
 	modelsToLoad.push_back(std::make_pair("particle", "objs/particle.obj"));
 	modelsToLoad.push_back(std::make_pair("billboard", "objs/billboard.obj"));
 	modelsToLoad.push_back(std::make_pair("flare", "objs/flare.obj"));
+	modelsToLoad.push_back(std::make_pair("finish", "objs/finish.obj"));
 
 	for (auto m : modelsToLoad) {
 		if (loader->LoadFile(m.second)) {
@@ -152,8 +153,8 @@ void GameManager::initCameras() {
 	if (!soundtrack.openFromFile("sounds/race.ogg"))
 		std::cout << "error loading soundtrack";
 	else {
-		soundtrack.play();
-		soundtrack.setLoop(true);
+		//soundtrack.play();
+		//soundtrack.setLoop(true);
 	}
 
 }

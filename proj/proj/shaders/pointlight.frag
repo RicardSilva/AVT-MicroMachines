@@ -175,6 +175,13 @@ void main() {
 			materialSpecular = vec3(0.4f, 0.6f, 0.4f);
 			materialTransparency = color.w;
 		}
+		else if (textureMode == 2) {
+			vec4 color = texture(billboardTexture, DataIn.texCoord);
+			materialDiffuse = vec3(color);
+			colorOut += vec4(materialDiffuse * 0.1, 1);
+			materialSpecular = vec3(0.05f, 0.05f, 0.05f);
+			materialTransparency = color.w;
+		}
 	}	
 	else {
 		colorOut += vec4(mat.ambient.xyz, 1);	
