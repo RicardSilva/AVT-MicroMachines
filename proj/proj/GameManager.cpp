@@ -148,6 +148,14 @@ void GameManager::initCameras() {
 
 	activeCamera = cameras[2];
 
+	//music
+	if (!soundtrack.openFromFile("sounds/race.ogg"))
+		std::cout << "error loading soundtrack";
+	else {
+		soundtrack.play();
+		soundtrack.setLoop(true);
+	}
+
 }
 void GameManager::initLights() {
 	

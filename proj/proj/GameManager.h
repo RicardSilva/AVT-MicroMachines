@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdlib.h>
+#include <SFML/Audio.hpp>
 #include <ctype.h>
 #include <memory>
 #include <vector>
@@ -74,6 +75,8 @@ class GameManager {
 	TextureHolder* pauseTexture;
 	TextureHolder* gameOverTexture;
 	Fog* fog;
+
+	sf::Music soundtrack;
 
 public:
 	GameManager() {}
